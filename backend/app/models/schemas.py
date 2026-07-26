@@ -1,13 +1,13 @@
 """Pydantic schemas for POLICEGPT"""
+
 from pydantic import BaseModel
-from typing import Optional
 
 
 class OfficerOut(BaseModel):
-    id: Optional[str]
-    name: Optional[str]
-    role: Optional[str]
-    badge_number: Optional[str]
+    id: str | None
+    name: str | None
+    role: str | None
+    badge_number: str | None
 
     class Config:
         from_attributes = True

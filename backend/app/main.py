@@ -3,23 +3,24 @@ POLICEGPT - National-Grade AI Investigation Assistant
 Karnataka State Police | Intelligent Crime & Investigation Database
 """
 
+import logging
+import time
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
-import time
-import logging
 
 from app.api.routers import (
-    auth,
-    chat,
-    cases,
-    suspects,
+    admin,
     analytics,
+    auth,
+    cases,
+    chat,
     knowledge_graph,
     reports,
-    admin,
     search,
+    suspects,
 )
 from app.core.config import settings
 from app.db.database import init_db

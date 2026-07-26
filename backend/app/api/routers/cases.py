@@ -1,10 +1,10 @@
 """
 Cases / FIR Router — Search, retrieve, create FIRs
 """
-from fastapi import APIRouter, Depends, Query, HTTPException, UploadFile, File
-from typing import Optional, List
+from datetime import date
+
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from pydantic import BaseModel
-from datetime import date, datetime
 
 from app.auth.dependencies import get_current_officer
 from app.models.schemas import OfficerOut
@@ -23,19 +23,19 @@ class FIRSummary(BaseModel):
     investigating_officer: str
     suspect_count: int
     urgency_score: float
-    ai_summary: Optional[str]
+    ai_summary: str | None
 
 
-@router.get("/", response_model=List[FIRSummary])
+@router.get("/", response_model=list[FIRSummary])
 async def list_firs(
-    search: Optional[str] = None,
-    category: Optional[str] = None,
-    status: Optional[str] = None,
-    district: Optional[str] = None,
-    start_date: Optional[date] = None,
-    end_date: Optional[date] = None,
-    repeat_offender: Optional[bool] = None,
-    unsolved_days: Optional[int] = None,
+    search: str | None = None,
+    category: str | None = None,
+    status: str | None = None,
+    district: str | None = None,
+    start_date: date | None = None,
+    end_date: date | None = None,
+    repeat_offender: bool | None = None,
+    unsolved_days: int | None = None,
     page: int = Query(default=1, ge=1),
     limit: int = Query(default=20, ge=1, le=100),
     officer: OfficerOut = Depends(get_current_officer),

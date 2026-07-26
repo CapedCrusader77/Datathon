@@ -1,10 +1,12 @@
 """
 LLM Client — Supports Ollama (local), OpenAI, and Google Gemini
 """
-import httpx
-from typing import AsyncGenerator
-from app.core.config import settings
 import json
+from collections.abc import AsyncGenerator
+
+import httpx
+
+from app.core.config import settings
 
 
 class LLMClient:
@@ -34,27 +36,26 @@ class LLMClient:
             yield "3. Forensic analysis of CCTV footage\n"
 
     async def _ollama_stream(self, system: str, prompt: str) -> AsyncGenerator[str, None]:
-        async with httpx.AsyncClient(timeout=120) as client:
-            async with client.stream(
-                "POST",
-                f"{settings.OLLAMA_BASE_URL}/api/chat",
-                json={
-                    "model": settings.OLLAMA_MODEL,
-                    "messages": [
-                        {"role": "system", "content": system},
-                        {"role": "user", "content": prompt},
-                    ],
-                    "stream": True,
-                },
-            ) as response:
-                async for line in response.aiter_lines():
-                    if line:
-                        try:
-                            data = json.loads(line)
-                            if content := data.get("message", {}).get("content"):
-                                yield content
-                        except json.JSONDecodeError:
-                            pass
+        async with httpx.AsyncClient(timeout=120) as client, client.stream(
+            "POST",
+            f"{settings.OLLAMA_BASE_URL}/api/chat",
+            json={
+                "model": settings.OLLAMA_MODEL,
+                "messages": [
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": prompt},
+                ],
+                "stream": True,
+            },
+        ) as response:
+            async for line in response.aiter_lines():
+                if line:
+                    try:
+                        data = json.loads(line)
+                        if content := data.get("message", {}).get("content"):
+                            yield content
+                    except json.JSONDecodeError:
+                        pass
 
     async def _openai_stream(self, system: str, prompt: str) -> AsyncGenerator[str, None]:
         from openai import AsyncOpenAI

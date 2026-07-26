@@ -1,8 +1,9 @@
 """Redis client for conversation history and caching"""
 import json
+
 import redis.asyncio as aioredis
+
 from app.core.config import settings
-from typing import List, Dict, Optional
 
 
 class RedisClient:
@@ -15,7 +16,7 @@ class RedisClient:
             self._client = aioredis.from_url(settings.REDIS_URL, decode_responses=True)
         return self._client
 
-    async def get_conversation_history(self, session_id: str, limit: int = 10) -> List[Dict]:
+    async def get_conversation_history(self, session_id: str, limit: int = 10) -> list[dict]:
         key = f"conv:{session_id}"
         raw = await self.client.lrange(key, -limit * 2, -1)
         return [json.loads(r) for r in raw]
@@ -29,6 +30,6 @@ class RedisClient:
     async def clear_session(self, session_id: str):
         await self.client.delete(f"conv:{session_id}")
 
-    async def list_officer_sessions(self, officer_id: str) -> List[str]:
+    async def list_officer_sessions(self, officer_id: str) -> list[str]:
         keys = await self.client.keys(f"officer:{officer_id}:sessions:*")
         return keys

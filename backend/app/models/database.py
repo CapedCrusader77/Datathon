@@ -2,16 +2,25 @@
 Database models (SQLAlchemy) for POLICEGPT
 Complete schema for all crime investigation entities
 """
+import enum
+import uuid
+from datetime import datetime
+
 from sqlalchemy import (
-    Column, String, Integer, Float, Boolean, DateTime,
-    Text, ForeignKey, JSON, Enum as SAEnum, ARRAY, LargeBinary
+    ARRAY,
+    JSON,
+    Boolean,
+    Column,
+    DateTime,
+    Float,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Enum as SAEnum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-from datetime import datetime
-import uuid
-import enum
 
 Base = declarative_base()
 

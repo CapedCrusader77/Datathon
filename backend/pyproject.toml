@@ -1,0 +1,12 @@
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint]
+ignore = [
+    "B008",    # FastAPI Depends in argument defaults
+    "RUF012",  # Mutable class attributes
+    "LOG014",  # exc_info= outside exception handlers in custom decorator
+    "DTZ005",  # datetime.datetime.now() without tz
+    "DTZ003",  # datetime.datetime.utcnow()
+    "BLE001",  # Blind exception: Exception
+]

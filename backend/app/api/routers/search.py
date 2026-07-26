@@ -1,8 +1,9 @@
 """
 Search Router — Unified search across all entities
 """
+
 from fastapi import APIRouter, Depends, Query
-from typing import Optional
+
 from app.auth.dependencies import get_current_officer
 from app.models.schemas import OfficerOut
 
@@ -12,7 +13,7 @@ router = APIRouter()
 @router.get("/")
 async def unified_search(
     q: str = Query(..., min_length=2),
-    entity_type: Optional[str] = Query(default=None, description="fir|suspect|vehicle|phone|weapon"),
+    entity_type: str | None = Query(default=None, description="fir|suspect|vehicle|phone|weapon"),
     officer: OfficerOut = Depends(get_current_officer),
 ):
     """Unified search across FIRs, suspects, vehicles, phones, weapons"""

@@ -2,7 +2,6 @@
 POLICEGPT Prompt Templates
 All system prompts and RAG prompt builders for the investigation assistant
 """
-from typing import Dict, List, Optional
 
 
 class PromptTemplates:
@@ -55,7 +54,7 @@ SECURITY:
         "missing_person": "\nTASK: Search missing persons database and cross-reference with cases.",
     }
 
-    def get_system_prompt(self, officer_role: str, intent: Dict) -> str:
+    def get_system_prompt(self, officer_role: str, intent: dict) -> str:
         base = self.SYSTEM_BASE
         role_supplement = self.ROLE_SUPPLEMENTS.get(officer_role, "")
         intent_supplement = self.INTENT_SUPPLEMENTS.get(intent.get("primary", ""), "")
@@ -65,9 +64,9 @@ SECURITY:
         self,
         query: str,
         context: str,
-        history: List[Dict],
-        intent: Dict,
-        entities: Dict,
+        history: list[dict],
+        intent: dict,
+        entities: dict,
     ) -> str:
         history_text = ""
         if history:
@@ -98,7 +97,7 @@ OFFICER QUERY: {query}
 
 POLICEGPT RESPONSE:"""
 
-    def get_report_prompt(self, fir_data: Dict, evidence: List, suspects: List) -> str:
+    def get_report_prompt(self, fir_data: dict, evidence: list, suspects: list) -> str:
         return f"""Generate a comprehensive investigation report for Karnataka State Police.
 
 FIR DATA:
@@ -140,7 +139,7 @@ Provide:
 
 Format as a structured legal recommendation."""
 
-    def get_mo_analysis_prompt(self, modus_operandi: str, similar_cases: List) -> str:
+    def get_mo_analysis_prompt(self, modus_operandi: str, similar_cases: list) -> str:
         return f"""Analyze the following modus operandi and compare with similar cases.
 
 CURRENT MO:
@@ -156,7 +155,7 @@ Provide:
 4. Recommended investigation steps
 5. Known offenders with similar MO"""
 
-    def _format_entities(self, entities: Dict) -> str:
+    def _format_entities(self, entities: dict) -> str:
         lines = []
         for key, value in entities.items():
             if value:
