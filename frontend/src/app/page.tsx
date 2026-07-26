@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -8,11 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [activeDemo, setActiveDemo] = useState<string | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,36 +33,20 @@ export default function LoginPage() {
 
       const data = await res.json();
       localStorage.setItem("pgpt_token", data.access_token);
-      localStorage.setItem(
-        "pgpt_officer",
-        JSON.stringify({
-          name: data.officer_name,
-          role: data.officer_role,
-          badge: data.badge_number,
-        })
-      );
+      localStorage.setItem("pgpt_officer", JSON.stringify({
+        name: data.officer_name,
+        role: data.officer_role,
+        badge: data.badge_number,
+      }));
       router.push("/dashboard");
     } catch {
       if (badge && password) {
         localStorage.setItem("pgpt_token", "demo_jwt_token_ksp_2024");
-        localStorage.setItem(
-          "pgpt_officer",
-          JSON.stringify({
-            name:
-              badge === "KSP999"
-                ? "DGP Alok Mohan"
-                : badge === "KSP004"
-                ? "Insp. Ananya Rao"
-                : "Insp. Ramesh Kumar",
-            role:
-              badge === "KSP999"
-                ? "Commissioner"
-                : badge === "KSP004"
-                ? "Cybercrime"
-                : "Investigating Officer",
-            badge: badge,
-          })
-        );
+        localStorage.setItem("pgpt_officer", JSON.stringify({
+          name: badge === "KSP999" ? "DGP Alok Mohan" : badge === "KSP004" ? "Insp. Ananya Rao" : "Insp. Ramesh Kumar",
+          role: badge === "KSP999" ? "Commissioner" : badge === "KSP004" ? "Cybercrime" : "Investigating Officer",
+          badge,
+        }));
         router.push("/dashboard");
         return;
       }
@@ -75,453 +55,439 @@ export default function LoginPage() {
     }
   };
 
-  const quickLogin = (badgeId: string, pass: string, name: string, role: string) => {
-    setLoading(true);
+  const quickLogin = (acc: { id: string; pass: string; name: string; role: string }) => {
+    setActiveDemo(acc.id);
     localStorage.setItem("pgpt_token", "demo_jwt_token_ksp_2024");
-    localStorage.setItem(
-      "pgpt_officer",
-      JSON.stringify({ name, role, badge: badgeId })
-    );
-    setTimeout(() => router.push("/dashboard"), 400);
+    localStorage.setItem("pgpt_officer", JSON.stringify({ name: acc.name, role: acc.role, badge: acc.id }));
+    setTimeout(() => router.push("/dashboard"), 350);
   };
 
-  const demoAccounts = [
-    { id: "KSP001", pass: "police123", name: "Insp. Ramesh Kumar", role: "Investigating Officer", initial: "R" },
-    { id: "KSP004", pass: "police123", name: "Insp. Ananya Rao", role: "Cybercrime Specialist", initial: "A" },
-    { id: "KSP999", pass: "admin123", name: "DGP Alok Mohan", role: "Commissioner", initial: "D" },
+  const demos = [
+    { id: "KSP001", pass: "police123", name: "Insp. Ramesh Kumar", role: "Investigating Officer" },
+    { id: "KSP004", pass: "police123", name: "Insp. Ananya Rao",   role: "Cybercrime Specialist" },
+    { id: "KSP999", pass: "admin123",  name: "DGP Alok Mohan",     role: "Commissioner" },
   ];
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; }
 
-        body { background: #080c14; }
-
-        .login-root {
+        .root {
           min-height: 100vh;
-          background: #080c14;
+          display: flex;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          background: #0c0e12;
+          color: #e4e7ec;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── LEFT PANEL ── */
+        .panel-left {
+          display: none;
+          width: 420px;
+          flex-shrink: 0;
+          background: #0c0e12;
+          border-right: 1px solid #1c2030;
+          padding: 3rem;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        @media (min-width: 900px) { .panel-left { display: flex; } }
+
+        .left-top { }
+
+        .ksp-mark {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 3.5rem;
+        }
+        .ksp-emblem {
+          width: 36px;
+          height: 36px;
+          flex-shrink: 0;
+        }
+        .ksp-label {
+          font-size: 0.8rem;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #6b7588;
+        }
+
+        .left-headline {
+          font-size: 2rem;
+          font-weight: 700;
+          line-height: 1.2;
+          color: #f0f2f5;
+          letter-spacing: -0.03em;
+          margin-bottom: 1.25rem;
+        }
+        .left-headline em {
+          font-style: normal;
+          color: #4e7bff;
+        }
+
+        .left-desc {
+          font-size: 0.875rem;
+          color: #505a70;
+          line-height: 1.7;
+          max-width: 300px;
+        }
+
+        .left-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-top: 2.5rem;
+        }
+        .tag {
+          font-size: 0.68rem;
+          font-weight: 500;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          color: #3a4256;
+          border: 1px solid #1c2030;
+          border-radius: 4px;
+          padding: 0.3rem 0.6rem;
+        }
+
+        .left-bottom {
+          font-size: 0.72rem;
+          color: #2c3347;
+          letter-spacing: 0.04em;
+        }
+
+        /* ── RIGHT PANEL ── */
+        .panel-right {
+          flex: 1;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-family: 'Inter', system-ui, -apple-system, sans-serif;
-          padding: 1.5rem;
-          position: relative;
-          overflow: hidden;
+          padding: 2rem 1.5rem;
+          background: #080a0e;
         }
 
-        /* Animated background blobs */
-        .bg-blob {
-          position: absolute;
-          border-radius: 50%;
-          filter: blur(100px);
-          pointer-events: none;
-          opacity: 0;
-          transition: opacity 1.2s ease;
-        }
-        .bg-blob.visible { opacity: 1; }
-
-        .blob-1 {
-          width: 500px; height: 400px;
-          background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
-          top: -100px; left: -100px;
-          animation: drift1 18s ease-in-out infinite alternate;
-        }
-        .blob-2 {
-          width: 400px; height: 400px;
-          background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
-          bottom: -80px; right: -80px;
-          animation: drift2 22s ease-in-out infinite alternate;
-        }
-        .blob-3 {
-          width: 300px; height: 300px;
-          background: radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%);
-          top: 50%; left: 50%; transform: translate(-50%, -50%);
-          animation: pulse-blob 8s ease-in-out infinite;
-        }
-
-        @keyframes drift1 {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(60px, 80px); }
-        }
-        @keyframes drift2 {
-          0% { transform: translate(0, 0); }
-          100% { transform: translate(-60px, -60px); }
-        }
-        @keyframes pulse-blob {
-          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-          50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
-        }
-
-        /* Grid lines subtle overlay */
-        .grid-overlay {
-          position: absolute;
-          inset: 0;
-          background-image:
-            linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-          background-size: 50px 50px;
-          pointer-events: none;
-        }
-
-        /* Main card */
-        .card {
-          position: relative;
-          z-index: 10;
+        .form-shell {
           width: 100%;
-          max-width: 420px;
-          background: rgba(11, 16, 28, 0.95);
-          border: 1px solid rgba(255,255,255,0.07);
-          border-radius: 20px;
-          padding: 2.5rem 2rem;
-          box-shadow:
-            0 0 0 1px rgba(59,130,246,0.05),
-            0 25px 60px rgba(0,0,0,0.6),
-            0 0 80px rgba(59,130,246,0.04);
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .card.visible {
-          opacity: 1;
-          transform: translateY(0);
+          max-width: 360px;
         }
 
-        /* Logo area */
-        .logo-wrap {
+        /* Mobile logo */
+        .mobile-logo {
           display: flex;
-          flex-direction: column;
           align-items: center;
-          gap: 1rem;
+          gap: 10px;
+          margin-bottom: 2.5rem;
+        }
+        @media (min-width: 900px) { .mobile-logo { display: none; } }
+
+        .mobile-logo-text {
+          font-size: 1rem;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          color: #e4e7ec;
+        }
+        .mobile-logo-text span { color: #4e7bff; }
+
+        .form-heading {
+          font-size: 1.4rem;
+          font-weight: 700;
+          letter-spacing: -0.03em;
+          color: #f0f2f5;
+          margin-bottom: 0.4rem;
+        }
+        .form-sub {
+          font-size: 0.82rem;
+          color: #424c63;
           margin-bottom: 2rem;
         }
 
-        .logo-icon {
-          width: 52px; height: 52px;
-          background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.1));
-          border: 1px solid rgba(59,130,246,0.25);
-          border-radius: 14px;
+        /* Demo pills */
+        .demo-strip {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #60a5fa;
-          box-shadow: 0 0 24px rgba(59,130,246,0.15), inset 0 1px 0 rgba(255,255,255,0.06);
-        }
-
-        .logo-title {
-          font-size: 1.375rem;
-          font-weight: 700;
-          color: #f1f5f9;
-          letter-spacing: -0.5px;
-        }
-        .logo-title span { color: #3b82f6; }
-
-        .logo-sub {
-          font-size: 0.7rem;
-          color: #475569;
-          letter-spacing: 0.08em;
-          font-weight: 500;
-          text-transform: uppercase;
-          margin-top: -0.5rem;
-        }
-
-        /* Status indicator */
-        .status-bar {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
+          flex-direction: column;
+          gap: 0.4rem;
           margin-bottom: 1.75rem;
-          font-size: 0.7rem;
-          color: #64748b;
-          font-weight: 500;
+          padding-bottom: 1.75rem;
+          border-bottom: 1px solid #13172000;
+          position: relative;
         }
-        .status-dot {
-          width: 6px; height: 6px;
-          border-radius: 50%;
-          background: #22c55e;
-          box-shadow: 0 0 8px #22c55e;
-          animation: blink 2.5s ease-in-out infinite;
-        }
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.3; }
+        .demo-strip::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0; right: 0;
+          height: 1px;
+          background: #171b25;
         }
 
-        /* Form fields */
-        .field { margin-bottom: 1rem; }
+        .demo-label {
+          font-size: 0.68rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #2e3650;
+          margin-bottom: 0.5rem;
+        }
+
+        .demo-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.65rem 0.875rem;
+          border: 1px solid #171b25;
+          border-radius: 8px;
+          cursor: pointer;
+          background: transparent;
+          width: 100%;
+          text-align: left;
+          font-family: inherit;
+          color: inherit;
+          transition: background 0.15s, border-color 0.15s;
+        }
+        .demo-row:hover {
+          background: #0f1219;
+          border-color: #252c3f;
+        }
+        .demo-row.active {
+          border-color: #2a3cff30;
+          background: #0d1020;
+        }
+
+        .demo-row-left { }
+        .demo-row-name {
+          font-size: 0.8rem;
+          font-weight: 500;
+          color: #c8cdd8;
+          display: block;
+        }
+        .demo-row-meta {
+          font-size: 0.7rem;
+          color: #3a4256;
+          display: block;
+          margin-top: 1px;
+        }
+
+        .demo-row-id {
+          font-size: 0.7rem;
+          font-weight: 600;
+          font-family: 'SF Mono', 'Fira Code', monospace;
+          color: #2e3a58;
+          letter-spacing: 0.05em;
+        }
+
+        /* OR separator */
+        .sep {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 1.5rem;
+        }
+        .sep-line { flex: 1; height: 1px; background: #171b25; }
+        .sep-text { font-size: 0.7rem; color: #2a3044; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+
+        /* Fields */
+        .field { margin-bottom: 0.875rem; }
 
         .field label {
           display: block;
           font-size: 0.72rem;
           font-weight: 600;
-          color: #94a3b8;
-          margin-bottom: 0.4rem;
-          letter-spacing: 0.03em;
           text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: #3d4660;
+          margin-bottom: 0.45rem;
         }
 
         .field input {
           width: 100%;
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 10px;
-          padding: 0.7rem 1rem;
-          font-size: 0.875rem;
-          color: #e2e8f0;
-          outline: none;
-          transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-          font-family: inherit;
-        }
-        .field input::placeholder { color: #334155; }
-        .field input:focus {
-          border-color: rgba(59,130,246,0.4);
-          background: rgba(59,130,246,0.04);
-          box-shadow: 0 0 0 3px rgba(59,130,246,0.08);
-        }
-
-        /* Error */
-        .error-msg {
-          background: rgba(239,68,68,0.08);
-          border: 1px solid rgba(239,68,68,0.2);
+          background: #0c0e14;
+          border: 1px solid #171c2a;
           border-radius: 8px;
-          padding: 0.6rem 0.875rem;
+          padding: 0.7rem 0.875rem;
+          font-size: 0.875rem;
+          color: #dde0e8;
+          outline: none;
+          font-family: inherit;
+          transition: border-color 0.15s;
+        }
+        .field input::placeholder { color: #252b3d; }
+        .field input:focus {
+          border-color: #2b3cff50;
+        }
+        .field input:focus-visible { outline: none; }
+
+        .err {
           font-size: 0.75rem;
-          color: #f87171;
-          margin-bottom: 1rem;
-          text-align: center;
+          color: #e05f5f;
+          background: #1a0e0e;
+          border: 1px solid #2e1515;
+          border-radius: 6px;
+          padding: 0.55rem 0.75rem;
+          margin-bottom: 0.875rem;
         }
 
-        /* Submit button */
-        .btn-login {
+        .btn {
           width: 100%;
-          background: linear-gradient(135deg, #2563eb, #3b82f6);
+          margin-top: 0.5rem;
+          padding: 0.75rem;
           border: none;
-          border-radius: 10px;
-          padding: 0.8rem;
+          border-radius: 8px;
           font-size: 0.875rem;
           font-weight: 600;
-          color: white;
+          font-family: inherit;
           cursor: pointer;
-          margin-top: 0.5rem;
-          transition: all 0.2s ease;
-          box-shadow: 0 4px 20px rgba(59,130,246,0.25);
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 0.5rem;
-          font-family: inherit;
-          letter-spacing: 0.01em;
+          background: #2b3cff;
+          color: #fff;
+          letter-spacing: -0.01em;
+          transition: background 0.15s, opacity 0.15s;
         }
-        .btn-login:hover:not(:disabled) {
-          background: linear-gradient(135deg, #1d4ed8, #2563eb);
-          box-shadow: 0 6px 28px rgba(59,130,246,0.35);
-          transform: translateY(-1px);
-        }
-        .btn-login:active:not(:disabled) { transform: translateY(0); }
-        .btn-login:disabled { opacity: 0.55; cursor: not-allowed; }
+        .btn:hover:not(:disabled) { background: #3b4eff; }
+        .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
         .spinner {
-          width: 15px; height: 15px;
-          border: 2px solid rgba(255,255,255,0.3);
-          border-top-color: white;
+          width: 14px; height: 14px;
+          border: 2px solid rgba(255,255,255,0.25);
+          border-top-color: #fff;
           border-radius: 50%;
-          animation: spin 0.7s linear infinite;
+          animation: spin 0.65s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Divider */
-        .divider {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          margin: 1.5rem 0 1rem;
-        }
-        .divider-line {
-          flex: 1;
-          height: 1px;
-          background: rgba(255,255,255,0.06);
-        }
-        .divider-text {
-          font-size: 0.65rem;
-          font-weight: 600;
-          color: #334155;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          white-space: nowrap;
-        }
-
-        /* Demo accounts */
-        .demo-accounts { display: flex; flex-direction: column; gap: 0.5rem; }
-
-        .demo-btn {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          width: 100%;
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.06);
-          border-radius: 10px;
-          padding: 0.6rem 0.875rem;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          text-align: left;
-          font-family: inherit;
-          color: inherit;
-        }
-        .demo-btn:hover {
-          background: rgba(59,130,246,0.06);
-          border-color: rgba(59,130,246,0.2);
-        }
-
-        .demo-avatar {
-          width: 30px; height: 30px;
-          border-radius: 8px;
-          background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.15));
-          border: 1px solid rgba(59,130,246,0.15);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.7rem;
-          font-weight: 700;
-          color: #93c5fd;
-          flex-shrink: 0;
-        }
-
-        .demo-info { flex: 1; min-width: 0; }
-        .demo-name {
-          font-size: 0.78rem;
-          font-weight: 600;
-          color: #cbd5e1;
-          display: block;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-        .demo-role {
-          font-size: 0.66rem;
-          color: #475569;
-          display: block;
-          margin-top: 1px;
-        }
-
-        .demo-arrow {
-          color: #3b82f6;
-          font-size: 0.75rem;
-          opacity: 0;
-          transition: opacity 0.2s, transform 0.2s;
-        }
-        .demo-btn:hover .demo-arrow {
-          opacity: 1;
-          transform: translateX(2px);
-        }
-
-        /* Footer */
-        .footer {
+        .foot-note {
           margin-top: 2rem;
+          font-size: 0.7rem;
+          color: #1e2436;
           text-align: center;
-          font-size: 0.65rem;
-          color: #1e293b;
-          letter-spacing: 0.08em;
-          font-weight: 500;
-          text-transform: uppercase;
+          letter-spacing: 0.04em;
         }
       `}</style>
 
-      <div className="login-root">
-        <div className={`bg-blob blob-1 ${mounted ? "visible" : ""}`} />
-        <div className={`bg-blob blob-2 ${mounted ? "visible" : ""}`} />
-        <div className={`bg-blob blob-3 ${mounted ? "visible" : ""}`} />
-        <div className="grid-overlay" />
+      <div className="root">
 
-        <div className={`card ${mounted ? "visible" : ""}`}>
-          {/* Logo */}
-          <div className="logo-wrap">
-            <div className="logo-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                <path d="M9 12l2 2 4-4"/>
+        {/* ── LEFT PANEL ── */}
+        <aside className="panel-left">
+          <div className="left-top">
+            <div className="ksp-mark">
+              <svg className="ksp-emblem" viewBox="0 0 36 36" fill="none">
+                <rect width="36" height="36" rx="8" fill="#10141e"/>
+                <path d="M18 6 L28 10 L28 19 C28 25 18 30 18 30 C18 30 8 25 8 19 L8 10 Z" stroke="#2b3cff" strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
+                <path d="M13 18 L16.5 21.5 L23 15" stroke="#4e7bff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
+              <span className="ksp-label">Karnataka State Police</span>
             </div>
-            <div style={{ textAlign: "center" }}>
-              <div className="logo-title">POLICE<span>GPT</span></div>
-              <div className="logo-sub">Karnataka State Police · Intelligence System</div>
+
+            <h1 className="left-headline">
+              Intelligence<br />at the speed<br />of <em>thought.</em>
+            </h1>
+
+            <p className="left-desc">
+              PoliceGPT gives investigators instant access to case intelligence, pattern analysis, and criminal records through natural language.
+            </p>
+
+            <div className="left-tags">
+              <span className="tag">CCTNS Integrated</span>
+              <span className="tag">End-to-End Encrypted</span>
+              <span className="tag">Role-Based Access</span>
+              <span className="tag">Audit Logged</span>
             </div>
           </div>
 
-          {/* Status */}
-          <div className="status-bar">
-            <div className="status-dot" />
-            <span>Secure Connection · CCTNS Encrypted</span>
+          <div className="left-bottom">
+            © 2024 Karnataka State Police · Restricted System
           </div>
+        </aside>
 
-          {/* Error */}
-          {error && <div className="error-msg">{error}</div>}
+        {/* ── RIGHT PANEL ── */}
+        <main className="panel-right">
+          <div className="form-shell">
 
-          {/* Form */}
-          <form onSubmit={handleLogin}>
-            <div className="field">
-              <label htmlFor="badge-input">Badge / Officer ID</label>
-              <input
-                id="badge-input"
-                type="text"
-                value={badge}
-                onChange={(e) => setBadge(e.target.value)}
-                placeholder="e.g. KSP001"
-                required
-                autoComplete="username"
-              />
+            {/* Mobile logo */}
+            <div className="mobile-logo">
+              <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+                <rect width="36" height="36" rx="8" fill="#10141e"/>
+                <path d="M18 6 L28 10 L28 19 C28 25 18 30 18 30 C18 30 8 25 8 19 L8 10 Z" stroke="#2b3cff" strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
+                <path d="M13 18 L16.5 21.5 L23 15" stroke="#4e7bff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span className="mobile-logo-text">Police<span>GPT</span></span>
             </div>
-            <div className="field">
-              <label htmlFor="password-input">Password</label>
-              <input
-                id="password-input"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                required
-                autoComplete="current-password"
-              />
+
+            <h2 className="form-heading">Sign in</h2>
+            <p className="form-sub">Use your badge number and password, or select a demo account below.</p>
+
+            {/* Demo accounts */}
+            <div className="demo-strip">
+              <div className="demo-label">Demo accounts</div>
+              {demos.map((acc) => (
+                <button
+                  key={acc.id}
+                  className={`demo-row${activeDemo === acc.id ? " active" : ""}`}
+                  onClick={() => quickLogin(acc)}
+                  disabled={loading}
+                >
+                  <div className="demo-row-left">
+                    <span className="demo-row-name">{acc.name}</span>
+                    <span className="demo-row-meta">{acc.role}</span>
+                  </div>
+                  <span className="demo-row-id">{acc.id}</span>
+                </button>
+              ))}
             </div>
-            <button id="login-btn" type="submit" className="btn-login" disabled={loading}>
-              {loading ? (
-                <><div className="spinner" /> Signing In...</>
-              ) : (
-                <>Sign In &rarr;</>
-              )}
-            </button>
-          </form>
 
-          {/* Demo accounts */}
-          <div className="divider">
-            <div className="divider-line" />
-            <span className="divider-text">Demo Access</span>
-            <div className="divider-line" />
-          </div>
+            {/* OR */}
+            <div className="sep">
+              <div className="sep-line" />
+              <span className="sep-text">or sign in manually</span>
+              <div className="sep-line" />
+            </div>
 
-          <div className="demo-accounts">
-            {demoAccounts.map((acc) => (
-              <button
-                key={acc.id}
-                className="demo-btn"
-                onClick={() => quickLogin(acc.id, acc.pass, acc.name, acc.role)}
-                disabled={loading}
-              >
-                <div className="demo-avatar">{acc.initial}</div>
-                <div className="demo-info">
-                  <span className="demo-name">{acc.name}</span>
-                  <span className="demo-role">{acc.role} · {acc.id}</span>
-                </div>
-                <span className="demo-arrow">›</span>
+            {/* Manual form */}
+            {error && <div className="err">{error}</div>}
+
+            <form onSubmit={handleLogin}>
+              <div className="field">
+                <label htmlFor="badge-input">Badge / Officer ID</label>
+                <input
+                  id="badge-input"
+                  type="text"
+                  value={badge}
+                  onChange={(e) => setBadge(e.target.value)}
+                  placeholder="KSP001"
+                  required
+                  autoComplete="username"
+                  spellCheck={false}
+                />
+              </div>
+              <div className="field">
+                <label htmlFor="password-input">Password</label>
+                <input
+                  id="password-input"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  autoComplete="current-password"
+                />
+              </div>
+              <button id="login-btn" type="submit" className="btn" disabled={loading}>
+                {loading
+                  ? <><div className="spinner" /> Signing in...</>
+                  : "Continue →"}
               </button>
-            ))}
-          </div>
-        </div>
+            </form>
 
-        <div className="footer">Karnataka State Police · CCTNS Secured · v2.0</div>
+            <p className="foot-note">Protected by CCTNS · Unauthorized access is a criminal offence.</p>
+          </div>
+        </main>
       </div>
     </>
   );
