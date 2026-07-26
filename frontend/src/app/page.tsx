@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -8,289 +8,255 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState<"credentials" | "demo">("credentials");
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+
     try {
       const form = new URLSearchParams();
       form.append("username", badge);
       form.append("password", password);
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/auth/login`,
-        { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: form }
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: form,
+        }
       );
+
       if (!res.ok) throw new Error("Invalid credentials");
+
       const data = await res.json();
       localStorage.setItem("pgpt_token", data.access_token);
-      localStorage.setItem("pgpt_officer", JSON.stringify({
-        name: data.officer_name, role: data.officer_role, badge: data.badge_number
-      }));
+      localStorage.setItem(
+        "pgpt_officer",
+        JSON.stringify({
+          name: data.officer_name,
+          role: data.officer_role,
+          badge: data.badge_number,
+        })
+      );
       router.push("/dashboard");
     } catch {
-      // Fallback for hackathon demo mode if server is offline or mock credentials used
+      // Demo fallback for local offline / hackathon testing
       if (badge && password) {
         localStorage.setItem("pgpt_token", "demo_jwt_token_ksp_2024");
-        localStorage.setItem("pgpt_officer", JSON.stringify({
-          name: badge === "KSP999" ? "DGP Alok Mohan" : badge === "KSP004" ? "Insp. Ananya Rao" : "Insp. Ramesh Kumar",
-          role: badge === "KSP999" ? "Commissioner" : badge === "KSP004" ? "Cybercrime" : "Investigating Officer",
-          badge: badge
-        }));
+        localStorage.setItem(
+          "pgpt_officer",
+          JSON.stringify({
+            name:
+              badge === "KSP999"
+                ? "Alok Mohan, IPS"
+                : badge === "KSP004"
+                ? "Insp. Ananya Rao"
+                : "Insp. Ramesh Kumar",
+            role:
+              badge === "KSP999"
+                ? "Director General & IGP"
+                : badge === "KSP004"
+                ? "Cybercrime Division"
+                : "Station House Officer",
+            badge: badge,
+          })
+        );
         router.push("/dashboard");
         return;
       }
-      setError("Invalid badge number or password. Please verify credentials.");
+      setError("Authentication failed. Check your Police ID and Password.");
       setLoading(false);
     }
   };
 
-  const executeDemoLogin = (badgeNum: string, pass: string) => {
-    setBadge(badgeNum);
+  const handleQuickSelect = (id: string, pass: string, name: string, role: string) => {
+    setBadge(id);
     setPassword(pass);
-    localStorage.setItem("pgpt_token", "demo_jwt_token_ksp_2024");
-    localStorage.setItem("pgpt_officer", JSON.stringify({
-      name: badgeNum === "KSP999" ? "DGP Alok Mohan" : badgeNum === "KSP004" ? "Insp. Ananya Rao" : "Insp. Ramesh Kumar",
-      role: badgeNum === "KSP999" ? "Director General of Police" : badgeNum === "KSP004" ? "Cybercrime Specialist" : "Senior Inspector",
-      badge: badgeNum
-    }));
+    setSelectedProfile(id);
     setLoading(true);
+    localStorage.setItem("pgpt_token", "demo_jwt_token_ksp_2024");
+    localStorage.setItem(
+      "pgpt_officer",
+      JSON.stringify({
+        name,
+        role,
+        badge: id,
+      })
+    );
     setTimeout(() => {
       router.push("/dashboard");
-    }, 600);
+    }, 400);
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center relative overflow-hidden selection:bg-blue-500 selection:text-white"
-      style={{ background: "radial-gradient(circle at 50% -20%, #0f2342 0%, #040812 80%)" }}>
+    <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col justify-between p-4 sm:p-8 font-sans selection:bg-blue-600 selection:text-white">
+      {/* Top Bar / Gov Header */}
+      <header className="max-w-6xl w-full mx-auto flex items-center justify-between py-2 border-b border-slate-800/60">
+        <div className="flex items-center gap-3">
+          {/* Official Emblem / Crest Graphic */}
+          <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-amber-400 font-bold text-xs tracking-wider shadow-sm">
+            KSP
+          </div>
+          <div>
+            <h1 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+              Karnataka State Police
+            </h1>
+            <p className="text-[10px] text-slate-400 font-mono">
+              Crime & Investigation Intelligence Network
+            </p>
+          </div>
+        </div>
 
-      {/* Grid Pattern Overlay */}
-      <div className="absolute inset-0 bg-grid opacity-25 pointer-events-none" />
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-500" />
+          <span className="text-[11px] font-mono text-slate-400">
+            CCTNS Node #8902 Active
+          </span>
+        </div>
+      </header>
 
-      {/* Glowing Dynamic Backdrop Spheres */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 left-1/3 w-[650px] h-[400px] rounded-full opacity-20"
-          style={{ background: "radial-gradient(circle, #3b82f6 0%, #06b6d4 50%, transparent 80%)", filter: "blur(90px)" }} />
-        <div className="absolute bottom-10 right-1/4 w-[450px] h-[300px] rounded-full opacity-15"
-          style={{ background: "radial-gradient(circle, #8b5cf6 0%, transparent 70%)", filter: "blur(100px)" }} />
-      </div>
-
-      <div className={`relative z-10 w-full max-w-5xl mx-auto px-4 py-8 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
-        
-        {/* Main Grid: Left Feature Briefing + Right Authentication Box */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
-          {/* Left Column: Platform Branding & Intelligence Highlights */}
-          <div className="lg:col-span-6 space-y-6 text-left">
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400">
-              <div className="live-dot" />
-              <span className="text-[11px] font-mono font-bold tracking-widest uppercase">
-                STATE POLICE AI COMMAND CENTER
+      {/* Main Container */}
+      <main className="max-w-md w-full mx-auto my-auto py-8">
+        <div className="bg-[#0f172a] border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
+          {/* Card Title */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold text-white tracking-tight">
+                Officer Login
+              </h2>
+              <span className="text-[10px] font-mono uppercase bg-blue-950 text-blue-400 border border-blue-800 px-2 py-0.5 rounded font-semibold">
+                POLICEGPT v2.4
               </span>
             </div>
-
-            <div>
-              <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-white leading-tight" style={{ fontFamily: "'Outfit', sans-serif" }}>
-                POLICE<span className="text-amber-400">GPT</span>
-              </h1>
-              <p className="text-sm font-semibold tracking-[0.2em] text-blue-400 uppercase mt-1">
-                Karnataka State Police Intelligence System
-              </p>
-              <p className="text-xs text-slate-400 mt-3 leading-relaxed max-w-md">
-                Grounded multi-modal crime analytics platform empowering law enforcement with instant FIR synthesis, criminal network link graphs, and predictive AI intelligence.
-              </p>
-            </div>
-
-            {/* Key Capability Chips */}
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              {[
-                { icon: "📋", title: "CCTNS Integration", desc: "Real-time FIR database linking" },
-                { icon: "🕸️", title: "Knowledge Link Graph", desc: "Suspect, vehicle & phone mapping" },
-                { icon: "🔮", title: "Predictive Analytics", desc: "30-day spatial crime forecasts" },
-                { icon: "🎙️", title: "Kannada Audio OCR", desc: "Voice transcription & translation" },
-              ].map((feat, i) => (
-                <div key={i} className="p-3 rounded-2xl bg-slate-900/50 border border-slate-800/80 hover:border-slate-700 transition-colors">
-                  <div className="text-base mb-1">{feat.icon}</div>
-                  <h4 className="text-xs font-bold text-slate-200">{feat.title}</h4>
-                  <p className="text-[10px] text-slate-500 mt-0.5">{feat.desc}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Security Audit Badge */}
-            <div className="flex items-center gap-3 pt-2">
-              <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-sm font-bold">
-                ✓
-              </div>
-              <div className="text-[11px] text-slate-400 font-mono">
-                <span className="text-slate-200 font-semibold block">AES-256 Encrypted Gateway</span>
-                <span>Restricted Officers Only • Audit Log Active</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Authentication Card */}
-          <div className="lg:col-span-6">
-            <div className="glass-card p-7 sm:p-8 relative overflow-hidden border border-blue-500/30 shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-3xl bg-slate-950/80 backdrop-blur-xl">
-              
-              {/* Glowing Top Beam */}
-              <div className="absolute top-0 left-0 right-0 h-[2px]"
-                style={{ background: "linear-gradient(90deg, transparent, #3b82f6, #06b6d4, transparent)" }} />
-
-              {/* Shield Header */}
-              <div className="text-center mb-6">
-                <div className="w-16 h-16 mx-auto mb-3 rounded-2xl flex items-center justify-center shadow-xl border border-blue-500/40 bg-gradient-to-br from-slate-900 to-blue-950">
-                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    <path d="m9 12 2 2 4-4" stroke="#38bdf8" strokeWidth="2"/>
-                  </svg>
-                </div>
-                <h2 className="text-lg font-bold text-slate-100" style={{ fontFamily: "'Outfit', sans-serif" }}>
-                  Officer Access Portal
-                </h2>
-                <p className="text-xs text-slate-400 mt-0.5">Authenticate with official credentials</p>
-              </div>
-
-              {/* Mode Tabs */}
-              <div className="flex bg-slate-900/80 p-1 rounded-xl border border-slate-800 mb-6">
-                <button
-                  onClick={() => setActiveTab("credentials")}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                    activeTab === "credentials" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-slate-200"
-                  }`}>
-                  Standard Login
-                </button>
-                <button
-                  onClick={() => setActiveTab("demo")}
-                  className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
-                    activeTab === "demo" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-slate-200"
-                  }`}>
-                  <span>⭐ Quick Access</span>
-                </button>
-              </div>
-
-              {error && (
-                <div className="mb-5 p-3.5 rounded-xl text-xs text-red-300 flex items-start gap-2.5 bg-red-500/10 border border-red-500/30">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-red-400 flex-shrink-0 mt-0.5">
-                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                  </svg>
-                  <span>{error}</span>
-                </div>
-              )}
-
-              {activeTab === "credentials" ? (
-                <form onSubmit={handleLogin} className="space-y-4">
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                      Badge Number / Police ID
-                    </label>
-                    <div className="relative">
-                      <input
-                        id="badge-input"
-                        type="text"
-                        className="pg-input pl-10 text-xs py-2.5 font-mono"
-                        placeholder="e.g. KSP001"
-                        value={badge}
-                        onChange={e => setBadge(e.target.value)}
-                        required
-                        autoComplete="username"
-                      />
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                      </svg>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                      Password
-                    </label>
-                    <div className="relative">
-                      <input
-                        id="password-input"
-                        type="password"
-                        className="pg-input pl-10 text-xs py-2.5"
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={e => setPassword(e.target.value)}
-                        required
-                        autoComplete="current-password"
-                      />
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                      </svg>
-                    </div>
-                  </div>
-
-                  <button
-                    id="login-btn"
-                    type="submit"
-                    disabled={loading}
-                    className="btn-primary w-full justify-center py-3 mt-2 font-bold tracking-wider text-xs shadow-lg">
-                    {loading ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        VERIFYING CLEARANCE...
-                      </>
-                    ) : (
-                      <>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
-                        </svg>
-                        AUTHENTICATE & ACCESS SYSTEM
-                      </>
-                    )}
-                  </button>
-                </form>
-              ) : (
-                <div className="space-y-3">
-                  <p className="text-xs text-slate-400 mb-3 text-center">
-                    Select a pre-configured clearance profile for instant access:
-                  </p>
-
-                  {[
-                    { label: "Inspector Ramesh Kumar", role: "Investigating Officer (Koramangala)", badge: "KSP001", pass: "police123", icon: "👮" },
-                    { label: "Inspector Ananya Rao", role: "Cybercrime Division Head", badge: "KSP004", pass: "police123", icon: "💻" },
-                    { label: "DGP Alok Mohan", role: "Director General of Police", badge: "KSP999", pass: "admin123", icon: "⭐" },
-                  ].map((d) => (
-                    <div
-                      key={d.badge}
-                      onClick={() => executeDemoLogin(d.badge, d.pass)}
-                      className="p-3.5 rounded-2xl border border-slate-800 bg-slate-900/50 hover:bg-blue-600/10 hover:border-blue-500/40 transition-all cursor-pointer group flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-lg">
-                          {d.icon}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-xs text-slate-200 group-hover:text-blue-300">{d.label}</span>
-                            <span className="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-800 text-blue-400">{d.badge}</span>
-                          </div>
-                          <p className="text-[11px] text-slate-500 mt-0.5">{d.role}</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-bold text-blue-400 group-hover:translate-x-1 transition-transform">
-                        Launch →
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <p className="text-center text-[10px] text-slate-600 font-mono mt-4">
-              KARNATAKA POLICE DEPT • OFFICIAL USE ONLY • IP LOGGED
+            <p className="text-xs text-slate-400">
+              Enter your official credentials to access criminal records and intelligence tools.
             </p>
           </div>
 
+          {error && (
+            <div className="p-3 rounded-lg bg-red-950/50 border border-red-800/80 text-xs text-red-300 flex items-center gap-2">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Form */}
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-300">
+                Police ID / Badge Number
+              </label>
+              <input
+                id="badge-input"
+                type="text"
+                value={badge}
+                onChange={(e) => setBadge(e.target.value)}
+                placeholder="e.g. KSP001"
+                required
+                className="w-full bg-[#090d16] border border-slate-700 rounded-lg px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors font-mono"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-slate-300">
+                Password
+              </label>
+              <input
+                id="password-input"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                className="w-full bg-[#090d16] border border-slate-700 rounded-lg px-3.5 py-2.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+              />
+            </div>
+
+            <button
+              id="login-btn"
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm disabled:opacity-50"
+            >
+              {loading ? (
+                <>
+                  <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Authenticating...
+                </>
+              ) : (
+                "Sign In to Portal"
+              )}
+            </button>
+          </form>
+
+          {/* Quick Demo Access (Clean minimal selector) */}
+          <div className="pt-4 border-t border-slate-800/80 space-y-2.5">
+            <p className="text-[11px] font-medium text-slate-400">
+              Quick Demo Accounts:
+            </p>
+            <div className="space-y-1.5">
+              {[
+                {
+                  id: "KSP001",
+                  pass: "police123",
+                  name: "Insp. Ramesh Kumar",
+                  role: "Station House Officer (Koramangala)",
+                },
+                {
+                  id: "KSP004",
+                  pass: "police123",
+                  name: "Insp. Ananya Rao",
+                  role: "Cybercrime Division Head",
+                },
+                {
+                  id: "KSP999",
+                  pass: "admin123",
+                  name: "Alok Mohan, IPS",
+                  role: "Director General & IGP",
+                },
+              ].map((acc) => (
+                <button
+                  key={acc.id}
+                  onClick={() =>
+                    handleQuickSelect(acc.id, acc.pass, acc.name, acc.role)
+                  }
+                  className={`w-full flex items-center justify-between p-2.5 rounded-lg border text-left transition-all ${
+                    selectedProfile === acc.id
+                      ? "bg-blue-950/60 border-blue-600 text-blue-200"
+                      : "bg-[#090d16] border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-900/60"
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="font-mono text-xs font-bold text-blue-400 bg-blue-950/80 px-2 py-0.5 rounded border border-blue-900">
+                      {acc.id}
+                    </span>
+                    <div>
+                      <p className="text-xs font-medium text-slate-200">
+                        {acc.name}
+                      </p>
+                      <p className="text-[10px] text-slate-400">{acc.role}</p>
+                    </div>
+                  </div>
+                  <span className="text-[11px] text-slate-400 font-medium">
+                    Auto-Fill →
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="max-w-6xl w-full mx-auto py-3 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-500 gap-2">
+        <p>Government of Karnataka • Department of Home Affairs</p>
+        <p className="font-mono text-[10px]">
+          FOR AUTHORIZED OFFICIAL USE ONLY
+        </p>
+      </footer>
     </div>
   );
 }
