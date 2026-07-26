@@ -2,451 +2,477 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+const demos = [
+  { id: "KSP001", pass: "police123", name: "Ramesh Kumar",  role: "Investigating Officer",  color: "#3b5bff" },
+  { id: "KSP004", pass: "police123", name: "Ananya Rao",    role: "Cybercrime Specialist",  color: "#7c3aed" },
+  { id: "KSP999", pass: "admin123",  name: "Alok Mohan",    role: "Commissioner",           color: "#0ea5e9" },
+];
+
 export default function LoginPage() {
   const router = useRouter();
-  const [badge, setBadge] = useState("");
+  const [badge, setBadge]       = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [activeDemo, setActiveDemo] = useState<string | null>(null);
+  const [loading, setLoading]   = useState(false);
+  const [active, setActive]     = useState<string | null>(null);
+  const [error, setError]       = useState("");
+
+  const go = (officerName: string, role: string, badgeId: string) => {
+    localStorage.setItem("pgpt_token", "demo_jwt_token_ksp_2024");
+    localStorage.setItem("pgpt_officer", JSON.stringify({ name: officerName, role, badge: badgeId }));
+    router.push("/dashboard");
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     try {
       const form = new URLSearchParams();
       form.append("username", badge);
       form.append("password", password);
-
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/v1/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: form,
-        }
+        { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: form }
       );
-
-      if (!res.ok) throw new Error("Invalid credentials");
-
+      if (!res.ok) throw new Error();
       const data = await res.json();
       localStorage.setItem("pgpt_token", data.access_token);
-      localStorage.setItem("pgpt_officer", JSON.stringify({
-        name: data.officer_name,
-        role: data.officer_role,
-        badge: data.badge_number,
-      }));
+      localStorage.setItem("pgpt_officer", JSON.stringify({ name: data.officer_name, role: data.officer_role, badge: data.badge_number }));
       router.push("/dashboard");
     } catch {
       if (badge && password) {
-        localStorage.setItem("pgpt_token", "demo_jwt_token_ksp_2024");
-        localStorage.setItem("pgpt_officer", JSON.stringify({
-          name: badge === "KSP999" ? "DGP Alok Mohan" : badge === "KSP004" ? "Insp. Ananya Rao" : "Insp. Ramesh Kumar",
-          role: badge === "KSP999" ? "Commissioner" : badge === "KSP004" ? "Cybercrime" : "Investigating Officer",
-          badge,
-        }));
-        router.push("/dashboard");
+        const match = demos.find((d) => d.id === badge);
+        go(match?.name ?? "Officer", match?.role ?? "Officer", badge);
         return;
       }
-      setError("Invalid badge number or password.");
+      setError("Badge number or password is incorrect.");
       setLoading(false);
     }
   };
 
-  const quickLogin = (acc: { id: string; pass: string; name: string; role: string }) => {
-    setActiveDemo(acc.id);
-    localStorage.setItem("pgpt_token", "demo_jwt_token_ksp_2024");
-    localStorage.setItem("pgpt_officer", JSON.stringify({ name: acc.name, role: acc.role, badge: acc.id }));
-    setTimeout(() => router.push("/dashboard"), 350);
+  const quickLogin = (d: typeof demos[0]) => {
+    setActive(d.id);
+    setTimeout(() => go(d.name, d.role, d.id), 320);
   };
-
-  const demos = [
-    { id: "KSP001", pass: "police123", name: "Insp. Ramesh Kumar", role: "Investigating Officer" },
-    { id: "KSP004", pass: "police123", name: "Insp. Ananya Rao",   role: "Cybercrime Specialist" },
-    { id: "KSP999", pass: "admin123",  name: "DGP Alok Mohan",     role: "Commissioner" },
-  ];
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { height: 100%; }
+        html, body { height: 100%; background: #06080d; }
 
+        /* ─────── ROOT ─────── */
         .root {
           min-height: 100vh;
           display: flex;
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          background: #0c0e12;
-          color: #e4e7ec;
+          font-family: 'Inter', -apple-system, sans-serif;
           -webkit-font-smoothing: antialiased;
+          color: #dde2ee;
         }
 
-        /* ── LEFT PANEL ── */
-        .panel-left {
+        /* ─────── LEFT ─────── */
+        .left {
           display: none;
-          width: 420px;
+          width: 440px;
           flex-shrink: 0;
-          background: #0c0e12;
-          border-right: 1px solid #1c2030;
-          padding: 3rem;
+          background: #06080d;
+          border-right: 1px solid #12151e;
           flex-direction: column;
           justify-content: space-between;
+          padding: 3.25rem 3rem;
+          position: relative;
+          overflow: hidden;
         }
-        @media (min-width: 900px) { .panel-left { display: flex; } }
+        @media (min-width: 880px) { .left { display: flex; } }
 
-        .left-top { }
+        /* Subtle corner accent */
+        .left::before {
+          content: '';
+          position: absolute;
+          top: 0; right: 0;
+          width: 180px; height: 180px;
+          background: radial-gradient(circle at top right, rgba(59,91,255,0.07) 0%, transparent 70%);
+          pointer-events: none;
+        }
+        .left::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0;
+          width: 140px; height: 140px;
+          background: radial-gradient(circle at bottom left, rgba(14,165,233,0.05) 0%, transparent 70%);
+          pointer-events: none;
+        }
 
-        .ksp-mark {
+        .brand {
           display: flex;
           align-items: center;
           gap: 10px;
-          margin-bottom: 3.5rem;
         }
-        .ksp-emblem {
-          width: 36px;
-          height: 36px;
-          flex-shrink: 0;
+        .brand-icon {
+          width: 32px; height: 32px;
+          background: #0d1120;
+          border: 1px solid #1e2438;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
-        .ksp-label {
-          font-size: 0.8rem;
-          font-weight: 600;
-          letter-spacing: 0.12em;
+        .brand-name {
+          font-size: 0.82rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
           text-transform: uppercase;
-          color: #6b7588;
+          color: #3d4560;
         }
 
-        .left-headline {
-          font-size: 2rem;
-          font-weight: 700;
-          line-height: 1.2;
-          color: #f0f2f5;
-          letter-spacing: -0.03em;
+        .left-body { margin-top: auto; margin-bottom: auto; }
+
+        .left-eyebrow {
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #3b5bff;
           margin-bottom: 1.25rem;
         }
-        .left-headline em {
-          font-style: normal;
-          color: #4e7bff;
-        }
 
-        .left-desc {
+        .left-h1 {
+          font-size: 2.6rem;
+          font-weight: 800;
+          line-height: 1.1;
+          letter-spacing: -0.045em;
+          color: #f0f3fa;
+          margin-bottom: 1.25rem;
+        }
+        .left-h1 .muted { color: #1e2438; }
+
+        .left-p {
           font-size: 0.875rem;
-          color: #505a70;
-          line-height: 1.7;
-          max-width: 300px;
+          color: #3d4560;
+          line-height: 1.75;
+          max-width: 280px;
+          margin-bottom: 2.5rem;
         }
 
-        .left-tags {
+        .stats {
           display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-          margin-top: 2.5rem;
+          gap: 2rem;
         }
-        .tag {
+        .stat-val {
+          font-size: 1.5rem;
+          font-weight: 800;
+          letter-spacing: -0.04em;
+          color: #8b97b8;
+          display: block;
+        }
+        .stat-key {
           font-size: 0.68rem;
           font-weight: 500;
-          letter-spacing: 0.04em;
           text-transform: uppercase;
-          color: #3a4256;
-          border: 1px solid #1c2030;
-          border-radius: 4px;
-          padding: 0.3rem 0.6rem;
+          letter-spacing: 0.08em;
+          color: #252c40;
+          display: block;
+          margin-top: 2px;
         }
 
-        .left-bottom {
-          font-size: 0.72rem;
-          color: #2c3347;
-          letter-spacing: 0.04em;
+        .left-foot {
+          font-size: 0.68rem;
+          color: #1a1f30;
+          letter-spacing: 0.05em;
         }
 
-        /* ── RIGHT PANEL ── */
-        .panel-right {
+        /* ─────── RIGHT ─────── */
+        .right {
           flex: 1;
+          background: #06080d;
           display: flex;
           align-items: center;
           justify-content: center;
           padding: 2rem 1.5rem;
-          background: #080a0e;
         }
 
-        .form-shell {
+        .form-box {
           width: 100%;
-          max-width: 360px;
+          max-width: 348px;
         }
 
-        /* Mobile logo */
-        .mobile-logo {
+        /* Mobile only brand */
+        .mob-brand {
           display: flex;
           align-items: center;
-          gap: 10px;
-          margin-bottom: 2.5rem;
+          gap: 9px;
+          margin-bottom: 2.25rem;
         }
-        @media (min-width: 900px) { .mobile-logo { display: none; } }
+        @media (min-width: 880px) { .mob-brand { display: none; } }
+        .mob-brand-icon {
+          width: 30px; height: 30px;
+          background: #0d1120;
+          border: 1px solid #1e2438;
+          border-radius: 7px;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .mob-brand-name {
+          font-size: 0.8rem; font-weight: 700;
+          letter-spacing: 0.08em; text-transform: uppercase; color: #3d4560;
+        }
 
-        .mobile-logo-text {
-          font-size: 1rem;
+        .form-title {
+          font-size: 1.5rem;
           font-weight: 700;
-          letter-spacing: -0.02em;
-          color: #e4e7ec;
+          letter-spacing: -0.035em;
+          color: #edf0f8;
+          margin-bottom: 0.3rem;
         }
-        .mobile-logo-text span { color: #4e7bff; }
-
-        .form-heading {
-          font-size: 1.4rem;
-          font-weight: 700;
-          letter-spacing: -0.03em;
-          color: #f0f2f5;
-          margin-bottom: 0.4rem;
-        }
-        .form-sub {
-          font-size: 0.82rem;
-          color: #424c63;
+        .form-hint {
+          font-size: 0.8rem;
+          color: #2e3550;
           margin-bottom: 2rem;
+          line-height: 1.5;
         }
 
-        /* Demo pills */
-        .demo-strip {
-          display: flex;
-          flex-direction: column;
-          gap: 0.4rem;
-          margin-bottom: 1.75rem;
-          padding-bottom: 1.75rem;
-          border-bottom: 1px solid #13172000;
-          position: relative;
-        }
-        .demo-strip::after {
-          content: '';
-          position: absolute;
-          bottom: 0; left: 0; right: 0;
-          height: 1px;
-          background: #171b25;
-        }
-
-        .demo-label {
-          font-size: 0.68rem;
+        /* ── Demo accounts ── */
+        .section-label {
+          font-size: 0.65rem;
           font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: #2e3650;
-          margin-bottom: 0.5rem;
+          letter-spacing: 0.1em;
+          color: #232840;
+          margin-bottom: 0.6rem;
         }
 
-        .demo-row {
+        .demo-list { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1.5rem; }
+
+        .demo-item {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 0.65rem 0.875rem;
-          border: 1px solid #171b25;
-          border-radius: 8px;
-          cursor: pointer;
+          gap: 0.75rem;
+          padding: 0.6rem 0.8rem;
+          border: 1px solid #111420;
+          border-radius: 9px;
           background: transparent;
+          cursor: pointer;
           width: 100%;
           text-align: left;
           font-family: inherit;
           color: inherit;
-          transition: background 0.15s, border-color 0.15s;
+          transition: background 0.12s, border-color 0.12s;
+          position: relative;
+          overflow: hidden;
         }
-        .demo-row:hover {
-          background: #0f1219;
-          border-color: #252c3f;
+        .demo-item:hover {
+          background: #0c0f18;
+          border-color: #1c2236;
         }
-        .demo-row.active {
-          border-color: #2a3cff30;
-          background: #0d1020;
+        .demo-item.active {
+          border-color: #1e2a50;
+          background: #090c16;
+        }
+        .demo-item:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .avatar {
+          width: 28px; height: 28px;
+          border-radius: 7px;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 0.68rem; font-weight: 700;
+          flex-shrink: 0;
+          letter-spacing: 0;
         }
 
-        .demo-row-left { }
-        .demo-row-name {
-          font-size: 0.8rem;
-          font-weight: 500;
-          color: #c8cdd8;
-          display: block;
+        .demo-text { flex: 1; min-width: 0; }
+        .demo-name {
+          font-size: 0.78rem; font-weight: 600; color: #bcc5dc;
+          display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
-        .demo-row-meta {
-          font-size: 0.7rem;
-          color: #3a4256;
-          display: block;
-          margin-top: 1px;
-        }
+        .demo-role { font-size: 0.67rem; color: #2a3048; display: block; margin-top: 1px; }
 
-        .demo-row-id {
-          font-size: 0.7rem;
-          font-weight: 600;
-          font-family: 'SF Mono', 'Fira Code', monospace;
-          color: #2e3a58;
-          letter-spacing: 0.05em;
+        .demo-badge {
+          font-size: 0.65rem; font-weight: 600;
+          font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+          color: #1e2538; letter-spacing: 0.06em; flex-shrink: 0;
         }
 
-        /* OR separator */
-        .sep {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          margin-bottom: 1.5rem;
+        /* Loading bar on active demo */
+        .demo-item.active::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0;
+          width: 100%; height: 2px;
+          background: currentColor;
+          animation: fill 0.32s linear forwards;
         }
-        .sep-line { flex: 1; height: 1px; background: #171b25; }
-        .sep-text { font-size: 0.7rem; color: #2a3044; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; }
+        @keyframes fill { from { transform: scaleX(0); transform-origin: left; } to { transform: scaleX(1); transform-origin: left; } }
 
-        /* Fields */
-        .field { margin-bottom: 0.875rem; }
+        /* ── OR divider ── */
+        .or {
+          display: flex; align-items: center; gap: 0.75rem;
+          margin-bottom: 1.4rem;
+        }
+        .or-line { flex: 1; height: 1px; background: #10131c; }
+        .or-text { font-size: 0.67rem; color: #1e2436; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; }
 
+        /* ── Fields ── */
+        .field { margin-bottom: 0.8rem; }
         .field label {
           display: block;
-          font-size: 0.72rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-          color: #3d4660;
-          margin-bottom: 0.45rem;
+          font-size: 0.68rem; font-weight: 600;
+          text-transform: uppercase; letter-spacing: 0.07em;
+          color: #2e3550; margin-bottom: 0.4rem;
         }
-
         .field input {
           width: 100%;
-          background: #0c0e14;
-          border: 1px solid #171c2a;
+          background: #080a10;
+          border: 1px solid #12151f;
           border-radius: 8px;
-          padding: 0.7rem 0.875rem;
+          padding: 0.68rem 0.875rem;
           font-size: 0.875rem;
-          color: #dde0e8;
+          color: #d8dde9;
           outline: none;
           font-family: inherit;
-          transition: border-color 0.15s;
+          transition: border-color 0.15s, background 0.15s;
+          caret-color: #3b5bff;
         }
-        .field input::placeholder { color: #252b3d; }
+        .field input::placeholder { color: #1e2438; font-size: 0.83rem; }
         .field input:focus {
-          border-color: #2b3cff50;
+          border-color: #1e2a50;
+          background: #070910;
         }
-        .field input:focus-visible { outline: none; }
 
         .err {
-          font-size: 0.75rem;
-          color: #e05f5f;
-          background: #1a0e0e;
-          border: 1px solid #2e1515;
-          border-radius: 6px;
-          padding: 0.55rem 0.75rem;
-          margin-bottom: 0.875rem;
+          font-size: 0.74rem; color: #f87171;
+          background: #110b0b; border: 1px solid #1f1010;
+          border-radius: 7px; padding: 0.55rem 0.75rem;
+          margin-bottom: 0.8rem;
         }
 
-        .btn {
+        .submit {
           width: 100%;
-          margin-top: 0.5rem;
-          padding: 0.75rem;
-          border: none;
-          border-radius: 8px;
-          font-size: 0.875rem;
-          font-weight: 600;
-          font-family: inherit;
+          margin-top: 0.4rem;
+          padding: 0.75rem 1rem;
+          background: #3b5bff;
+          border: none; border-radius: 8px;
+          font-size: 0.875rem; font-weight: 600;
+          font-family: inherit; color: #fff;
           cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          background: #2b3cff;
-          color: #fff;
+          display: flex; align-items: center; justify-content: center; gap: 0.5rem;
           letter-spacing: -0.01em;
-          transition: background 0.15s, opacity 0.15s;
+          transition: background 0.15s, transform 0.1s;
+          box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 8px 24px rgba(59,91,255,0.18);
         }
-        .btn:hover:not(:disabled) { background: #3b4eff; }
-        .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .submit:hover:not(:disabled) { background: #4a6aff; }
+        .submit:active:not(:disabled) { transform: scale(0.99); }
+        .submit:disabled { opacity: 0.45; cursor: not-allowed; }
 
-        .spinner {
+        .spin {
           width: 14px; height: 14px;
-          border: 2px solid rgba(255,255,255,0.25);
+          border: 2px solid rgba(255,255,255,0.2);
           border-top-color: #fff;
           border-radius: 50%;
-          animation: spin 0.65s linear infinite;
+          animation: spin 0.6s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        .foot-note {
+        .footnote {
           margin-top: 2rem;
-          font-size: 0.7rem;
-          color: #1e2436;
-          text-align: center;
-          letter-spacing: 0.04em;
+          font-size: 0.67rem; color: #141720;
+          text-align: center; letter-spacing: 0.04em; line-height: 1.6;
         }
       `}</style>
 
       <div className="root">
-
         {/* ── LEFT PANEL ── */}
-        <aside className="panel-left">
-          <div className="left-top">
-            <div className="ksp-mark">
-              <svg className="ksp-emblem" viewBox="0 0 36 36" fill="none">
-                <rect width="36" height="36" rx="8" fill="#10141e"/>
-                <path d="M18 6 L28 10 L28 19 C28 25 18 30 18 30 C18 30 8 25 8 19 L8 10 Z" stroke="#2b3cff" strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
-                <path d="M13 18 L16.5 21.5 L23 15" stroke="#4e7bff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <aside className="left">
+          <div className="brand">
+            <div className="brand-icon">
+              <svg width="17" height="17" viewBox="0 0 20 20" fill="none">
+                <path d="M10 2L17 5V11C17 15 10 18 10 18C10 18 3 15 3 11V5L10 2Z" stroke="#3b5bff" strokeWidth="1.4" fill="none" strokeLinejoin="round"/>
+                <path d="M7 10L9.5 12.5L13 8" stroke="#3b5bff" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <span className="ksp-label">Karnataka State Police</span>
             </div>
+            <span className="brand-name">PoliceGPT · KSP</span>
+          </div>
 
-            <h1 className="left-headline">
-              Intelligence<br />at the speed<br />of <em>thought.</em>
+          <div className="left-body">
+            <div className="left-eyebrow">Karnataka State Police</div>
+            <h1 className="left-h1">
+              Investigate<br/>
+              faster.<br/>
+              <span className="muted">Think clearer.</span>
             </h1>
-
-            <p className="left-desc">
-              PoliceGPT gives investigators instant access to case intelligence, pattern analysis, and criminal records through natural language.
+            <p className="left-p">
+              Natural language access to case records, FIR history, criminal profiles, and cross-district analytics — in seconds.
             </p>
-
-            <div className="left-tags">
-              <span className="tag">CCTNS Integrated</span>
-              <span className="tag">End-to-End Encrypted</span>
-              <span className="tag">Role-Based Access</span>
-              <span className="tag">Audit Logged</span>
+            <div className="stats">
+              <div>
+                <span className="stat-val">4.2M+</span>
+                <span className="stat-key">Records</span>
+              </div>
+              <div>
+                <span className="stat-val">31</span>
+                <span className="stat-key">Districts</span>
+              </div>
+              <div>
+                <span className="stat-val">99.9%</span>
+                <span className="stat-key">Uptime</span>
+              </div>
             </div>
           </div>
 
-          <div className="left-bottom">
-            © 2024 Karnataka State Police · Restricted System
+          <div className="left-foot">
+            CCTNS · End-to-end Encrypted · Audit Logged
           </div>
         </aside>
 
         {/* ── RIGHT PANEL ── */}
-        <main className="panel-right">
-          <div className="form-shell">
+        <main className="right">
+          <div className="form-box">
 
-            {/* Mobile logo */}
-            <div className="mobile-logo">
-              <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
-                <rect width="36" height="36" rx="8" fill="#10141e"/>
-                <path d="M18 6 L28 10 L28 19 C28 25 18 30 18 30 C18 30 8 25 8 19 L8 10 Z" stroke="#2b3cff" strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
-                <path d="M13 18 L16.5 21.5 L23 15" stroke="#4e7bff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span className="mobile-logo-text">Police<span>GPT</span></span>
+            {/* Mobile brand */}
+            <div className="mob-brand">
+              <div className="mob-brand-icon">
+                <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+                  <path d="M10 2L17 5V11C17 15 10 18 10 18C10 18 3 15 3 11V5L10 2Z" stroke="#3b5bff" strokeWidth="1.4" fill="none" strokeLinejoin="round"/>
+                  <path d="M7 10L9.5 12.5L13 8" stroke="#3b5bff" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              <span className="mob-brand-name">PoliceGPT · KSP</span>
             </div>
 
-            <h2 className="form-heading">Sign in</h2>
-            <p className="form-sub">Use your badge number and password, or select a demo account below.</p>
+            <h2 className="form-title">Sign in</h2>
+            <p className="form-hint">Access the intelligence system with your credentials.</p>
 
             {/* Demo accounts */}
-            <div className="demo-strip">
-              <div className="demo-label">Demo accounts</div>
-              {demos.map((acc) => (
-                <button
-                  key={acc.id}
-                  className={`demo-row${activeDemo === acc.id ? " active" : ""}`}
-                  onClick={() => quickLogin(acc)}
-                  disabled={loading}
-                >
-                  <div className="demo-row-left">
-                    <span className="demo-row-name">{acc.name}</span>
-                    <span className="demo-row-meta">{acc.role}</span>
-                  </div>
-                  <span className="demo-row-id">{acc.id}</span>
-                </button>
-              ))}
+            <div className="section-label">Demo accounts</div>
+            <div className="demo-list">
+              {demos.map((d) => {
+                const initials = d.name.split(" ").map((w) => w[0]).join("").slice(0, 2);
+                return (
+                  <button
+                    key={d.id}
+                    className={`demo-item${active === d.id ? " active" : ""}`}
+                    style={{ color: d.color }}
+                    onClick={() => quickLogin(d)}
+                    disabled={!!active}
+                  >
+                    <div className="avatar" style={{ background: `${d.color}15`, border: `1px solid ${d.color}25`, color: d.color }}>
+                      {initials}
+                    </div>
+                    <div className="demo-text">
+                      <span className="demo-name">{d.name}</span>
+                      <span className="demo-role">{d.role}</span>
+                    </div>
+                    <span className="demo-badge">{d.id}</span>
+                  </button>
+                );
+              })}
             </div>
 
             {/* OR */}
-            <div className="sep">
-              <div className="sep-line" />
-              <span className="sep-text">or sign in manually</span>
-              <div className="sep-line" />
+            <div className="or">
+              <div className="or-line" />
+              <span className="or-text">or continue with badge</span>
+              <div className="or-line" />
             </div>
 
             {/* Manual form */}
@@ -473,19 +499,22 @@ export default function LoginPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   required
                   autoComplete="current-password"
                 />
               </div>
-              <button id="login-btn" type="submit" className="btn" disabled={loading}>
+              <button id="login-btn" type="submit" className="submit" disabled={loading || !!active}>
                 {loading
-                  ? <><div className="spinner" /> Signing in...</>
+                  ? <><div className="spin" /> Signing in...</>
                   : "Continue →"}
               </button>
             </form>
 
-            <p className="foot-note">Protected by CCTNS · Unauthorized access is a criminal offence.</p>
+            <p className="footnote">
+              Restricted system — Karnataka State Police.<br/>
+              Unauthorised access is a criminal offence.
+            </p>
           </div>
         </main>
       </div>
