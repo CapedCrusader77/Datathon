@@ -6,10 +6,10 @@
 
 <div align="center">
 
-![POLICEGPT](https://img.shields.io/badge/POLICEGPT-v1.0-blue?style=for-the-badge&logo=shield)
+![POLICEGPT](https://img.shields.io/badge/POLICEGPT-v2.0-blue?style=for-the-badge&logo=shield)
 ![Karnataka Police](https://img.shields.io/badge/Karnataka%20State%20Police-Classified-red?style=for-the-badge)
 ![AI Powered](https://img.shields.io/badge/AI%20Powered-RAG%20%2B%20LLM-purple?style=for-the-badge)
-![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.111-green?style=for-the-badge&logo=fastapi)
 
 </div>
@@ -21,19 +21,18 @@
 POLICEGPT is a **production-ready, cloud-native, AI-first national policing platform** that transforms how Karnataka State Police officers interact with crime data. Instead of complex SQL queries or manual database searches, officers simply ask questions in natural language and receive intelligent, grounded responses in seconds.
 
 ### The Problem
-- Traditional crime database searches require SQL expertise
-- Investigation insights that take hours to compile
-- Disconnected databases (FIRs, suspects, vehicles, phones)
-- No cross-linking of related cases
-- No predictive intelligence capability
+- Traditional crime database searches require SQL expertise.
+- Investigation insights take hours to compile manually.
+- Databases (FIRs, suspects, vehicles, phones) are disconnected.
+- Lacks automated cross-linking of related cases or predictive intelligence.
 
 ### The Solution — POLICEGPT
 A conversational AI system that:
-- ✅ Understands natural language queries in English, Kannada, and Hindi
-- ✅ Retrieves and synthesizes information from 10+ crime databases
-- ✅ Generates investigation summaries, reports, and recommendations
-- ✅ Visualizes crime networks, heatmaps, and timelines
-- ✅ Predicts crime trends using AI pattern analysis
+- ✅ Understands natural language queries in English, Kannada, and Hindi.
+- ✅ Retrieves and synthesizes information from 10+ crime databases.
+- ✅ Generates investigation summaries, reports, and recommendations.
+- ✅ Visualizes crime networks, heatmaps, and timelines.
+- ✅ Predicts crime trends using AI pattern analysis.
 
 ---
 
@@ -44,7 +43,7 @@ A conversational AI system that:
 │                         POLICEGPT Platform                           │
 │                                                                       │
 │  ┌──────────────┐    ┌──────────────┐    ┌────────────────────────┐ │
-│  │  Next.js 15  │    │   FastAPI    │    │      AI Engine         │ │
+│  │  Next.js 16  │    │   FastAPI    │    │      AI Engine         │ │
 │  │  TypeScript  │◄──►│   Backend   │◄──►│  LLM + RAG + KG       │ │
 │  │  Tailwind CSS│    │   Python 3.12│    │  Intent + NER + Search │ │
 │  └──────────────┘    └──────────────┘    └────────────────────────┘ │
@@ -105,8 +104,8 @@ Grounded Response + Citations + Visualization Hints
 ### 1. Clone & Setup
 
 ```bash
-git clone https://github.com/ksp-ai/policegpt.git
-cd policegpt
+git clone https://github.com/CapedCrusader77/Datathon.git
+cd Datathon
 cp .env.example .env
 ```
 
@@ -144,15 +143,15 @@ docker-compose logs -f backend
 open http://localhost:3000
 ```
 
-### 4. Demo Login Credentials
+### 4. Active Demo Login Credentials
 
-| Badge    | Name               | Role         | Password    |
-|----------|--------------------|--------------|-------------|
-| KSP001   | Inspector Ramesh   | Inspector    | police123   |
-| KSP002   | SI Priya Sharma    | Officer      | police123   |
-| KSP003   | DySP Vikram Nair   | DSP          | police123   |
-| KSP004   | Cyber Expert Ananya| Cybercrime   | police123   |
-| KSP999   | Commissioner DGP   | Commissioner | admin123    |
+You can click these on the login page for quick access, or sign in manually:
+
+| Badge ID | Officer Name | Assigned Role | Password |
+|---|---|---|---|
+| **KSP001** | Ramesh Kumar | Investigating Officer | `police123` |
+| **KSP004** | Ananya Rao | Cybercrime Specialist | `police123` |
+| **KSP999** | Alok Mohan | Commissioner | `admin123` |
 
 ---
 
@@ -223,21 +222,6 @@ GET  /api/v1/suspects/{id}/timeline — Crime timeline
 GET  /api/v1/suspects/{id}/similar-mo — MO similarity
 ```
 
-### Analytics
-```
-GET  /api/v1/analytics/heatmap   — Crime heatmap coordinates
-GET  /api/v1/analytics/trends    — Crime trends
-GET  /api/v1/analytics/kpis      — Dashboard KPIs
-GET  /api/v1/analytics/predictions — AI crime prediction
-```
-
-### Knowledge Graph
-```
-GET  /api/v1/graph/suspect-network/{id} — Suspect relationship graph
-GET  /api/v1/graph/gang-network/{id}    — Gang network
-POST /api/v1/graph/find-path            — Shortest path between entities
-```
-
 ---
 
 ## 🛡️ Security Architecture
@@ -255,22 +239,6 @@ POST /api/v1/graph/find-path            — Shortest path between entities
 
 ---
 
-## 🌐 Deployment
-
-### Kubernetes (Production)
-
-```bash
-kubectl apply -f k8s/
-```
-
-### Docker Compose (Development)
-
-```bash
-docker-compose up -d
-```
-
----
-
 ## 🧪 Testing
 
 ```bash
@@ -279,25 +247,7 @@ cd backend && pytest tests/ -v
 
 # Frontend tests
 cd frontend && npm test
-
-# E2E tests
-cd frontend && npx cypress run
 ```
-
----
-
-## 🗺️ Future Roadmap
-
-- [ ] Face similarity search (integration with AFRS)
-- [ ] Real CCTNS integration
-- [ ] Live CCTV metadata ingestion
-- [ ] Voice chat (Kannada/Hindi speech-to-text)
-- [ ] Mobile app (Android) for field officers
-- [ ] WhatsApp bot integration
-- [ ] Aadhaar-linked identity verification
-- [ ] NCRB database synchronization
-- [ ] Real-time crime alert system (SMS/push)
-- [ ] Predictive patrol routing
 
 ---
 
@@ -305,15 +255,15 @@ cd frontend && npx cypress run
 
 | Feature | Traditional System | POLICEGPT |
 |---------|-------------------|-----------|
-| Query Interface | SQL / Form fields | Natural language |
-| Search Time | Minutes to hours | Seconds |
-| Cross-DB linking | Manual | Automatic (Knowledge Graph) |
-| Pattern detection | Periodic reports | Real-time AI |
-| Language support | English only | English + Kannada + Hindi |
-| Insights | Raw data | AI-synthesized intelligence |
-| Reports | Manual writing | Auto-generated |
-| Legal sections | Manual lookup | AI-recommended |
-| Accessibility | PC only | Web + Mobile |
+| **Query Interface** | SQL / Form fields | Natural language |
+| **Search Time** | Minutes to hours | Seconds |
+| **Cross-DB linking** | Manual | Automatic (Knowledge Graph) |
+| **Pattern detection** | Periodic reports | Real-time AI |
+| **Language support** | English only | English + Kannada + Hindi |
+| **Insights** | Raw data | AI-synthesized intelligence |
+| **Reports** | Manual writing | Auto-generated |
+| **Legal sections** | Manual lookup | AI-recommended |
+| **Accessibility** | PC only | Web + Mobile |
 
 ---
 
@@ -339,6 +289,4 @@ Internal Use Only. All Rights Reserved.
 
 ---
 
-*Built with ❤️ for Karnataka State Police | POLICEGPT v1.0*
-#   D a t a t h o n  
- 
+*Built with ❤️ for Karnataka State Police | POLICEGPT v2.0*
