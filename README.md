@@ -289,4 +289,4 @@ Internal Use Only. All Rights Reserved.
 
 ---
 
-*Built with ❤️ for Karnataka State Police | POLICEGPT v2.0*
+*Built with loveeeeeeeeeeeeeeeeeeeee for Karnataka State Police | POLICEGPT v2.0*
