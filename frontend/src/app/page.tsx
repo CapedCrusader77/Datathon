@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -8,6 +8,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +47,6 @@ export default function LoginPage() {
       );
       router.push("/dashboard");
     } catch {
-      // Demo fallback for instant offline/hackathon testing
       if (badge && password) {
         localStorage.setItem("pgpt_token", "demo_jwt_token_ksp_2024");
         localStorage.setItem(
@@ -72,130 +76,453 @@ export default function LoginPage() {
   };
 
   const quickLogin = (badgeId: string, pass: string, name: string, role: string) => {
-    setBadge(badgeId);
-    setPassword(pass);
     setLoading(true);
     localStorage.setItem("pgpt_token", "demo_jwt_token_ksp_2024");
     localStorage.setItem(
       "pgpt_officer",
       JSON.stringify({ name, role, badge: badgeId })
     );
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 300);
+    setTimeout(() => router.push("/dashboard"), 400);
   };
 
+  const demoAccounts = [
+    { id: "KSP001", pass: "police123", name: "Insp. Ramesh Kumar", role: "Investigating Officer", initial: "R" },
+    { id: "KSP004", pass: "police123", name: "Insp. Ananya Rao", role: "Cybercrime Specialist", initial: "A" },
+    { id: "KSP999", pass: "admin123", name: "DGP Alok Mohan", role: "Commissioner", initial: "D" },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 flex flex-col items-center justify-center p-4 relative overflow-hidden font-sans selection:bg-blue-600 selection:text-white">
-      {/* Background Subtle Gradient Glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-      {/* Main Centered Login Card */}
-      <div className="w-full max-w-sm bg-[#0b0f19] border border-slate-800/80 rounded-2xl p-7 shadow-2xl relative z-10 space-y-6">
-        
-        {/* Top Logo & Title */}
-        <div className="text-center space-y-2">
-          <div className="w-12 h-12 mx-auto rounded-xl bg-blue-600/10 border border-blue-500/30 flex items-center justify-center text-blue-400 shadow-sm">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body { background: #080c14; }
+
+        .login-root {
+          min-height: 100vh;
+          background: #080c14;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: 'Inter', system-ui, -apple-system, sans-serif;
+          padding: 1.5rem;
+          position: relative;
+          overflow: hidden;
+        }
+
+        /* Animated background blobs */
+        .bg-blob {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(100px);
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 1.2s ease;
+        }
+        .bg-blob.visible { opacity: 1; }
+
+        .blob-1 {
+          width: 500px; height: 400px;
+          background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+          top: -100px; left: -100px;
+          animation: drift1 18s ease-in-out infinite alternate;
+        }
+        .blob-2 {
+          width: 400px; height: 400px;
+          background: radial-gradient(circle, rgba(139,92,246,0.08) 0%, transparent 70%);
+          bottom: -80px; right: -80px;
+          animation: drift2 22s ease-in-out infinite alternate;
+        }
+        .blob-3 {
+          width: 300px; height: 300px;
+          background: radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%);
+          top: 50%; left: 50%; transform: translate(-50%, -50%);
+          animation: pulse-blob 8s ease-in-out infinite;
+        }
+
+        @keyframes drift1 {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(60px, 80px); }
+        }
+        @keyframes drift2 {
+          0% { transform: translate(0, 0); }
+          100% { transform: translate(-60px, -60px); }
+        }
+        @keyframes pulse-blob {
+          0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+          50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+        }
+
+        /* Grid lines subtle overlay */
+        .grid-overlay {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+          background-size: 50px 50px;
+          pointer-events: none;
+        }
+
+        /* Main card */
+        .card {
+          position: relative;
+          z-index: 10;
+          width: 100%;
+          max-width: 420px;
+          background: rgba(11, 16, 28, 0.95);
+          border: 1px solid rgba(255,255,255,0.07);
+          border-radius: 20px;
+          padding: 2.5rem 2rem;
+          box-shadow:
+            0 0 0 1px rgba(59,130,246,0.05),
+            0 25px 60px rgba(0,0,0,0.6),
+            0 0 80px rgba(59,130,246,0.04);
+          opacity: 0;
+          transform: translateY(20px);
+          transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .card.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        /* Logo area */
+        .logo-wrap {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+          width: 52px; height: 52px;
+          background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.1));
+          border: 1px solid rgba(59,130,246,0.25);
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #60a5fa;
+          box-shadow: 0 0 24px rgba(59,130,246,0.15), inset 0 1px 0 rgba(255,255,255,0.06);
+        }
+
+        .logo-title {
+          font-size: 1.375rem;
+          font-weight: 700;
+          color: #f1f5f9;
+          letter-spacing: -0.5px;
+        }
+        .logo-title span { color: #3b82f6; }
+
+        .logo-sub {
+          font-size: 0.7rem;
+          color: #475569;
+          letter-spacing: 0.08em;
+          font-weight: 500;
+          text-transform: uppercase;
+          margin-top: -0.5rem;
+        }
+
+        /* Status indicator */
+        .status-bar {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          margin-bottom: 1.75rem;
+          font-size: 0.7rem;
+          color: #64748b;
+          font-weight: 500;
+        }
+        .status-dot {
+          width: 6px; height: 6px;
+          border-radius: 50%;
+          background: #22c55e;
+          box-shadow: 0 0 8px #22c55e;
+          animation: blink 2.5s ease-in-out infinite;
+        }
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.3; }
+        }
+
+        /* Form fields */
+        .field { margin-bottom: 1rem; }
+
+        .field label {
+          display: block;
+          font-size: 0.72rem;
+          font-weight: 600;
+          color: #94a3b8;
+          margin-bottom: 0.4rem;
+          letter-spacing: 0.03em;
+          text-transform: uppercase;
+        }
+
+        .field input {
+          width: 100%;
+          background: rgba(255,255,255,0.03);
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 10px;
+          padding: 0.7rem 1rem;
+          font-size: 0.875rem;
+          color: #e2e8f0;
+          outline: none;
+          transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+          font-family: inherit;
+        }
+        .field input::placeholder { color: #334155; }
+        .field input:focus {
+          border-color: rgba(59,130,246,0.4);
+          background: rgba(59,130,246,0.04);
+          box-shadow: 0 0 0 3px rgba(59,130,246,0.08);
+        }
+
+        /* Error */
+        .error-msg {
+          background: rgba(239,68,68,0.08);
+          border: 1px solid rgba(239,68,68,0.2);
+          border-radius: 8px;
+          padding: 0.6rem 0.875rem;
+          font-size: 0.75rem;
+          color: #f87171;
+          margin-bottom: 1rem;
+          text-align: center;
+        }
+
+        /* Submit button */
+        .btn-login {
+          width: 100%;
+          background: linear-gradient(135deg, #2563eb, #3b82f6);
+          border: none;
+          border-radius: 10px;
+          padding: 0.8rem;
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: white;
+          cursor: pointer;
+          margin-top: 0.5rem;
+          transition: all 0.2s ease;
+          box-shadow: 0 4px 20px rgba(59,130,246,0.25);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          font-family: inherit;
+          letter-spacing: 0.01em;
+        }
+        .btn-login:hover:not(:disabled) {
+          background: linear-gradient(135deg, #1d4ed8, #2563eb);
+          box-shadow: 0 6px 28px rgba(59,130,246,0.35);
+          transform: translateY(-1px);
+        }
+        .btn-login:active:not(:disabled) { transform: translateY(0); }
+        .btn-login:disabled { opacity: 0.55; cursor: not-allowed; }
+
+        .spinner {
+          width: 15px; height: 15px;
+          border: 2px solid rgba(255,255,255,0.3);
+          border-top-color: white;
+          border-radius: 50%;
+          animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Divider */
+        .divider {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin: 1.5rem 0 1rem;
+        }
+        .divider-line {
+          flex: 1;
+          height: 1px;
+          background: rgba(255,255,255,0.06);
+        }
+        .divider-text {
+          font-size: 0.65rem;
+          font-weight: 600;
+          color: #334155;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          white-space: nowrap;
+        }
+
+        /* Demo accounts */
+        .demo-accounts { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .demo-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          width: 100%;
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.06);
+          border-radius: 10px;
+          padding: 0.6rem 0.875rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          text-align: left;
+          font-family: inherit;
+          color: inherit;
+        }
+        .demo-btn:hover {
+          background: rgba(59,130,246,0.06);
+          border-color: rgba(59,130,246,0.2);
+        }
+
+        .demo-avatar {
+          width: 30px; height: 30px;
+          border-radius: 8px;
+          background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.15));
+          border: 1px solid rgba(59,130,246,0.15);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.7rem;
+          font-weight: 700;
+          color: #93c5fd;
+          flex-shrink: 0;
+        }
+
+        .demo-info { flex: 1; min-width: 0; }
+        .demo-name {
+          font-size: 0.78rem;
+          font-weight: 600;
+          color: #cbd5e1;
+          display: block;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .demo-role {
+          font-size: 0.66rem;
+          color: #475569;
+          display: block;
+          margin-top: 1px;
+        }
+
+        .demo-arrow {
+          color: #3b82f6;
+          font-size: 0.75rem;
+          opacity: 0;
+          transition: opacity 0.2s, transform 0.2s;
+        }
+        .demo-btn:hover .demo-arrow {
+          opacity: 1;
+          transform: translateX(2px);
+        }
+
+        /* Footer */
+        .footer {
+          margin-top: 2rem;
+          text-align: center;
+          font-size: 0.65rem;
+          color: #1e293b;
+          letter-spacing: 0.08em;
+          font-weight: 500;
+          text-transform: uppercase;
+        }
+      `}</style>
+
+      <div className="login-root">
+        <div className={`bg-blob blob-1 ${mounted ? "visible" : ""}`} />
+        <div className={`bg-blob blob-2 ${mounted ? "visible" : ""}`} />
+        <div className={`bg-blob blob-3 ${mounted ? "visible" : ""}`} />
+        <div className="grid-overlay" />
+
+        <div className={`card ${mounted ? "visible" : ""}`}>
+          {/* Logo */}
+          <div className="logo-wrap">
+            <div className="logo-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M9 12l2 2 4-4"/>
+              </svg>
+            </div>
+            <div style={{ textAlign: "center" }}>
+              <div className="logo-title">POLICE<span>GPT</span></div>
+              <div className="logo-sub">Karnataka State Police · Intelligence System</div>
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-white tracking-tight">
-              POLICE<span className="text-blue-500">GPT</span>
-            </h1>
-            <p className="text-[11px] text-slate-400 font-medium">
-              Karnataka State Police Intelligence System
-            </p>
-          </div>
-        </div>
 
-        {error && (
-          <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-400 text-center font-medium">
-            {error}
-          </div>
-        )}
-
-        {/* Login Form */}
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">
-              Badge Number / ID
-            </label>
-            <input
-              id="badge-input"
-              type="text"
-              value={badge}
-              onChange={(e) => setBadge(e.target.value)}
-              placeholder="e.g. KSP001"
-              required
-              className="w-full bg-[#030712] border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all font-mono"
-            />
+          {/* Status */}
+          <div className="status-bar">
+            <div className="status-dot" />
+            <span>Secure Connection · CCTNS Encrypted</span>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-300">
-              Password
-            </label>
-            <input
-              id="password-input"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              className="w-full bg-[#030712] border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all"
-            />
+          {/* Error */}
+          {error && <div className="error-msg">{error}</div>}
+
+          {/* Form */}
+          <form onSubmit={handleLogin}>
+            <div className="field">
+              <label htmlFor="badge-input">Badge / Officer ID</label>
+              <input
+                id="badge-input"
+                type="text"
+                value={badge}
+                onChange={(e) => setBadge(e.target.value)}
+                placeholder="e.g. KSP001"
+                required
+                autoComplete="username"
+              />
+            </div>
+            <div className="field">
+              <label htmlFor="password-input">Password</label>
+              <input
+                id="password-input"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                required
+                autoComplete="current-password"
+              />
+            </div>
+            <button id="login-btn" type="submit" className="btn-login" disabled={loading}>
+              {loading ? (
+                <><div className="spinner" /> Signing In...</>
+              ) : (
+                <>Sign In &rarr;</>
+              )}
+            </button>
+          </form>
+
+          {/* Demo accounts */}
+          <div className="divider">
+            <div className="divider-line" />
+            <span className="divider-text">Demo Access</span>
+            <div className="divider-line" />
           </div>
 
-          <button
-            id="login-btn"
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs py-3 rounded-xl transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 disabled:opacity-50"
-          >
-            {loading ? (
-              <>
-                <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Signing In...
-              </>
-            ) : (
-              "Sign In →"
-            )}
-          </button>
-        </form>
-
-        {/* Quick Demo Access Pills */}
-        <div className="pt-4 border-t border-slate-800/60 space-y-2">
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider text-center">
-            Quick Demo Accounts
-          </p>
-          <div className="flex flex-col gap-1.5">
-            {[
-              { id: "KSP001", pass: "police123", label: "Insp. Ramesh (KSP001)", role: "Investigating Officer" },
-              { id: "KSP004", pass: "police123", label: "Insp. Ananya (KSP004)", role: "Cybercrime Specialist" },
-              { id: "KSP999", pass: "admin123", label: "DGP Alok Mohan (KSP999)", role: "Commissioner" },
-            ].map((acc) => (
+          <div className="demo-accounts">
+            {demoAccounts.map((acc) => (
               <button
                 key={acc.id}
-                onClick={() => quickLogin(acc.id, acc.pass, acc.label, acc.role)}
-                className="w-full text-left py-2 px-3 rounded-xl bg-[#030712] border border-slate-800/80 hover:border-blue-500/50 hover:bg-blue-950/20 text-xs text-slate-300 hover:text-white transition-all flex items-center justify-between group"
+                className="demo-btn"
+                onClick={() => quickLogin(acc.id, acc.pass, acc.name, acc.role)}
+                disabled={loading}
               >
-                <span className="font-mono text-[11px]">{acc.label}</span>
-                <span className="text-[10px] text-blue-400 group-hover:translate-x-0.5 transition-transform">
-                  Login →
-                </span>
+                <div className="demo-avatar">{acc.initial}</div>
+                <div className="demo-info">
+                  <span className="demo-name">{acc.name}</span>
+                  <span className="demo-role">{acc.role} · {acc.id}</span>
+                </div>
+                <span className="demo-arrow">›</span>
               </button>
             ))}
           </div>
         </div>
 
+        <div className="footer">Karnataka State Police · CCTNS Secured · v2.0</div>
       </div>
-
-      {/* Subtle Footer */}
-      <footer className="mt-8 text-center text-[11px] text-slate-600 font-mono">
-        Karnataka State Police • CCTNS Secured
-      </footer>
-    </div>
+    </>
   );
 }
