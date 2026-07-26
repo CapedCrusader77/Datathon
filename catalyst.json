@@ -1,5 +1,9 @@
 {
-  "project_name": "policegpt",
+  "client": {
+    "source": "frontend/out",
+    "index": "index.html",
+    "error": "index.html"
+  },
   "appsail": [
     {
       "name": "policegpt-backend",
@@ -15,8 +19,5 @@
       "build_command": "npm install && npm run build",
       "run_command": "npm start"
     }
-  ],
-  "client": {
-    "source": "frontend/out"
-  }
+  ]
 }
