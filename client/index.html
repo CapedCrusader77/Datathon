@@ -1,0 +1,322 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/chunks/19aul9au1g665.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/3yiddnbtmgj46.js"/><script src="/_next/static/chunks/27jktro2p5rq9.js" async=""></script><script src="/_next/static/chunks/3hdj40qmts5sf.js" async=""></script><script src="/_next/static/chunks/1wxw8ny0hl5xh.js" async=""></script><script src="/_next/static/chunks/turbopack-0-n2twgywm00f.js" async=""></script><script src="/_next/static/chunks/05-c3ty_6dwfk.js" async=""></script><script src="/_next/static/chunks/14mrh2-p_w84d.js" async=""></script><script src="/_next/static/chunks/0e4ead_w8oinp.js" async=""></script><link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Rajdhani:wght@500;600;700&amp;display=swap" as="style"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/><title>POLICEGPT — Karnataka State Police AI Investigation Assistant</title><meta name="description" content="National-grade AI-powered crime investigation platform for Karnataka State Police. Ask crime data like you ask ChatGPT."/><meta name="author" content="Karnataka State Police - POLICEGPT Team"/><meta name="keywords" content="Karnataka Police,POLICEGPT,AI Investigation,Crime Database,FIR Search,Criminal Intelligence,Law Enforcement AI"/><meta name="robots" content="noindex, nofollow"/><link rel="icon" href="/favicon.ico?favicon.2vob68tjqpejf.ico" sizes="256x256" type="image/x-icon"/><link rel="icon" href="/favicon.ico"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Rajdhani:wght@500;600;700&amp;display=swap"/><script src="/_next/static/chunks/0cz1d0mv5g_q7.js" noModule=""></script></head><body class="antialiased"><div hidden=""><!--$--><!--/$--></div><style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap');
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; background: #06080d; }
+
+        /* ─────── ROOT ─────── */
+        .root {
+          min-height: 100vh;
+          display: flex;
+          font-family: 'Inter', -apple-system, sans-serif;
+          -webkit-font-smoothing: antialiased;
+          color: #dde2ee;
+        }
+
+        /* ─────── LEFT ─────── */
+        .left {
+          display: none;
+          width: 440px;
+          flex-shrink: 0;
+          background: #06080d;
+          border-right: 1px solid #12151e;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: 3.25rem 3rem;
+          position: relative;
+          overflow: hidden;
+        }
+        @media (min-width: 880px) { .left { display: flex; } }
+
+        /* Subtle corner accent */
+        .left::before {
+          content: '';
+          position: absolute;
+          top: 0; right: 0;
+          width: 180px; height: 180px;
+          background: radial-gradient(circle at top right, rgba(59,91,255,0.07) 0%, transparent 70%);
+          pointer-events: none;
+        }
+        .left::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0;
+          width: 140px; height: 140px;
+          background: radial-gradient(circle at bottom left, rgba(14,165,233,0.05) 0%, transparent 70%);
+          pointer-events: none;
+        }
+
+        .brand {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .brand-icon {
+          width: 32px; height: 32px;
+          background: #0d1120;
+          border: 1px solid #1e2438;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .brand-name {
+          font-size: 0.82rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: #3d4560;
+        }
+
+        .left-body { margin-top: auto; margin-bottom: auto; }
+
+        .left-eyebrow {
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #3b5bff;
+          margin-bottom: 1.25rem;
+        }
+
+        .left-h1 {
+          font-size: 2.6rem;
+          font-weight: 800;
+          line-height: 1.1;
+          letter-spacing: -0.045em;
+          color: #f0f3fa;
+          margin-bottom: 1.25rem;
+        }
+        .left-h1 .muted { color: #1e2438; }
+
+        .left-p {
+          font-size: 0.875rem;
+          color: #3d4560;
+          line-height: 1.75;
+          max-width: 280px;
+          margin-bottom: 2.5rem;
+        }
+
+        .stats {
+          display: flex;
+          gap: 2rem;
+        }
+        .stat-val {
+          font-size: 1.5rem;
+          font-weight: 800;
+          letter-spacing: -0.04em;
+          color: #8b97b8;
+          display: block;
+        }
+        .stat-key {
+          font-size: 0.68rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #252c40;
+          display: block;
+          margin-top: 2px;
+        }
+
+        .left-foot {
+          font-size: 0.68rem;
+          color: #1a1f30;
+          letter-spacing: 0.05em;
+        }
+
+        /* ─────── RIGHT ─────── */
+        .right {
+          flex: 1;
+          background: #06080d;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem 1.5rem;
+        }
+
+        .form-box {
+          width: 100%;
+          max-width: 348px;
+        }
+
+        /* Mobile only brand */
+        .mob-brand {
+          display: flex;
+          align-items: center;
+          gap: 9px;
+          margin-bottom: 2.25rem;
+        }
+        @media (min-width: 880px) { .mob-brand { display: none; } }
+        .mob-brand-icon {
+          width: 30px; height: 30px;
+          background: #0d1120;
+          border: 1px solid #1e2438;
+          border-radius: 7px;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .mob-brand-name {
+          font-size: 0.8rem; font-weight: 700;
+          letter-spacing: 0.08em; text-transform: uppercase; color: #3d4560;
+        }
+
+        .form-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          letter-spacing: -0.035em;
+          color: #edf0f8;
+          margin-bottom: 0.3rem;
+        }
+        .form-hint {
+          font-size: 0.8rem;
+          color: #2e3550;
+          margin-bottom: 2rem;
+          line-height: 1.5;
+        }
+
+        /* ── Demo accounts ── */
+        .section-label {
+          font-size: 0.65rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #232840;
+          margin-bottom: 0.6rem;
+        }
+
+        .demo-list { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1.5rem; }
+
+        .demo-item {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.6rem 0.8rem;
+          border: 1px solid #111420;
+          border-radius: 9px;
+          background: transparent;
+          cursor: pointer;
+          width: 100%;
+          text-align: left;
+          font-family: inherit;
+          color: inherit;
+          transition: background 0.12s, border-color 0.12s;
+          position: relative;
+          overflow: hidden;
+        }
+        .demo-item:hover {
+          background: #0c0f18;
+          border-color: #1c2236;
+        }
+        .demo-item.active {
+          border-color: #1e2a50;
+          background: #090c16;
+        }
+        .demo-item:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .avatar {
+          width: 28px; height: 28px;
+          border-radius: 7px;
+          display: flex; align-items: center; justify-content: center;
+          font-size: 0.68rem; font-weight: 700;
+          flex-shrink: 0;
+          letter-spacing: 0;
+        }
+
+        .demo-text { flex: 1; min-width: 0; }
+        .demo-name {
+          font-size: 0.78rem; font-weight: 600; color: #bcc5dc;
+          display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .demo-role { font-size: 0.67rem; color: #2a3048; display: block; margin-top: 1px; }
+
+        .demo-badge {
+          font-size: 0.65rem; font-weight: 600;
+          font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+          color: #1e2538; letter-spacing: 0.06em; flex-shrink: 0;
+        }
+
+        /* Loading bar on active demo */
+        .demo-item.active::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0;
+          width: 100%; height: 2px;
+          background: currentColor;
+          animation: fill 0.32s linear forwards;
+        }
+        @keyframes fill { from { transform: scaleX(0); transform-origin: left; } to { transform: scaleX(1); transform-origin: left; } }
+
+        /* ── OR divider ── */
+        .or {
+          display: flex; align-items: center; gap: 0.75rem;
+          margin-bottom: 1.4rem;
+        }
+        .or-line { flex: 1; height: 1px; background: #10131c; }
+        .or-text { font-size: 0.67rem; color: #1e2436; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; }
+
+        /* ── Fields ── */
+        .field { margin-bottom: 0.8rem; }
+        .field label {
+          display: block;
+          font-size: 0.68rem; font-weight: 600;
+          text-transform: uppercase; letter-spacing: 0.07em;
+          color: #2e3550; margin-bottom: 0.4rem;
+        }
+        .field input {
+          width: 100%;
+          background: #080a10;
+          border: 1px solid #12151f;
+          border-radius: 8px;
+          padding: 0.68rem 0.875rem;
+          font-size: 0.875rem;
+          color: #d8dde9;
+          outline: none;
+          font-family: inherit;
+          transition: border-color 0.15s, background 0.15s;
+          caret-color: #3b5bff;
+        }
+        .field input::placeholder { color: #1e2438; font-size: 0.83rem; }
+        .field input:focus {
+          border-color: #1e2a50;
+          background: #070910;
+        }
+
+        .err {
+          font-size: 0.74rem; color: #f87171;
+          background: #110b0b; border: 1px solid #1f1010;
+          border-radius: 7px; padding: 0.55rem 0.75rem;
+          margin-bottom: 0.8rem;
+        }
+
+        .submit {
+          width: 100%;
+          margin-top: 0.4rem;
+          padding: 0.75rem 1rem;
+          background: #3b5bff;
+          border: none; border-radius: 8px;
+          font-size: 0.875rem; font-weight: 600;
+          font-family: inherit; color: #fff;
+          cursor: pointer;
+          display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+          letter-spacing: -0.01em;
+          transition: background 0.15s, transform 0.1s;
+          box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 8px 24px rgba(59,91,255,0.18);
+        }
+        .submit:hover:not(:disabled) { background: #4a6aff; }
+        .submit:active:not(:disabled) { transform: scale(0.99); }
+        .submit:disabled { opacity: 0.45; cursor: not-allowed; }
+
+        .spin {
+          width: 14px; height: 14px;
+          border: 2px solid rgba(255,255,255,0.2);
+          border-top-color: #fff;
+          border-radius: 50%;
+          animation: spin 0.6s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .footnote {
+          margin-top: 2rem;
+          font-size: 0.67rem; color: #141720;
+          text-align: center; letter-spacing: 0.04em; line-height: 1.6;
+        }
+      </style><div class="root"><aside class="left"><div class="brand"><div class="brand-icon"><svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M10 2L17 5V11C17 15 10 18 10 18C10 18 3 15 3 11V5L10 2Z" stroke="#3b5bff" stroke-width="1.4" fill="none" stroke-linejoin="round"></path><path d="M7 10L9.5 12.5L13 8" stroke="#3b5bff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><span class="brand-name">PoliceGPT · KSP</span></div><div class="left-body"><div class="left-eyebrow">Karnataka State Police</div><h1 class="left-h1">Investigate<br/>faster.<br/><span class="muted">Think clearer.</span></h1><p class="left-p">Natural language access to case records, FIR history, criminal profiles, and cross-district analytics — in seconds.</p><div class="stats"><div><span class="stat-val">4.2M+</span><span class="stat-key">Records</span></div><div><span class="stat-val">31</span><span class="stat-key">Districts</span></div><div><span class="stat-val">99.9%</span><span class="stat-key">Uptime</span></div></div></div><div class="left-foot">CCTNS · End-to-end Encrypted · Audit Logged</div></aside><main class="right"><div class="form-box"><div class="mob-brand"><div class="mob-brand-icon"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M10 2L17 5V11C17 15 10 18 10 18C10 18 3 15 3 11V5L10 2Z" stroke="#3b5bff" stroke-width="1.4" fill="none" stroke-linejoin="round"></path><path d="M7 10L9.5 12.5L13 8" stroke="#3b5bff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><span class="mob-brand-name">PoliceGPT · KSP</span></div><h2 class="form-title">Sign in</h2><p class="form-hint">Access the intelligence system with your credentials.</p><div class="section-label">Demo accounts</div><div class="demo-list"><button class="demo-item" style="color:#3b5bff"><div class="avatar" style="background:#3b5bff15;border:1px solid #3b5bff25;color:#3b5bff">RK</div><div class="demo-text"><span class="demo-name">Ramesh Kumar</span><span class="demo-role">Investigating Officer</span></div><span class="demo-badge">KSP001</span></button><button class="demo-item" style="color:#7c3aed"><div class="avatar" style="background:#7c3aed15;border:1px solid #7c3aed25;color:#7c3aed">AR</div><div class="demo-text"><span class="demo-name">Ananya Rao</span><span class="demo-role">Cybercrime Specialist</span></div><span class="demo-badge">KSP004</span></button><button class="demo-item" style="color:#0ea5e9"><div class="avatar" style="background:#0ea5e915;border:1px solid #0ea5e925;color:#0ea5e9">AM</div><div class="demo-text"><span class="demo-name">Alok Mohan</span><span class="demo-role">Commissioner</span></div><span class="demo-badge">KSP999</span></button></div><div class="or"><div class="or-line"></div><span class="or-text">or continue with badge</span><div class="or-line"></div></div><form><div class="field"><label for="badge-input">Badge / Officer ID</label><input id="badge-input" type="text" placeholder="KSP001" required="" autoComplete="username" spellCheck="false" value=""/></div><div class="field"><label for="password-input">Password</label><input id="password-input" type="password" placeholder="Enter your password" required="" autoComplete="current-password" value=""/></div><button id="login-btn" type="submit" class="submit">Continue →</button></form><p class="footnote">Restricted system — Karnataka State Police.<br/>Unauthorised access is a criminal offence.</p></div></main></div><!--$--><!--/$--><script src="/_next/static/chunks/3yiddnbtmgj46.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[39756,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"default\"]\n3:I[37457,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"default\"]\n4:I[47257,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"ClientPageRoot\"]\n5:I[52683,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\",\"/_next/static/chunks/0e4ead_w8oinp.js\"],\"default\"]\n8:I[97367,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"OutletBoundary\"]\n9:\"$Sreact.suspense\"\nb:I[97367,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"ViewportBoundary\"]\nd:I[97367,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"MetadataBoundary\"]\nf:I[68027,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"default\",1]\n:HL[\"/_next/static/chunks/19aul9au1g665.css\",\"style\"]\n:HL[\"https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800\u0026family=JetBrains+Mono:wght@400;500;700\u0026family=Outfit:wght@400;500;600;700;800\u0026family=Rajdhani:wght@500;600;700\u0026display=swap\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"c\":[\"\",\"\"],\"q\":\"\",\"i\":false,\"f\":[[[\"\",{\"children\":[\"__PAGE__\",{}]},\"$undefined\",\"$undefined\",16],[[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/chunks/19aul9au1g665.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"async\":true,\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-1\",{\"src\":\"/_next/static/chunks/14mrh2-p_w84d.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"en\",\"suppressHydrationWarning\":true,\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"link\",null,{\"rel\":\"preconnect\",\"href\":\"https://fonts.googleapis.com\"}],[\"$\",\"link\",null,{\"rel\":\"preconnect\",\"href\":\"https://fonts.gstatic.com\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"link\",null,{\"rel\":\"stylesheet\",\"href\":\"https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800\u0026family=JetBrains+Mono:wght@400;500;700\u0026family=Outfit:wght@400;500;600;700;800\u0026family=Rajdhani:wght@500;600;700\u0026display=swap\"}]]}],[\"$\",\"body\",null,{\"className\":\"antialiased\",\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"serverProvidedParams\":{\"searchParams\":{},\"params\":{},\"promises\":[\"$@6\",\"$@7\"]}}],[[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/0e4ead_w8oinp.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"$L8\",null,{\"children\":[\"$\",\"$9\",null,{\"name\":\"Next.MetadataOutlet\",\"children\":\"$@a\"}]}]]}],{},null,false,null]},null,false,null],[\"$\",\"$1\",\"h\",{\"children\":[null,[\"$\",\"$Lb\",null,{\"children\":\"$Lc\"}],[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$Ld\",null,{\"children\":[\"$\",\"$9\",null,{\"name\":\"Next.Metadata\",\"children\":\"$Le\"}]}]}],null]}],false]],\"m\":\"$undefined\",\"G\":[\"$f\",[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/chunks/19aul9au1g665.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]]],\"S\":true,\"h\":null,\"s\":\"$undefined\",\"l\":\"$undefined\",\"p\":\"$undefined\",\"d\":\"$undefined\",\"b\":\"dJZAR-NGrQa8X8RVHwL2W\"}\n"])</script><script>self.__next_f.push([1,"6:{}\n7:\"$0:f:0:1:1:children:0:props:children:0:props:serverProvidedParams:params\"\n"])</script><script>self.__next_f.push([1,"c:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n"])</script><script>self.__next_f.push([1,"10:I[27201,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"IconMark\"]\na:null\ne:[[\"$\",\"title\",\"0\",{\"children\":\"POLICEGPT — Karnataka State Police AI Investigation Assistant\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"National-grade AI-powered crime investigation platform for Karnataka State Police. Ask crime data like you ask ChatGPT.\"}],[\"$\",\"meta\",\"2\",{\"name\":\"author\",\"content\":\"Karnataka State Police - POLICEGPT Team\"}],[\"$\",\"meta\",\"3\",{\"name\":\"keywords\",\"content\":\"Karnataka Police,POLICEGPT,AI Investigation,Crime Database,FIR Search,Criminal Intelligence,Law Enforcement AI\"}],[\"$\",\"meta\",\"4\",{\"name\":\"robots\",\"content\":\"noindex, nofollow\"}],[\"$\",\"link\",\"5\",{\"rel\":\"icon\",\"href\":\"/favicon.ico?favicon.2vob68tjqpejf.ico\",\"sizes\":\"256x256\",\"type\":\"image/x-icon\"}],[\"$\",\"link\",\"6\",{\"rel\":\"icon\",\"href\":\"/favicon.ico\"}],[\"$\",\"$L10\",\"7\",{}]]\n"])</script></body></html>

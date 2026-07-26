@@ -1,0 +1,276 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/chunks/19aul9au1g665.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/3yiddnbtmgj46.js"/><script src="/_next/static/chunks/27jktro2p5rq9.js" async=""></script><script src="/_next/static/chunks/3hdj40qmts5sf.js" async=""></script><script src="/_next/static/chunks/1wxw8ny0hl5xh.js" async=""></script><script src="/_next/static/chunks/turbopack-0-n2twgywm00f.js" async=""></script><script src="/_next/static/chunks/05-c3ty_6dwfk.js" async=""></script><script src="/_next/static/chunks/14mrh2-p_w84d.js" async=""></script><script src="/_next/static/chunks/3wcf5eo7uop05.js" async=""></script><script src="/_next/static/chunks/3t8km82tl_4cn.js" async=""></script><link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Rajdhani:wght@500;600;700&amp;display=swap" as="style"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/><title>POLICEGPT — Karnataka State Police AI Investigation Assistant</title><meta name="description" content="National-grade AI-powered crime investigation platform for Karnataka State Police. Ask crime data like you ask ChatGPT."/><meta name="author" content="Karnataka State Police - POLICEGPT Team"/><meta name="keywords" content="Karnataka Police,POLICEGPT,AI Investigation,Crime Database,FIR Search,Criminal Intelligence,Law Enforcement AI"/><meta name="robots" content="noindex, nofollow"/><link rel="icon" href="/favicon.ico?favicon.2vob68tjqpejf.ico" sizes="256x256" type="image/x-icon"/><link rel="icon" href="/favicon.ico"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Rajdhani:wght@500;600;700&amp;display=swap"/><script src="/_next/static/chunks/0cz1d0mv5g_q7.js" noModule=""></script></head><body class="antialiased"><div hidden=""><!--$--><!--/$--></div><style>
+        :root {
+          --bg-primary: #05070a;
+          --bg-panel: rgba(11, 15, 26, 0.85);
+          --bg-elevated: rgba(22, 29, 49, 0.6);
+          --border: rgba(59, 91, 255, 0.12);
+          --border-hover: rgba(59, 91, 255, 0.3);
+          --text-primary: #f8fafc;
+          --text-muted: #64748b;
+          --accent: #3b5bff;
+          --accent-alert: #ef4444;
+          --font-sans: 'Inter', -apple-system, sans-serif;
+          --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; background: var(--bg-primary); }
+
+        .shell {
+          display: flex;
+          height: 100vh;
+          font-family: var(--font-sans);
+          -webkit-font-smoothing: antialiased;
+          background: var(--bg-primary);
+          color: var(--text-primary);
+          overflow: hidden;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+          width: 250px;
+          flex-shrink: 0;
+          background: rgba(11, 15, 26, 0.95);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-right: 1px solid var(--border);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-brand {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 1.75rem 1.25rem;
+          border-bottom: 1px solid var(--border);
+        }
+        .sidebar-brand-icon {
+          width: 32px; height: 32px;
+          background: var(--bg-elevated);
+          border: 1px solid rgba(59, 91, 255, 0.25);
+          border-radius: 8px;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0;
+          box-shadow: 0 0 15px rgba(59, 91, 255, 0.15);
+        }
+        .sidebar-brand-name {
+          font-size: 0.9rem;
+          font-weight: 800;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-nav {
+          flex: 1;
+          overflow-y: auto;
+          padding: 1.25rem 0.85rem;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .sidebar-nav::-webkit-scrollbar { width: 0; }
+
+        .nav-link {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.7rem 0.95rem;
+          border-radius: 8px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: #94a3b8;
+          text-decoration: none;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          border: 1px solid transparent;
+          position: relative;
+        }
+        .nav-link svg {
+          color: #64748b;
+          transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+          background: rgba(59, 91, 255, 0.05);
+          color: var(--text-primary);
+          border-color: rgba(59, 91, 255, 0.08);
+        }
+        .nav-link:hover svg {
+          color: #93c5fd;
+        }
+        .nav-link.active {
+          background: linear-gradient(135deg, rgba(59, 91, 255, 0.15) 0%, rgba(59, 91, 255, 0.05) 100%);
+          color: #ffffff;
+          border-color: rgba(59, 91, 255, 0.25);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .nav-link.active svg {
+          color: #818cf8;
+        }
+        .nav-link.active::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 20%;
+          height: 60%;
+          width: 3px;
+          background: var(--accent);
+          border-radius: 0 4px 4px 0;
+          box-shadow: 0 0 10px var(--accent);
+        }
+
+        .sidebar-footer {
+          border-top: 1px solid var(--border);
+          padding: 1.25rem 1rem;
+          background: rgba(11, 15, 26, 0.98);
+        }
+        .officer-row {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 0.85rem;
+        }
+        .officer-avatar {
+          width: 32px; height: 32px;
+          border-radius: 8px;
+          background: rgba(59, 91, 255, 0.1);
+          border: 1px solid rgba(59, 91, 255, 0.2);
+          display: flex; align-items: center; justify-content: center;
+          font-size: 0.75rem; font-weight: 700; color: #a5b4fc;
+          font-family: var(--font-mono);
+          flex-shrink: 0;
+        }
+        .officer-info { flex: 1; min-width: 0; }
+        .officer-name {
+          font-size: 0.78rem; font-weight: 700; color: var(--text-primary);
+          display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .officer-meta {
+          font-size: 0.65rem; color: #64748b;
+          display: block; margin-top: 2px;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+          font-family: var(--font-mono);
+          font-weight: 500;
+        }
+        .logout-btn {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.6rem;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.01);
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #94a3b8;
+          cursor: pointer;
+          font-family: inherit;
+          transition: all 0.2s ease;
+        }
+        .logout-btn:hover {
+          color: var(--accent-alert);
+          border-color: rgba(239, 68, 68, 0.35);
+          background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* ── MAIN ── */
+        .main-wrap {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          background: var(--bg-primary);
+        }
+
+        .topbar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 2rem;
+          height: 64px;
+          border-bottom: 1px solid var(--border);
+          flex-shrink: 0;
+          background: rgba(11, 15, 26, 0.8);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+
+        .topbar-left {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+        .topbar-dot {
+          width: 8px; height: 8px;
+          border-radius: 50%;
+          background: #22c55e;
+          box-shadow: 0 0 10px #22c55e;
+          animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+          0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+          70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .topbar-status {
+          font-size: 0.72rem;
+          font-weight: 700;
+          color: #22c55e;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          font-family: var(--font-mono);
+        }
+
+        .topbar-right { display: flex; align-items: center; gap: 1rem; }
+
+        .topbar-search {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          background: rgba(13, 17, 28, 0.5);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          padding: 0.5rem 0.85rem;
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+          transition: all 0.2s ease;
+        }
+        .topbar-search:focus-within {
+          border-color: rgba(59, 91, 255, 0.4);
+          background: rgba(13, 17, 28, 0.85);
+          box-shadow: 0 0 10px rgba(59, 91, 255, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .topbar-search input {
+          background: transparent;
+          border: none;
+          outline: none;
+          font-size: 0.78rem;
+          color: var(--text-primary);
+          font-family: var(--font-sans);
+          width: 220px;
+        }
+        .topbar-search input::placeholder { color: #475569; }
+
+        .topbar-officer {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          padding: 0.4rem 0.85rem;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          background: var(--bg-elevated);
+        }
+        .topbar-officer-name { font-size: 0.75rem; font-weight: 700; color: var(--text-primary); }
+
+        /* ── PAGE CONTENT ── */
+        .page-content {
+          flex: 1;
+          overflow-y: auto;
+          padding: 2rem;
+        }
+      </style><div class="shell"><aside class="sidebar"><div class="sidebar-brand"><div class="sidebar-brand-icon"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M10 2L17 5V11C17 15 10 18 10 18C10 18 3 15 3 11V5L10 2Z" stroke="#3b5bff" stroke-width="1.4" fill="none" stroke-linejoin="round"></path><path d="M7 10L9.5 12.5L13 8" stroke="#3b5bff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><span class="sidebar-brand-name">PoliceGPT</span></div><nav class="sidebar-nav"><a id="nav-dashboard" class="nav-link" href="/dashboard/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg>Overview</a><a id="nav-chat" class="nav-link" href="/dashboard/chat/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>PoliceGPT Chat</a><a id="nav-cases" class="nav-link" href="/dashboard/cases/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>FIR &amp; Cases</a><a id="nav-suspects" class="nav-link" href="/dashboard/suspects/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Suspects</a><a id="nav-analytics" class="nav-link active" href="/dashboard/analytics/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Analytics</a><a id="nav-graph" class="nav-link" href="/dashboard/graph/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="12" cy="18" r="3"></circle><line x1="8.5" y1="7.5" x2="15.5" y2="7.5"></line><line x1="7.5" y1="8.5" x2="10.5" y2="15.5"></line><line x1="16.5" y1="8.5" x2="13.5" y2="15.5"></line></svg>Knowledge Graph</a><a id="nav-reports" class="nav-link" href="/dashboard/reports/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M12 18v-6"></path><path d="m9 15 3 3 3-3"></path></svg>Reports</a><a id="nav-search" class="nav-link" href="/dashboard/search/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</a></nav><div class="sidebar-footer"><button id="logout-btn" class="logout-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Sign out</button></div></aside><div class="main-wrap"><header class="topbar"><div class="topbar-left"><div class="topbar-dot"></div><span class="topbar-status">KSP INTELLIGENCE NET · DEMO DATA</span></div><div class="topbar-right"><div class="topbar-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a3048" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><input id="quick-search" type="text" placeholder="Search FIRs, suspects… (⌘K)"/></div></div></header><main class="page-content"><div style="display:flex;flex-direction:column;gap:20px"><div style="display:flex;align-items:center;justify-content:space-between"><div><h1 style="font-size:1.5rem;font-weight:800;color:#f8fafc;letter-spacing:-0.02em">Crime Intelligence Analytics</h1><p style="font-size:0.78rem;color:#64748b;margin-top:2px">Visual pattern detection, district heatmaps, and predictive AI crime models</p></div><a class="btn-primary" style="font-size:0.75rem;padding:8px 14px;text-decoration:none" href="/dashboard/chat/">🤖 AI Analytics Query</a></div><div style="display:flex;gap:8px;border-bottom:1px solid #141a28;padding-bottom:12px"><button style="font-size:0.75rem;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:8px;background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3)"><span>📊</span><span>Monthly Trends &amp; Breakdown</span></button><button style="font-size:0.75rem;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:8px;background:transparent;color:#64748b;border:1px solid transparent"><span>🗺️</span><span>District Spatial Heatmap</span></button><button style="font-size:0.75rem;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:8px;background:transparent;color:#64748b;border:1px solid transparent"><span>🔮</span><span>Predictive AI Intelligence</span></button></div><div style="display:flex;flex-direction:column;gap:20px"><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px"><div class="chart-container"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div><h3 style="font-size:0.9rem;font-weight:700;color:#f8fafc">Monthly Incident Trajectory — 2024</h3><p style="font-size:0.72rem;color:#64748b">Comparative multi-series volume</p></div><div style="display:flex;gap:12px"><div style="display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:#3b82f6"></div><span style="font-size:0.68rem;color:#94a3b8">Cyber</span></div><div style="display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:#0284c7"></div><span style="font-size:0.68rem;color:#94a3b8">Robbery</span></div><div style="display:flex;align-items:center;gap:6px"><div style="width:8px;height:8px;border-radius:50%;background:#ef4444"></div><span style="font-size:0.68rem;color:#94a3b8">Assault</span></div></div></div><div style="height:200px;display:flex;align-items:flex-end;gap:8px;padding-top:20px"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Jan): 89" style="flex:1;border-radius:2px 2px 0 0;height:82.4074074074074px;background:#3b82f6"></div><div title="Robbery (Jan): 45" style="flex:1;border-radius:2px 2px 0 0;height:41.66666666666667px;background:#0284c7"></div><div title="Assault (Jan): 67" style="flex:1;border-radius:2px 2px 0 0;height:62.03703703703704px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Jan</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Feb): 102" style="flex:1;border-radius:2px 2px 0 0;height:94.44444444444444px;background:#3b82f6"></div><div title="Robbery (Feb): 38" style="flex:1;border-radius:2px 2px 0 0;height:35.18518518518518px;background:#0284c7"></div><div title="Assault (Feb): 71" style="flex:1;border-radius:2px 2px 0 0;height:65.74074074074075px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Feb</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Mar): 115" style="flex:1;border-radius:2px 2px 0 0;height:106.4814814814815px;background:#3b82f6"></div><div title="Robbery (Mar): 52" style="flex:1;border-radius:2px 2px 0 0;height:48.148148148148145px;background:#0284c7"></div><div title="Assault (Mar): 63" style="flex:1;border-radius:2px 2px 0 0;height:58.333333333333336px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Mar</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Apr): 98" style="flex:1;border-radius:2px 2px 0 0;height:90.74074074074075px;background:#3b82f6"></div><div title="Robbery (Apr): 49" style="flex:1;border-radius:2px 2px 0 0;height:45.370370370370374px;background:#0284c7"></div><div title="Assault (Apr): 59" style="flex:1;border-radius:2px 2px 0 0;height:54.62962962962963px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Apr</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (May): 134" style="flex:1;border-radius:2px 2px 0 0;height:124.07407407407408px;background:#3b82f6"></div><div title="Robbery (May): 61" style="flex:1;border-radius:2px 2px 0 0;height:56.48148148148148px;background:#0284c7"></div><div title="Assault (May): 82" style="flex:1;border-radius:2px 2px 0 0;height:75.92592592592592px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">May</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Jun): 121" style="flex:1;border-radius:2px 2px 0 0;height:112.03703703703704px;background:#3b82f6"></div><div title="Robbery (Jun): 58" style="flex:1;border-radius:2px 2px 0 0;height:53.7037037037037px;background:#0284c7"></div><div title="Assault (Jun): 74" style="flex:1;border-radius:2px 2px 0 0;height:68.51851851851852px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Jun</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Jul): 143" style="flex:1;border-radius:2px 2px 0 0;height:132.40740740740742px;background:#3b82f6"></div><div title="Robbery (Jul): 67" style="flex:1;border-radius:2px 2px 0 0;height:62.03703703703704px;background:#0284c7"></div><div title="Assault (Jul): 88" style="flex:1;border-radius:2px 2px 0 0;height:81.48148148148148px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Jul</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Aug): 156" style="flex:1;border-radius:2px 2px 0 0;height:144.44444444444443px;background:#3b82f6"></div><div title="Robbery (Aug): 72" style="flex:1;border-radius:2px 2px 0 0;height:66.66666666666666px;background:#0284c7"></div><div title="Assault (Aug): 91" style="flex:1;border-radius:2px 2px 0 0;height:84.25925925925927px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Aug</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Sep): 148" style="flex:1;border-radius:2px 2px 0 0;height:137.03703703703704px;background:#3b82f6"></div><div title="Robbery (Sep): 64" style="flex:1;border-radius:2px 2px 0 0;height:59.25925925925925px;background:#0284c7"></div><div title="Assault (Sep): 79" style="flex:1;border-radius:2px 2px 0 0;height:73.14814814814815px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Sep</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Oct): 162" style="flex:1;border-radius:2px 2px 0 0;height:150px;background:#3b82f6"></div><div title="Robbery (Oct): 69" style="flex:1;border-radius:2px 2px 0 0;height:63.88888888888889px;background:#0284c7"></div><div title="Assault (Oct): 85" style="flex:1;border-radius:2px 2px 0 0;height:78.70370370370371px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Oct</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Nov): 139" style="flex:1;border-radius:2px 2px 0 0;height:128.7037037037037px;background:#3b82f6"></div><div title="Robbery (Nov): 55" style="flex:1;border-radius:2px 2px 0 0;height:50.925925925925924px;background:#0284c7"></div><div title="Assault (Nov): 71" style="flex:1;border-radius:2px 2px 0 0;height:65.74074074074075px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Nov</span></div><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px"><div style="width:100%;display:flex;gap:2px;align-items:flex-end;height:150px"><div title="Cybercrime (Dec): 128" style="flex:1;border-radius:2px 2px 0 0;height:118.5185185185185px;background:#3b82f6"></div><div title="Robbery (Dec): 48" style="flex:1;border-radius:2px 2px 0 0;height:44.44444444444444px;background:#0284c7"></div><div title="Assault (Dec): 66" style="flex:1;border-radius:2px 2px 0 0;height:61.11111111111111px;background:#ef4444"></div></div><span style="font-size:0.65rem;font-family:var(--font-mono);color:#64748b;font-weight:700">Dec</span></div></div></div><div class="chart-container"><div style="margin-bottom:16px"><h3 style="font-size:0.9rem;font-weight:700;color:#f8fafc">Crime Category Shares — YTD</h3><p style="font-size:0.72rem;color:#64748b">Volumetric offense totals &amp; YoY shift</p></div><div style="display:flex;flex-direction:column;gap:12px"><div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:#3b82f6;flex-shrink:0"></div><span style="font-size:0.75rem;color:#e2e8f0;width:120px;flex-shrink:0;font-weight:500">Cybercrime</span><div style="flex:1;height:6px;border-radius:99px;background:#0a0d14;overflow:hidden;border:1px solid #141a28"><div style="height:100%;border-radius:99px;width:100%;background:#3b82f6"></div></div><span style="font-size:0.72rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#f1f5f9">8,921</span><span style="font-size:0.68rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#ef4444">+<!-- -->34.1<!-- -->%</span></div><div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:#0284c7;flex-shrink:0"></div><span style="font-size:0.75rem;color:#e2e8f0;width:120px;flex-shrink:0;font-weight:500">Vehicle Theft</span><div style="flex:1;height:6px;border-radius:99px;background:#0a0d14;overflow:hidden;border:1px solid #141a28"><div style="height:100%;border-radius:99px;width:76.10133393117363%;background:#0284c7"></div></div><span style="font-size:0.72rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#f1f5f9">6,789</span><span style="font-size:0.68rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#ef4444">+<!-- -->8.2<!-- -->%</span></div><div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:#ef4444;flex-shrink:0"></div><span style="font-size:0.75rem;color:#e2e8f0;width:120px;flex-shrink:0;font-weight:500">Assault</span><div style="flex:1;height:6px;border-radius:99px;background:#0a0d14;overflow:hidden;border:1px solid #141a28"><div style="height:100%;border-radius:99px;width:81.08956395022979%;background:#ef4444"></div></div><span style="font-size:0.72rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#f1f5f9">7,234</span><span style="font-size:0.68rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#10b981">-2.1<!-- -->%</span></div><div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:#64748b;flex-shrink:0"></div><span style="font-size:0.75rem;color:#e2e8f0;width:120px;flex-shrink:0;font-weight:500">Robbery</span><div style="flex:1;height:6px;border-radius:99px;background:#0a0d14;overflow:hidden;border:1px solid #141a28"><div style="height:100%;border-radius:99px;width:60.890034749467546%;background:#64748b"></div></div><span style="font-size:0.72rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#f1f5f9">5,432</span><span style="font-size:0.68rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#ef4444">+<!-- -->5.3<!-- -->%</span></div><div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:#06b6d4;flex-shrink:0"></div><span style="font-size:0.75rem;color:#e2e8f0;width:120px;flex-shrink:0;font-weight:500">Narcotics</span><div style="flex:1;height:6px;border-radius:99px;background:#0a0d14;overflow:hidden;border:1px solid #141a28"><div style="height:100%;border-radius:99px;width:38.74005156372604%;background:#06b6d4"></div></div><span style="font-size:0.72rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#f1f5f9">3,456</span><span style="font-size:0.68rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#10b981">-8.7<!-- -->%</span></div><div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:#8b5cf6;flex-shrink:0"></div><span style="font-size:0.75rem;color:#e2e8f0;width:120px;flex-shrink:0;font-weight:500">Burglary</span><div style="flex:1;height:6px;border-radius:99px;background:#0a0d14;overflow:hidden;border:1px solid #141a28"><div style="height:100%;border-radius:99px;width:46.21679183947988%;background:#8b5cf6"></div></div><span style="font-size:0.72rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#f1f5f9">4,123</span><span style="font-size:0.68rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#ef4444">+<!-- -->3.2<!-- -->%</span></div><div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:#3b82f6;flex-shrink:0"></div><span style="font-size:0.75rem;color:#e2e8f0;width:120px;flex-shrink:0;font-weight:500">Economic Offence</span><div style="flex:1;height:6px;border-radius:99px;background:#0a0d14;overflow:hidden;border:1px solid #141a28"><div style="height:100%;border-radius:99px;width:26.241452751933643%;background:#3b82f6"></div></div><span style="font-size:0.72rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#f1f5f9">2,341</span><span style="font-size:0.68rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#ef4444">+<!-- -->15.4<!-- -->%</span></div><div style="display:flex;align-items:center;gap:12px"><div style="width:8px;height:8px;border-radius:50%;background:#0284c7;flex-shrink:0"></div><span style="font-size:0.75rem;color:#e2e8f0;width:120px;flex-shrink:0;font-weight:500">Missing Persons</span><div style="flex:1;height:6px;border-radius:99px;background:#0a0d14;overflow:hidden;border:1px solid #141a28"><div style="height:100%;border-radius:99px;width:13.832529985427644%;background:#0284c7"></div></div><span style="font-size:0.72rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#f1f5f9">1,234</span><span style="font-size:0.68rem;font-family:var(--font-mono);font-weight:700;width:50px;text-align:right;color:#10b981">-12<!-- -->%</span></div></div></div></div></div></div><!--$--><!--/$--></main></div></div><script src="/_next/static/chunks/3yiddnbtmgj46.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[39756,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"default\"]\n3:I[37457,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"default\"]\n4:I[92825,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"ClientSegmentRoot\"]\n5:I[39126,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\",\"/_next/static/chunks/3wcf5eo7uop05.js\"],\"default\"]\n7:I[47257,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"ClientPageRoot\"]\n8:I[82478,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\",\"/_next/static/chunks/3wcf5eo7uop05.js\",\"/_next/static/chunks/3t8km82tl_4cn.js\"],\"default\"]\nb:I[97367,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"OutletBoundary\"]\nc:\"$Sreact.suspense\"\nf:I[97367,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"ViewportBoundary\"]\n11:I[97367,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"MetadataBoundary\"]\n13:I[68027,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"default\",1]\n:HL[\"/_next/static/chunks/19aul9au1g665.css\",\"style\"]\n:HL[\"https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800\u0026family=JetBrains+Mono:wght@400;500;700\u0026family=Outfit:wght@400;500;600;700;800\u0026family=Rajdhani:wght@500;600;700\u0026display=swap\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"c\":[\"\",\"dashboard\",\"analytics\",\"\"],\"q\":\"\",\"i\":false,\"f\":[[[\"\",{\"children\":[\"dashboard\",{\"children\":[\"analytics\",{\"children\":[\"__PAGE__\",{}]}]}]},\"$undefined\",\"$undefined\",16],[[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/chunks/19aul9au1g665.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"async\":true,\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-1\",{\"src\":\"/_next/static/chunks/14mrh2-p_w84d.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"en\",\"suppressHydrationWarning\":true,\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"link\",null,{\"rel\":\"preconnect\",\"href\":\"https://fonts.googleapis.com\"}],[\"$\",\"link\",null,{\"rel\":\"preconnect\",\"href\":\"https://fonts.gstatic.com\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"link\",null,{\"rel\":\"stylesheet\",\"href\":\"https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800\u0026family=JetBrains+Mono:wght@400;500;700\u0026family=Outfit:wght@400;500;600;700;800\u0026family=Rajdhani:wght@500;600;700\u0026display=swap\"}]]}],[\"$\",\"body\",null,{\"className\":\"antialiased\",\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/3wcf5eo7uop05.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"slots\":{\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]},\"serverProvidedParams\":{\"params\":{},\"promises\":[\"$@6\"]}}]]}],{\"children\":[[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L7\",null,{\"Component\":\"$8\",\"serverProvidedParams\":{\"searchParams\":{},\"params\":\"$0:f:0:1:1:children:0:props:children:1:props:serverProvidedParams:params\",\"promises\":[\"$@9\",\"$@a\"]}}],[[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/3t8km82tl_4cn.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"$Lb\",null,{\"children\":[\"$\",\"$c\",null,{\"name\":\"Next.MetadataOutlet\",\"children\":\"$@d\"}]}]]}],{},null,false,null]},null,false,\"$@e\"]},null,false,null]},null,false,null],[\"$\",\"$1\",\"h\",{\"children\":[null,[\"$\",\"$Lf\",null,{\"children\":\"$L10\"}],[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$L11\",null,{\"children\":[\"$\",\"$c\",null,{\"name\":\"Next.Metadata\",\"children\":\"$L12\"}]}]}],null]}],false]],\"m\":\"$undefined\",\"G\":[\"$13\",[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/chunks/19aul9au1g665.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]]],\"S\":true,\"h\":null,\"s\":\"$undefined\",\"l\":\"$undefined\",\"p\":\"$undefined\",\"d\":\"$undefined\",\"b\":\"dJZAR-NGrQa8X8RVHwL2W\"}\n"])</script><script>self.__next_f.push([1,"14:[]\ne:\"$W14\"\n6:\"$0:f:0:1:1:children:0:props:children:1:props:serverProvidedParams:params\"\n9:{}\na:\"$0:f:0:1:1:children:0:props:children:1:props:serverProvidedParams:params\"\n"])</script><script>self.__next_f.push([1,"10:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n"])</script><script>self.__next_f.push([1,"15:I[27201,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"IconMark\"]\nd:null\n12:[[\"$\",\"title\",\"0\",{\"children\":\"POLICEGPT — Karnataka State Police AI Investigation Assistant\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"National-grade AI-powered crime investigation platform for Karnataka State Police. Ask crime data like you ask ChatGPT.\"}],[\"$\",\"meta\",\"2\",{\"name\":\"author\",\"content\":\"Karnataka State Police - POLICEGPT Team\"}],[\"$\",\"meta\",\"3\",{\"name\":\"keywords\",\"content\":\"Karnataka Police,POLICEGPT,AI Investigation,Crime Database,FIR Search,Criminal Intelligence,Law Enforcement AI\"}],[\"$\",\"meta\",\"4\",{\"name\":\"robots\",\"content\":\"noindex, nofollow\"}],[\"$\",\"link\",\"5\",{\"rel\":\"icon\",\"href\":\"/favicon.ico?favicon.2vob68tjqpejf.ico\",\"sizes\":\"256x256\",\"type\":\"image/x-icon\"}],[\"$\",\"link\",\"6\",{\"rel\":\"icon\",\"href\":\"/favicon.ico\"}],[\"$\",\"$L15\",\"7\",{}]]\n"])</script></body></html>

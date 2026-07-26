@@ -1,0 +1,527 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="/_next/static/chunks/19aul9au1g665.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/3yiddnbtmgj46.js"/><script src="/_next/static/chunks/27jktro2p5rq9.js" async=""></script><script src="/_next/static/chunks/3hdj40qmts5sf.js" async=""></script><script src="/_next/static/chunks/1wxw8ny0hl5xh.js" async=""></script><script src="/_next/static/chunks/turbopack-0-n2twgywm00f.js" async=""></script><script src="/_next/static/chunks/05-c3ty_6dwfk.js" async=""></script><script src="/_next/static/chunks/14mrh2-p_w84d.js" async=""></script><script src="/_next/static/chunks/3wcf5eo7uop05.js" async=""></script><script src="/_next/static/chunks/10g-gk85kgx44.js" async=""></script><link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Rajdhani:wght@500;600;700&amp;display=swap" as="style"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"/><title>POLICEGPT — Karnataka State Police AI Investigation Assistant</title><meta name="description" content="National-grade AI-powered crime investigation platform for Karnataka State Police. Ask crime data like you ask ChatGPT."/><meta name="author" content="Karnataka State Police - POLICEGPT Team"/><meta name="keywords" content="Karnataka Police,POLICEGPT,AI Investigation,Crime Database,FIR Search,Criminal Intelligence,Law Enforcement AI"/><meta name="robots" content="noindex, nofollow"/><link rel="icon" href="/favicon.ico?favicon.2vob68tjqpejf.ico" sizes="256x256" type="image/x-icon"/><link rel="icon" href="/favicon.ico"/><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Rajdhani:wght@500;600;700&amp;display=swap"/><script src="/_next/static/chunks/0cz1d0mv5g_q7.js" noModule=""></script></head><body class="antialiased"><div hidden=""><!--$--><!--/$--></div><style>
+        :root {
+          --bg-primary: #05070a;
+          --bg-panel: rgba(11, 15, 26, 0.85);
+          --bg-elevated: rgba(22, 29, 49, 0.6);
+          --border: rgba(59, 91, 255, 0.12);
+          --border-hover: rgba(59, 91, 255, 0.3);
+          --text-primary: #f8fafc;
+          --text-muted: #64748b;
+          --accent: #3b5bff;
+          --accent-alert: #ef4444;
+          --font-sans: 'Inter', -apple-system, sans-serif;
+          --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; background: var(--bg-primary); }
+
+        .shell {
+          display: flex;
+          height: 100vh;
+          font-family: var(--font-sans);
+          -webkit-font-smoothing: antialiased;
+          background: var(--bg-primary);
+          color: var(--text-primary);
+          overflow: hidden;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+          width: 250px;
+          flex-shrink: 0;
+          background: rgba(11, 15, 26, 0.95);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-right: 1px solid var(--border);
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .sidebar-brand {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 1.75rem 1.25rem;
+          border-bottom: 1px solid var(--border);
+        }
+        .sidebar-brand-icon {
+          width: 32px; height: 32px;
+          background: var(--bg-elevated);
+          border: 1px solid rgba(59, 91, 255, 0.25);
+          border-radius: 8px;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0;
+          box-shadow: 0 0 15px rgba(59, 91, 255, 0.15);
+        }
+        .sidebar-brand-name {
+          font-size: 0.9rem;
+          font-weight: 800;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-nav {
+          flex: 1;
+          overflow-y: auto;
+          padding: 1.25rem 0.85rem;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .sidebar-nav::-webkit-scrollbar { width: 0; }
+
+        .nav-link {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.7rem 0.95rem;
+          border-radius: 8px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: #94a3b8;
+          text-decoration: none;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          border: 1px solid transparent;
+          position: relative;
+        }
+        .nav-link svg {
+          color: #64748b;
+          transition: color 0.2s ease;
+        }
+        .nav-link:hover {
+          background: rgba(59, 91, 255, 0.05);
+          color: var(--text-primary);
+          border-color: rgba(59, 91, 255, 0.08);
+        }
+        .nav-link:hover svg {
+          color: #93c5fd;
+        }
+        .nav-link.active {
+          background: linear-gradient(135deg, rgba(59, 91, 255, 0.15) 0%, rgba(59, 91, 255, 0.05) 100%);
+          color: #ffffff;
+          border-color: rgba(59, 91, 255, 0.25);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+        .nav-link.active svg {
+          color: #818cf8;
+        }
+        .nav-link.active::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 20%;
+          height: 60%;
+          width: 3px;
+          background: var(--accent);
+          border-radius: 0 4px 4px 0;
+          box-shadow: 0 0 10px var(--accent);
+        }
+
+        .sidebar-footer {
+          border-top: 1px solid var(--border);
+          padding: 1.25rem 1rem;
+          background: rgba(11, 15, 26, 0.98);
+        }
+        .officer-row {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 0.85rem;
+        }
+        .officer-avatar {
+          width: 32px; height: 32px;
+          border-radius: 8px;
+          background: rgba(59, 91, 255, 0.1);
+          border: 1px solid rgba(59, 91, 255, 0.2);
+          display: flex; align-items: center; justify-content: center;
+          font-size: 0.75rem; font-weight: 700; color: #a5b4fc;
+          font-family: var(--font-mono);
+          flex-shrink: 0;
+        }
+        .officer-info { flex: 1; min-width: 0; }
+        .officer-name {
+          font-size: 0.78rem; font-weight: 700; color: var(--text-primary);
+          display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .officer-meta {
+          font-size: 0.65rem; color: #64748b;
+          display: block; margin-top: 2px;
+          white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+          font-family: var(--font-mono);
+          font-weight: 500;
+        }
+        .logout-btn {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          padding: 0.6rem;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.01);
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #94a3b8;
+          cursor: pointer;
+          font-family: inherit;
+          transition: all 0.2s ease;
+        }
+        .logout-btn:hover {
+          color: var(--accent-alert);
+          border-color: rgba(239, 68, 68, 0.35);
+          background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* ── MAIN ── */
+        .main-wrap {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+          background: var(--bg-primary);
+        }
+
+        .topbar {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 2rem;
+          height: 64px;
+          border-bottom: 1px solid var(--border);
+          flex-shrink: 0;
+          background: rgba(11, 15, 26, 0.8);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+        }
+
+        .topbar-left {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+        .topbar-dot {
+          width: 8px; height: 8px;
+          border-radius: 50%;
+          background: #22c55e;
+          box-shadow: 0 0 10px #22c55e;
+          animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+          0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+          70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .topbar-status {
+          font-size: 0.72rem;
+          font-weight: 700;
+          color: #22c55e;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          font-family: var(--font-mono);
+        }
+
+        .topbar-right { display: flex; align-items: center; gap: 1rem; }
+
+        .topbar-search {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          background: rgba(13, 17, 28, 0.5);
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          padding: 0.5rem 0.85rem;
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+          transition: all 0.2s ease;
+        }
+        .topbar-search:focus-within {
+          border-color: rgba(59, 91, 255, 0.4);
+          background: rgba(13, 17, 28, 0.85);
+          box-shadow: 0 0 10px rgba(59, 91, 255, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .topbar-search input {
+          background: transparent;
+          border: none;
+          outline: none;
+          font-size: 0.78rem;
+          color: var(--text-primary);
+          font-family: var(--font-sans);
+          width: 220px;
+        }
+        .topbar-search input::placeholder { color: #475569; }
+
+        .topbar-officer {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          padding: 0.4rem 0.85rem;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          background: var(--bg-elevated);
+        }
+        .topbar-officer-name { font-size: 0.75rem; font-weight: 700; color: var(--text-primary); }
+
+        /* ── PAGE CONTENT ── */
+        .page-content {
+          flex: 1;
+          overflow-y: auto;
+          padding: 2rem;
+        }
+      </style><div class="shell"><aside class="sidebar"><div class="sidebar-brand"><div class="sidebar-brand-icon"><svg width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M10 2L17 5V11C17 15 10 18 10 18C10 18 3 15 3 11V5L10 2Z" stroke="#3b5bff" stroke-width="1.4" fill="none" stroke-linejoin="round"></path><path d="M7 10L9.5 12.5L13 8" stroke="#3b5bff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><span class="sidebar-brand-name">PoliceGPT</span></div><nav class="sidebar-nav"><a id="nav-dashboard" class="nav-link" href="/dashboard/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg>Overview</a><a id="nav-chat" class="nav-link" href="/dashboard/chat/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>PoliceGPT Chat</a><a id="nav-cases" class="nav-link" href="/dashboard/cases/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>FIR &amp; Cases</a><a id="nav-suspects" class="nav-link" href="/dashboard/suspects/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Suspects</a><a id="nav-analytics" class="nav-link" href="/dashboard/analytics/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>Analytics</a><a id="nav-graph" class="nav-link" href="/dashboard/graph/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"></circle><circle cx="18" cy="6" r="3"></circle><circle cx="12" cy="18" r="3"></circle><line x1="8.5" y1="7.5" x2="15.5" y2="7.5"></line><line x1="7.5" y1="8.5" x2="10.5" y2="15.5"></line><line x1="16.5" y1="8.5" x2="13.5" y2="15.5"></line></svg>Knowledge Graph</a><a id="nav-reports" class="nav-link" href="/dashboard/reports/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><path d="M12 18v-6"></path><path d="m9 15 3 3 3-3"></path></svg>Reports</a><a id="nav-search" class="nav-link" href="/dashboard/search/"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>Search</a></nav><div class="sidebar-footer"><button id="logout-btn" class="logout-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Sign out</button></div></aside><div class="main-wrap"><header class="topbar"><div class="topbar-left"><div class="topbar-dot"></div><span class="topbar-status">KSP INTELLIGENCE NET · DEMO DATA</span></div><div class="topbar-right"><div class="topbar-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2a3048" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><input id="quick-search" type="text" placeholder="Search FIRs, suspects… (⌘K)"/></div></div></header><main class="page-content"><style>
+        .db-page {
+          display: flex;
+          flex-direction: column;
+          gap: 1.75rem;
+          font-family: 'Inter', -apple-system, sans-serif;
+          -webkit-font-smoothing: antialiased;
+          color: #f1f5f9;
+        }
+
+        /* Page header */
+        .page-hdr {
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 1rem;
+        }
+        .page-hdr h1 {
+          font-size: 1.5rem;
+          font-weight: 800;
+          letter-spacing: -0.03em;
+          background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+        .page-hdr p {
+          font-size: 0.78rem;
+          color: #64748b;
+          margin-top: 0.2rem;
+          font-weight: 500;
+        }
+        .page-time {
+          font-size: 0.72rem;
+          font-weight: 700;
+          font-family: 'JetBrains Mono', monospace;
+          color: #818cf8;
+          letter-spacing: 0.06em;
+          white-space: nowrap;
+          background: rgba(99, 102, 241, 0.08);
+          border: 1px solid rgba(99, 102, 241, 0.2);
+          padding: 0.4rem 0.85rem;
+          border-radius: 8px;
+          box-shadow: 0 0 15px rgba(99, 102, 241, 0.05);
+        }
+
+        /* Alerts */
+        .alerts { display: flex; flex-direction: column; gap: 0.5rem; }
+        .alert-row {
+          display: flex;
+          align-items: center;
+          gap: 0.85rem;
+          padding: 0.75rem 1.1rem;
+          border-radius: 8px;
+          border: 1px solid;
+          font-size: 0.8rem;
+          line-height: 1.5;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          transition: transform 0.2s ease;
+        }
+        .alert-row:hover {
+          transform: translateX(2px);
+        }
+        .alert-row.high {
+          background: rgba(239, 68, 68, 0.06);
+          border-color: rgba(239, 68, 68, 0.25);
+          color: #fca5a5;
+          box-shadow: 0 4px 15px rgba(239, 68, 68, 0.05);
+        }
+        .alert-row.medium {
+          background: rgba(59, 91, 255, 0.06);
+          border-color: rgba(59, 91, 255, 0.25);
+          color: #93c5fd;
+          box-shadow: 0 4px 15px rgba(59, 91, 255, 0.05);
+        }
+        .alert-row.low {
+          background: rgba(15, 23, 42, 0.4);
+          border-color: rgba(255, 255, 255, 0.05);
+          color: #94a3b8;
+        }
+        .alert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .alert-dot.high   { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+        .alert-dot.medium { background: #3b5bff; box-shadow: 0 0 10px #3b5bff; }
+        .alert-dot.low    { background: #64748b; }
+        .alert-time { font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; color: #475569; flex-shrink: 0; margin-left: auto; padding-left: 0.5rem; }
+
+        /* KPI grid */
+        .kpi-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0.85rem;
+        }
+        @media (max-width: 1100px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .kpi-card {
+          background: var(--bg-panel);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.6rem;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.02);
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .kpi-card:hover {
+          border-color: var(--border-hover);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(59, 91, 255, 0.03);
+        }
+        .kpi-top { display: flex; align-items: center; justify-content: space-between; }
+        .kpi-icon {
+          width: 32px; height: 32px;
+          border-radius: 8px;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .kpi-badge {
+          font-size: 0.65rem;
+          font-weight: 700;
+          font-family: 'JetBrains Mono', monospace;
+          padding: 0.2rem 0.5rem;
+          border-radius: 6px;
+          border: 1px solid;
+        }
+        .kpi-badge.up   { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.25); color: #4ade80; }
+        .kpi-badge.down { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); color: #f87171; }
+        .kpi-value {
+          font-size: 1.75rem;
+          font-weight: 800;
+          letter-spacing: -0.045em;
+          color: #ffffff;
+          font-family: 'Inter', sans-serif;
+        }
+        .kpi-label { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; }
+
+        /* Two col section */
+        .two-col {
+          display: grid;
+          grid-template-columns: 1fr 300px;
+          gap: 0.85rem;
+        }
+        @media (max-width: 1100px) { .two-col { grid-template-columns: 1fr; } }
+
+        /* Panel */
+        .panel {
+          background: var(--bg-panel);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 1.5rem;
+          box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
+        }
+        .panel-title {
+          font-size: 0.85rem;
+          font-weight: 800;
+          color: #ffffff;
+          margin-bottom: 0.25rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+        .panel-sub { font-size: 0.72rem; color: #64748b; margin-bottom: 1.5rem; font-weight: 500; }
+
+        /* Bar chart */
+        .bar-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.85rem; }
+        .bar-row:last-child { margin-bottom: 0; }
+        .bar-label { font-size: 0.78rem; color: #cbd5e1; width: 110px; flex-shrink: 0; font-weight: 600; }
+        .bar-track {
+          flex: 1; height: 6px;
+          background: rgba(255, 255, 255, 0.03);
+          border-radius: 99px;
+          overflow: hidden;
+          box-shadow: inset 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .bar-fill { height: 100%; border-radius: 99px; transition: width 0.8s ease-out; }
+        .bar-count { font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; color: #94a3b8; width: 50px; text-align: right; flex-shrink: 0; font-weight: 700; }
+
+        /* Modules */
+        .module-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .module-link {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.75rem 0.95rem;
+          border: 1px solid var(--border);
+          border-radius: 8px;
+          text-decoration: none;
+          background: rgba(255, 255, 255, 0.01);
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+          cursor: pointer;
+        }
+        .module-link:hover {
+          background: rgba(59, 91, 255, 0.05);
+          border-color: var(--border-hover);
+          transform: scale(1.01);
+        }
+        .module-link-name { font-size: 0.825rem; font-weight: 700; color: #f1f5f9; display: block; }
+        .module-link-desc { font-size: 0.7rem; color: #64748b; display: block; margin-top: 2px; font-weight: 500; }
+        .module-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+
+        /* Cases table */
+        .cases-table { width: 100%; border-collapse: collapse; }
+        .cases-table thead th {
+          font-size: 0.7rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #64748b;
+          padding: 0 0.85rem 0.85rem;
+          text-align: left;
+          border-bottom: 1px solid var(--border);
+        }
+        .cases-table tbody td {
+          font-size: 0.8rem;
+          padding: 0.85rem;
+          border-bottom: 1px solid rgba(255,255,255,0.02);
+          vertical-align: middle;
+          color: #e2e8f0;
+        }
+        .cases-table tbody tr:last-child td { border-bottom: none; }
+        .cases-table tbody tr { transition: background 0.15s ease; }
+        .cases-table tbody tr:hover td { background: rgba(59, 91, 255, 0.03); }
+
+        .fir-link { font-family: 'JetBrains Mono', monospace; font-weight: 800; color: #818cf8; font-size: 0.8rem; text-decoration: none; transition: color 0.15s ease; }
+        .fir-link:hover { color: #a5b4fc; }
+        .status-pill {
+          font-size: 0.65rem;
+          font-weight: 700;
+          font-family: 'JetBrains Mono', monospace;
+          padding: 0.25rem 0.6rem;
+          border-radius: 6px;
+          border: 1px solid;
+          white-space: nowrap;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+        }
+
+        .urgency-bar { display: flex; align-items: center; gap: 0.6rem; }
+        .urg-track { width: 80px; height: 5px; background: rgba(255,255,255,0.04); border-radius: 99px; overflow: hidden; flex-shrink: 0; }
+        .urg-fill { height: 100%; border-radius: 99px; }
+        .urg-val { font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; color: #94a3b8; font-weight: 700; }
+
+        .loc-text { color: #64748b; font-size: 0.8rem; font-weight: 500; }
+        .cat-text { color: #cbd5e1; font-weight: 600; }
+        .off-text { color: #cbd5e1; font-size: 0.8rem; }
+
+        .cases-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+        .view-all { font-size: 0.75rem; color: #3b5bff; text-decoration: none; font-weight: 700; transition: color 0.15s ease; }
+        .view-all:hover { color: #60a5fa; }
+      </style><div class="db-page"><div class="page-hdr"><div><h1>Good <!-- -->evening<!-- -->, <!-- -->Officer<!-- -->.</h1><p>Karnataka State Police · Operations Overview</p></div><span class="page-time"> IST</span></div><div class="alerts"><div class="alert-row high"><div class="alert-dot high"></div><span>BOLO: Ravi Kumar S (KSP-CR-2024-0001) — Repeat offender absconding near Shivajinagar.</span><span class="alert-time">2m ago</span></div><div class="alert-row medium"><div class="alert-dot medium"></div><span>Cybercrime Surge: 34% increase in UPI spoofing in Bangalore East.</span><span class="alert-time">15m ago</span></div><div class="alert-row low"><div class="alert-dot low"></div><span>Missing Child Matched: CCTV witness linked to Case CR-078/2024.</span><span class="alert-time">1h ago</span></div></div><div class="kpi-grid"><div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:#2563eb12;border:1px solid #2563eb22"><div style="width:8px;height:8px;border-radius:50%;background:#2563eb;opacity:0.8"></div></div><span class="kpi-badge up">+5.2%</span></div><div class="kpi-value">48,234</div><div class="kpi-label">Total FIRs</div></div><div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:#2563eb12;border:1px solid #2563eb22"><div style="width:8px;height:8px;border-radius:50%;background:#2563eb;opacity:0.8"></div></div><span class="kpi-badge down">−3.1%</span></div><div class="kpi-value">12,891</div><div class="kpi-label">Open Cases</div></div><div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:#0284c712;border:1px solid #0284c722"><div style="width:8px;height:8px;border-radius:50%;background:#0284c7;opacity:0.8"></div></div><span class="kpi-badge up">+12.4%</span></div><div class="kpi-value">35,343</div><div class="kpi-label">Solved</div></div><div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:#6366f112;border:1px solid #6366f122"><div style="width:8px;height:8px;border-radius:50%;background:#6366f1;opacity:0.8"></div></div><span class="kpi-badge up">+2.1%</span></div><div class="kpi-value">73.3%</div><div class="kpi-label">Clearance Rate</div></div><div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:#dc262612;border:1px solid #dc262622"><div style="width:8px;height:8px;border-radius:50%;background:#dc2626;opacity:0.8"></div></div><span class="kpi-badge down">+34.1%</span></div><div class="kpi-value">8,921</div><div class="kpi-label">Cybercrime YTD</div></div><div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:#0284c712;border:1px solid #0284c722"><div style="width:8px;height:8px;border-radius:50%;background:#0284c7;opacity:0.8"></div></div><span class="kpi-badge up">+8.7%</span></div><div class="kpi-value">19,876</div><div class="kpi-label">Arrests YTD</div></div><div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:#47556912;border:1px solid #47556922"><div style="width:8px;height:8px;border-radius:50%;background:#475569;opacity:0.8"></div></div><span class="kpi-badge up">−12.0%</span></div><div class="kpi-value">234</div><div class="kpi-label">Missing Persons</div></div><div class="kpi-card"><div class="kpi-top"><div class="kpi-icon" style="background:#2563eb12;border:1px solid #2563eb22"><div style="width:8px;height:8px;border-radius:50%;background:#2563eb;opacity:0.8"></div></div><span class="kpi-badge up">+45.0%</span></div><div class="kpi-value">1,204</div><div class="kpi-label">AI Queries Today</div></div></div><div class="two-col"><div class="panel"><div class="panel-title">Crime Categories — 2024 YTD</div><div class="panel-sub">Breakdown of reported offenses</div><div class="bar-row"><span class="bar-label">Cybercrime</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#2563eb"></div></div><span class="bar-count">8,921</span></div><div class="bar-row"><span class="bar-label">Assault</span><div class="bar-track"><div class="bar-fill" style="width:81.08956395022979%;background:#dc2626"></div></div><span class="bar-count">7,234</span></div><div class="bar-row"><span class="bar-label">Vehicle Theft</span><div class="bar-track"><div class="bar-fill" style="width:76.10133393117363%;background:#0284c7"></div></div><span class="bar-count">6,789</span></div><div class="bar-row"><span class="bar-label">Robbery</span><div class="bar-track"><div class="bar-fill" style="width:60.890034749467546%;background:#475569"></div></div><span class="bar-count">5,432</span></div><div class="bar-row"><span class="bar-label">Burglary</span><div class="bar-track"><div class="bar-fill" style="width:46.21679183947988%;background:#6366f1"></div></div><span class="bar-count">4,123</span></div><div class="bar-row"><span class="bar-label">Narcotics</span><div class="bar-track"><div class="bar-fill" style="width:38.74005156372604%;background:#0891b2"></div></div><span class="bar-count">3,456</span></div></div><div class="panel"><div class="panel-title">Quick Access</div><div class="panel-sub">Intelligence modules</div><div class="module-list"><a class="module-link" href="/dashboard/chat/"><div class="module-link-left"><span class="module-link-name">PoliceGPT Chat</span><span class="module-link-desc">Natural language crime queries</span></div><div class="module-dot" style="background:#2563eb"></div></a><a class="module-link" href="/dashboard/cases/"><div class="module-link-left"><span class="module-link-name">FIR Database</span><span class="module-link-desc">Search and filter case files</span></div><div class="module-dot" style="background:#0284c7"></div></a><a class="module-link" href="/dashboard/analytics/"><div class="module-link-left"><span class="module-link-name">Crime Analytics</span><span class="module-link-desc">Heatmaps and trend predictions</span></div><div class="module-dot" style="background:#6366f1"></div></a><a class="module-link" href="/dashboard/graph/"><div class="module-link-left"><span class="module-link-name">Knowledge Graph</span><span class="module-link-desc">Suspect network relationships</span></div><div class="module-dot" style="background:#475569"></div></a><a class="module-link" href="/dashboard/reports/"><div class="module-link-left"><span class="module-link-name">Investigation Reports</span><span class="module-link-desc">Auto-generate case dossiers</span></div><div class="module-dot" style="background:#0891b2"></div></a></div></div></div><div class="panel"><div class="cases-hdr"><div><div class="panel-title">High-Priority Active Cases</div><div class="panel-sub" style="margin:0">Cases requiring urgent investigation</div></div><a class="view-all" href="/dashboard/cases/">View all FIRs →</a></div><table class="cases-table"><thead><tr><th>FIR</th><th>Category</th><th>Location</th><th>Status</th><th>AI Urgency</th><th>Officer</th></tr></thead><tbody><tr><td><a class="fir-link" href="/dashboard/cases/">CR-045/2024</a></td><td><span class="cat-text">Robbery</span></td><td><span class="loc-text">Koramangala 5th Block</span></td><td><span class="status-pill" style="color:#dc2626;background:#dc262612;border-color:#dc262622">Open</span></td><td><div class="urgency-bar"><div class="urg-track"><div class="urg-fill" style="width:87%;background:#dc2626"></div></div><span class="urg-val">87<!-- -->%</span></div></td><td><span class="off-text">SI Priya</span></td></tr><tr><td><a class="fir-link" href="/dashboard/cases/">CR-089/2024</a></td><td><span class="cat-text">Cybercrime</span></td><td><span class="loc-text">Whitefield IT Park</span></td><td><span class="status-pill" style="color:#2563eb;background:#2563eb12;border-color:#2563eb22">Investigating</span></td><td><div class="urgency-bar"><div class="urg-track"><div class="urg-fill" style="width:72%;background:#2563eb"></div></div><span class="urg-val">72<!-- -->%</span></div></td><td><span class="off-text">Insp Ramesh</span></td></tr><tr><td><a class="fir-link" href="/dashboard/cases/">CR-112/2023</a></td><td><span class="cat-text">Murder</span></td><td><span class="loc-text">Mysore Road Junction</span></td><td><span class="status-pill" style="color:#0284c7;background:#0284c712;border-color:#0284c722">Chargesheeted</span></td><td><div class="urgency-bar"><div class="urg-track"><div class="urg-fill" style="width:95%;background:#dc2626"></div></div><span class="urg-val">95<!-- -->%</span></div></td><td><span class="off-text">Insp Ramesh</span></td></tr><tr><td><a class="fir-link" href="/dashboard/cases/">CR-034/2024</a></td><td><span class="cat-text">Narcotics</span></td><td><span class="loc-text">KR Market Hub</span></td><td><span class="status-pill" style="color:#dc2626;background:#dc262612;border-color:#dc262622">Open</span></td><td><div class="urgency-bar"><div class="urg-track"><div class="urg-fill" style="width:81%;background:#dc2626"></div></div><span class="urg-val">81<!-- -->%</span></div></td><td><span class="off-text">SI Priya</span></td></tr><tr><td><a class="fir-link" href="/dashboard/cases/">CR-156/2024</a></td><td><span class="cat-text">Burglary</span></td><td><span class="loc-text">Jayanagar 4th Block</span></td><td><span class="status-pill" style="color:#dc2626;background:#dc262612;border-color:#dc262622">Open</span></td><td><div class="urgency-bar"><div class="urg-track"><div class="urg-fill" style="width:55.00000000000001%;background:#0284c7"></div></div><span class="urg-val">55<!-- -->%</span></div></td><td><span class="off-text">PSI Arjun</span></td></tr></tbody></table></div></div><!--$--><!--/$--></main></div></div><script src="/_next/static/chunks/3yiddnbtmgj46.js" id="_R_" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[39756,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"default\"]\n3:I[37457,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"default\"]\n4:I[92825,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"ClientSegmentRoot\"]\n5:I[39126,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\",\"/_next/static/chunks/3wcf5eo7uop05.js\"],\"default\"]\n7:I[47257,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"ClientPageRoot\"]\n8:I[30257,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\",\"/_next/static/chunks/3wcf5eo7uop05.js\",\"/_next/static/chunks/10g-gk85kgx44.js\"],\"default\"]\nb:I[97367,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"OutletBoundary\"]\nc:\"$Sreact.suspense\"\ne:I[97367,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"ViewportBoundary\"]\n10:I[97367,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"MetadataBoundary\"]\n12:I[68027,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"default\",1]\n:HL[\"/_next/static/chunks/19aul9au1g665.css\",\"style\"]\n:HL[\"https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800\u0026family=JetBrains+Mono:wght@400;500;700\u0026family=Outfit:wght@400;500;600;700;800\u0026family=Rajdhani:wght@500;600;700\u0026display=swap\",\"style\"]\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"c\":[\"\",\"dashboard\",\"\"],\"q\":\"\",\"i\":false,\"f\":[[[\"\",{\"children\":[\"dashboard\",{\"children\":[\"__PAGE__\",{}]}]},\"$undefined\",\"$undefined\",16],[[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/chunks/19aul9au1g665.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"async\":true,\"nonce\":\"$undefined\"}],[\"$\",\"script\",\"script-1\",{\"src\":\"/_next/static/chunks/14mrh2-p_w84d.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"en\",\"suppressHydrationWarning\":true,\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"link\",null,{\"rel\":\"preconnect\",\"href\":\"https://fonts.googleapis.com\"}],[\"$\",\"link\",null,{\"rel\":\"preconnect\",\"href\":\"https://fonts.gstatic.com\",\"crossOrigin\":\"anonymous\"}],[\"$\",\"link\",null,{\"rel\":\"stylesheet\",\"href\":\"https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800\u0026family=JetBrains+Mono:wght@400;500;700\u0026family=Outfit:wght@400;500;600;700;800\u0026family=Rajdhani:wght@500;600;700\u0026display=swap\"}]]}],[\"$\",\"body\",null,{\"className\":\"antialiased\",\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]]}]]}],{\"children\":[[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/3wcf5eo7uop05.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"$L4\",null,{\"Component\":\"$5\",\"slots\":{\"children\":[\"$\",\"$L2\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L3\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]},\"serverProvidedParams\":{\"params\":{},\"promises\":[\"$@6\"]}}]]}],{\"children\":[[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"$L7\",null,{\"Component\":\"$8\",\"serverProvidedParams\":{\"searchParams\":{},\"params\":\"$0:f:0:1:1:children:0:props:children:1:props:serverProvidedParams:params\",\"promises\":[\"$@9\",\"$@a\"]}}],[[\"$\",\"script\",\"script-0\",{\"src\":\"/_next/static/chunks/10g-gk85kgx44.js\",\"async\":true,\"nonce\":\"$undefined\"}]],[\"$\",\"$Lb\",null,{\"children\":[\"$\",\"$c\",null,{\"name\":\"Next.MetadataOutlet\",\"children\":\"$@d\"}]}]]}],{},null,false,null]},null,false,null]},null,false,null],[\"$\",\"$1\",\"h\",{\"children\":[null,[\"$\",\"$Le\",null,{\"children\":\"$Lf\"}],[\"$\",\"div\",null,{\"hidden\":true,\"children\":[\"$\",\"$L10\",null,{\"children\":[\"$\",\"$c\",null,{\"name\":\"Next.Metadata\",\"children\":\"$L11\"}]}]}],null]}],false]],\"m\":\"$undefined\",\"G\":[\"$12\",[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/chunks/19aul9au1g665.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]]],\"S\":true,\"h\":null,\"s\":\"$undefined\",\"l\":\"$undefined\",\"p\":\"$undefined\",\"d\":\"$undefined\",\"b\":\"dJZAR-NGrQa8X8RVHwL2W\"}\n"])</script><script>self.__next_f.push([1,"6:\"$0:f:0:1:1:children:0:props:children:1:props:serverProvidedParams:params\"\n9:{}\na:\"$0:f:0:1:1:children:0:props:children:1:props:serverProvidedParams:params\"\n"])</script><script>self.__next_f.push([1,"f:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n"])</script><script>self.__next_f.push([1,"13:I[27201,[\"/_next/static/chunks/05-c3ty_6dwfk.js\",\"/_next/static/chunks/14mrh2-p_w84d.js\"],\"IconMark\"]\nd:null\n11:[[\"$\",\"title\",\"0\",{\"children\":\"POLICEGPT — Karnataka State Police AI Investigation Assistant\"}],[\"$\",\"meta\",\"1\",{\"name\":\"description\",\"content\":\"National-grade AI-powered crime investigation platform for Karnataka State Police. Ask crime data like you ask ChatGPT.\"}],[\"$\",\"meta\",\"2\",{\"name\":\"author\",\"content\":\"Karnataka State Police - POLICEGPT Team\"}],[\"$\",\"meta\",\"3\",{\"name\":\"keywords\",\"content\":\"Karnataka Police,POLICEGPT,AI Investigation,Crime Database,FIR Search,Criminal Intelligence,Law Enforcement AI\"}],[\"$\",\"meta\",\"4\",{\"name\":\"robots\",\"content\":\"noindex, nofollow\"}],[\"$\",\"link\",\"5\",{\"rel\":\"icon\",\"href\":\"/favicon.ico?favicon.2vob68tjqpejf.ico\",\"sizes\":\"256x256\",\"type\":\"image/x-icon\"}],[\"$\",\"link\",\"6\",{\"rel\":\"icon\",\"href\":\"/favicon.ico\"}],[\"$\",\"$L13\",\"7\",{}]]\n"])</script></body></html>

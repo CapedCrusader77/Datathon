@@ -1,8 +1,8 @@
 {
   "client": {
-    "source": "frontend/out",
+    "source": "client",
     "index": "index.html",
-    "error": "index.html"
+    "error": "404.html"
   },
   "appsail": [
     {
@@ -11,13 +11,6 @@
       "stack": "python3.11",
       "build_command": "pip install -r requirements.txt",
       "run_command": "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
-    },
-    {
-      "name": "policegpt-frontend",
-      "source": "frontend",
-      "stack": "node20",
-      "build_command": "npm install && npm run build",
-      "run_command": "npm start"
     }
   ]
 }
