@@ -2,7 +2,6 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 
-/* ── Types ─────────────────────────────────────────────────── */
 interface GraphNode {
   id: string;
   label: string;
@@ -20,7 +19,6 @@ interface GraphEdge {
   label: string;
 }
 
-/* ── Static layout positions for a given node id ────────────── */
 const LAYOUT_POSITIONS: Record<string, { x: number; y: number }> = {
   p1: { x: 380, y: 280 },
   p2: { x: 200, y: 160 },
@@ -39,7 +37,6 @@ const LAYOUT_POSITIONS: Record<string, { x: number; y: number }> = {
 
 function posForId(id: string, fallback: number): { x: number; y: number } {
   if (LAYOUT_POSITIONS[id]) return LAYOUT_POSITIONS[id];
-  // For unknown ids generate a deterministic but spread-out position
   const seed = id.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
   return {
     x: 120 + ((seed * 137) % 500),
@@ -48,22 +45,21 @@ function posForId(id: string, fallback: number): { x: number; y: number } {
 }
 
 const NODE_COLORS: Record<string, string> = {
-  person: "#2563eb",
+  person: "#3b82f6",
   vehicle: "#0284c7",
-  phone: "#475569",
-  fir: "#dc2626",
-  gang: "#6366f1",
-  location: "#0891b2",
+  phone: "#64748b",
+  fir: "#ef4444",
+  gang: "#8b5cf6",
+  location: "#06b6d4",
 };
 
 const RISK_COLORS: Record<string, string> = {
-  extreme: "#dc2626",
-  high: "#2563eb",
-  medium: "#0284c7",
-  low: "#475569",
+  extreme: "#ef4444",
+  high: "#f59e0b",
+  medium: "#3b82f6",
+  low: "#10b981",
 };
 
-/* ── API mapper: backend GraphNode → frontend GraphNode ───── */
 function mapApiToNode(n: {
   id: string;
   label: string;
@@ -87,19 +83,19 @@ function mapApiToEdge(e: { source: string; target: string; relationship: string 
   return { s: e.source, t: e.target, label: e.relationship };
 }
 
-/* ── Demo graph (shown before/when API is unavailable) ────── */
 const SEED_NODES: GraphNode[] = [
   { id: "p1", label: "Ravi Kumar S",          type: "person",   risk: "extreme", x: 380, y: 280, firs: 12 },
   { id: "p2", label: "Suresh Nayak",           type: "person",   risk: "high",    x: 200, y: 160, firs: 5  },
   { id: "p3", label: "Deepa Mallesh",          type: "person",   risk: "medium",  x: 560, y: 160, firs: 3  },
   { id: "p4", label: "Arjun Patil",            type: "person",   risk: "high",    x: 550, y: 400, firs: 7  },
-  { id: "g1", label: "BSS Network",            type: "gang",     risk: "extreme", x: 380, y: 90,  firs: 0  },
+  { id: "g1", label: "BSS Syndicate",          type: "gang",     risk: "extreme", x: 380, y: 90,  firs: 0  },
   { id: "v1", label: "KA-01-AB-1234",          type: "vehicle",  risk: null,      x: 200, y: 390, firs: 0  },
   { id: "ph1",label: "9900112233",             type: "phone",    risk: null,      x: 580, y: 310, firs: 0  },
   { id: "f1", label: "CR-045/2024",            type: "fir",      risk: null,      x: 280, y: 430, firs: 0  },
   { id: "f2", label: "CR-089/2024",            type: "fir",      risk: null,      x: 490, y: 430, firs: 0  },
   { id: "l1", label: "Koramangala",            type: "location", risk: null,      x: 120, y: 440, firs: 0  },
 ];
+
 const SEED_EDGES: GraphEdge[] = [
   { s: "p1", t: "g1",  label: "LEADER"      },
   { s: "p2", t: "g1",  label: "MEMBER"      },
@@ -113,7 +109,6 @@ const SEED_EDGES: GraphEdge[] = [
   { s: "v1", t: "l1",  label: "SPOTTED AT"  },
 ];
 
-/* ── Component ───────────────────────────────────────────────── */
 export default function GraphPage() {
   const [nodes, setNodes] = useState<GraphNode[]>(SEED_NODES);
   const [edges, setEdges] = useState<GraphEdge[]>(SEED_EDGES);
@@ -126,7 +121,6 @@ export default function GraphPage() {
 
   const getNode = (id: string) => nodes.find(n => n.id === id);
 
-  /* ── Feature 4: Load graph from API ─────────────────────── */
   const loadSuspectNetwork = useCallback(async (suspectId: string, isExpand = false) => {
     setLoadingNodeId(suspectId);
     try {
@@ -142,7 +136,6 @@ export default function GraphPage() {
       const newEdges: GraphEdge[] = (data.edges ?? []).map(mapApiToEdge);
 
       if (isExpand) {
-        // Merge: add new nodes/edges that aren't already in the graph
         setNodes(prev => {
           const existingIds = new Set(prev.map(n => n.id));
           const toAdd = newNodes.filter(n => !existingIds.has(n.id));
@@ -157,9 +150,7 @@ export default function GraphPage() {
         setNodes(newNodes);
         setEdges(newEdges);
       }
-    } catch (err) {
-      console.error("Graph API error:", err);
-      // On API failure fall back to rich demo seed data so graph is always visible
+    } catch {
       if (!isExpand) {
         setNodes(SEED_NODES);
         setEdges(SEED_EDGES);
@@ -170,19 +161,16 @@ export default function GraphPage() {
     }
   }, []);
 
-  // Load initial graph on mount
   useEffect(() => {
     loadSuspectNetwork("p1", false);
   }, [loadSuspectNetwork]);
 
-  // Node click: select + expand connections
   const handleNodeClick = useCallback((node: GraphNode) => {
     if (selected?.id === node.id) {
       setSelected(null);
       return;
     }
     setSelected(node);
-    // Expand connections for person nodes only
     if (node.type === "person" || node.type === "gang") {
       loadSuspectNetwork(node.id, true);
     }
@@ -191,7 +179,6 @@ export default function GraphPage() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
-    // Find matching node and select it, or reload graph with that suspect
     const found = nodes.find(n => n.label.toLowerCase().includes(searchQuery.toLowerCase()));
     if (found) {
       setSelected(found);
@@ -200,86 +187,64 @@ export default function GraphPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header (Contained bar to prevent logo collision) */}
-      <div className="bg-zinc-900 border-b border-zinc-800 p-6 -mt-7 -mx-7 mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-zinc-100 tracking-wide">
-              Entity Knowledge Graph
-            </h1>
-            <p className="text-xs text-zinc-400 mt-1 font-mono">
-              KSP INTELLIGENCE NET · DEMO DATA — click any node to explore connections
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            {/* Search */}
-            <form onSubmit={handleSearch} className="flex items-center gap-2 bg-zinc-800 border border-zinc-700 rounded-sm px-3 py-1.5">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-              <input
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                placeholder="Search suspect…"
-                className="bg-transparent border-none outline-none text-xs text-zinc-200 w-36 font-mono focus:ring-0"
-              />
-            </form>
-            <Link href="/dashboard/chat" className="btn-primary text-xs px-4 py-2 flex items-center gap-2 no-underline rounded-sm">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2-2z" />
-              </svg>
-              QUERY GRAPH VIA AI
-            </Link>
-          </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#f8fafc", letterSpacing: "-0.02em" }}>
+            Entity Knowledge Graph
+          </h1>
+          <p style={{ fontSize: "0.78rem", color: "#64748b", marginTop: "2px" }}>
+            Interactive relationship topology — click nodes to inspect suspect networks & linked FIRs
+          </p>
+        </div>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <form onSubmit={handleSearch} style={{ display: "flex", gap: "6px" }}>
+            <input
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search suspect..."
+              className="pg-input"
+              style={{ fontSize: "0.75rem", padding: "6px 12px", width: "160px" }}
+            />
+          </form>
+          <Link href="/dashboard/chat" className="btn-primary" style={{ fontSize: "0.75rem", padding: "8px 14px", textDecoration: "none" }}>
+            🤖 AI Query Graph
+          </Link>
         </div>
       </div>
 
-      {/* Legend & Filter Bar */}
-      <div className="flex gap-4 flex-wrap items-center bg-zinc-900 border border-zinc-800 rounded-sm p-3">
-        <span className="text-xs font-semibold text-zinc-400 font-mono uppercase">ENTITY LEGEND:</span>
+      {/* Legend */}
+      <div className="glass-card" style={{ padding: "10px 16px", display: "flex", gap: "16px", alignItems: "center", flexWrap: "wrap", fontSize: "0.72rem" }}>
+        <span style={{ fontWeight: 700, color: "#64748b", fontFamily: "var(--font-mono)", textTransform: "uppercase" }}>LEGEND:</span>
         {Object.entries(NODE_COLORS).map(([type, color]) => (
-          <div key={type} className="flex items-center gap-1.5 bg-zinc-950 px-2.5 py-1 rounded-sm border border-zinc-800">
-            <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
-            <span className="text-[11px] uppercase font-mono text-zinc-300 font-medium">{type}</span>
+          <div key={type} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: color }} />
+            <span style={{ textTransform: "capitalize", color: "#94a3b8" }}>{type}</span>
           </div>
         ))}
-        <div className="h-4 w-px bg-zinc-800 mx-1" />
-        <span className="text-xs font-semibold text-zinc-400 font-mono uppercase">SEVERITY LEVEL:</span>
+        <div style={{ width: "1px", height: "14px", background: "#141a28" }} />
         {Object.entries(RISK_COLORS).map(([r, c]) => (
-          <div key={r} className="flex items-center gap-1.5">
-            <div className="w-2 h-2 rounded-full" style={{ background: c }} />
-            <span className="text-[10px] uppercase font-mono text-zinc-400 font-bold">{r}</span>
+          <div key={r} style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: c }} />
+            <span style={{ textTransform: "uppercase", color: "#64748b", fontSize: "0.65rem", fontWeight: 700 }}>{r}</span>
           </div>
         ))}
-        {initialLoading && (
-          <span className="ml-auto text-[11px] text-[#2563eb] font-mono">QUERYING NEO4J INDEX…</span>
-        )}
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 items-start">
-        {/* SVG Interactive Canvas */}
-        <div className="xl:col-span-3 terminal-panel relative overflow-hidden h-[580px] p-0 bg-zinc-950 border border-zinc-800 rounded-sm">
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: "20px", alignItems: "start" }}>
+        {/* SVG Graph Canvas */}
+        <div className="kg-container" style={{ height: "540px", position: "relative", overflow: "hidden" }}>
           {initialLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-[#0d0f14]/90 z-10">
-              <div className="text-center space-y-3">
-                <div className="w-8 h-8 border-2 border-blue-500/30 border-t-[#2563eb] rounded-full animate-spin mx-auto" />
-                <p className="text-xs text-slate-400 font-mono">LOADING GRAPH FROM NEO4J…</p>
-              </div>
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "#000000" }}>
+              <span style={{ color: "#3b82f6", fontSize: "0.85rem", fontFamily: "var(--font-mono)" }}>Querying Neo4j Graph Index...</span>
             </div>
           )}
-          {!initialLoading && nodes.length === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-[#0d0f14] z-10 p-6 text-center">
-              <div className="max-w-md space-y-2">
-                <p className="text-sm font-semibold text-slate-200">No connections found for this entity — add more case files</p>
-                <p className="text-xs text-slate-400">Upload additional FIR documents in the Cases module or select an existing seed entity.</p>
-              </div>
-            </div>
-          )}
-          <svg ref={svgRef} width="100%" height="100%" viewBox="0 0 750 560" style={{ cursor: "default" }}>
+
+          <svg ref={svgRef} width="100%" height="100%" viewBox="0 0 750 540">
             <defs>
               <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
-                <polygon points="0 0, 8 3, 0 6" fill="rgba(37,99,235,0.8)" />
+                <polygon points="0 0, 8 3, 0 6" fill="rgba(59,130,246,0.6)" />
               </marker>
             </defs>
 
@@ -292,186 +257,105 @@ export default function GraphPage() {
               const my = (s.y + t.y) / 2;
               const isHovered = hoveredEdge === e;
               return (
-                <g key={`${e.s}-${e.t}-${i}`}>
+                <g key={i}>
                   <line
                     x1={s.x} y1={s.y} x2={t.x} y2={t.y}
-                    stroke={isHovered ? "#60a5fa" : "rgba(37,99,235,0.4)"}
-                    strokeWidth={isHovered ? 2 : 1.2}
+                    stroke={isHovered ? "#60a5fa" : "rgba(59,130,246,0.3)"}
+                    strokeWidth={isHovered ? 2 : 1}
                     markerEnd="url(#arrowhead)"
-                    style={{ cursor: "pointer", transition: "stroke 0.15s" }}
+                    style={{ cursor: "pointer" }}
                     onMouseEnter={() => setHoveredEdge(e)}
                     onMouseLeave={() => setHoveredEdge(null)}
                   />
                   {isHovered && (
-                    <g>
-                      <rect x={mx - 44} y={my - 14} width="88" height="18" rx="4" fill="#141720" stroke="#2563eb" strokeWidth="1" />
-                      <text x={mx} y={my - 2} textAnchor="middle" fontSize="9" fontWeight="bold" fill="#f1f5f9" fontFamily="JetBrains Mono">
-                        {e.label}
-                      </text>
-                    </g>
+                    <text x={mx} y={my - 6} textAnchor="middle" fontSize="9" fill="#60a5fa" fontFamily="var(--font-mono)" fontWeight="700">
+                      {e.label}
+                    </text>
                   )}
                 </g>
               );
             })}
 
-            {/* Nodes — Motion: One Moment Only (staggered 300ms entrance on load, no bounce/pulse) */}
-            {nodes.map((node, i) => {
-              const color = NODE_COLORS[node.type] || "#2563eb";
+            {/* Nodes */}
+            {nodes.map(node => {
+              const color = NODE_COLORS[node.type] || "#3b82f6";
               const borderColor = node.risk ? (RISK_COLORS[node.risk] || color) : color;
               const isSelected = selected?.id === node.id;
-              const isLoading = loadingNodeId === node.id;
               const r = node.type === "gang" ? 28 : node.type === "person" ? 22 : 16;
 
               return (
-                <g
-                  key={node.id}
-                  transform={`translate(${node.x},${node.y})`}
-                  className="animate-node-enter"
-                  style={{ cursor: "pointer", animationDelay: `${Math.min(i, 8) * 300}ms` }}
-                  onClick={() => handleNodeClick(node)}
-                >
-                  {/* Selected Solid Accent Ring */}
+                <g key={node.id} transform={`translate(${node.x},${node.y})`}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleNodeClick(node)}>
                   {isSelected && (
-                    <circle r={r + 6} fill="none" stroke={borderColor} strokeWidth="2" />
+                    <circle r={r + 6} fill="none" stroke={borderColor} strokeWidth="2" opacity="0.8" />
                   )}
-                  {/* Loading Ring (only while actively querying API for expansion) */}
-                  {isLoading && (
-                    <circle r={r + 8} fill="none" stroke="#2563eb" strokeWidth="2" strokeDasharray="5 3">
-                      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1s" repeatCount="indefinite" />
-                    </circle>
-                  )}
-                  {/* Risk Halo */}
                   {node.risk && (
                     <circle r={r + 3} fill="none" stroke={borderColor} strokeWidth="1.5" strokeDasharray="3 2" />
                   )}
-                  {/* Main Circle (match legend colors exactly) */}
-                  <circle r={r} fill={color} stroke="#ffffff" strokeWidth={isSelected ? 2.5 : 1} strokeOpacity="0.4" />
-                  {/* Node Symbol */}
+                  <circle r={r} fill={`${color}30`} stroke={color} strokeWidth={isSelected ? 2.5 : 1.5} />
                   <text textAnchor="middle" dominantBaseline="central" fontSize={node.type === "gang" ? "16" : "13"}>
                     {node.type === "person" ? "👤" : node.type === "vehicle" ? "🚗" : node.type === "phone" ? "📱" : node.type === "fir" ? "📋" : node.type === "location" ? "📍" : "⚡"}
                   </text>
-                  {/* Node Title (visible white text below node) */}
-                  <text y={r + 16} textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ffffff" fontFamily="JetBrains Mono" style={{ pointerEvents: "none" }}>
+                  <text y={r + 14} textAnchor="middle" fontSize="9" fill="#94a3b8" fontFamily="var(--font-mono)">
                     {node.label}
                   </text>
-                  {(node.firs ?? 0) > 0 && (
-                    <text y={r + 28} textAnchor="middle" fontSize="9" fontWeight="bold" fill="#ef4444" fontFamily="JetBrains Mono">
-                      {node.firs} FIRs
-                    </text>
-                  )}
                 </g>
               );
             })}
           </svg>
         </div>
 
-        {/* Side Panel Drawer (Tactical Command Drawer with Overflow Fix) */}
-        <div className="terminal-panel space-y-4 p-5 border border-zinc-800 bg-zinc-900 rounded-sm max-h-[580px] overflow-y-auto">
-          <h3 className="font-bold text-sm text-zinc-100 border-b border-zinc-800 pb-2.5 flex items-center justify-between">
-            <span>{selected ? "Entity Intelligence" : "Graph Overview"}</span>
-            {selected && (
-              <button onClick={() => setSelected(null)} className="text-zinc-400 hover:text-zinc-200">✕</button>
-            )}
+        {/* Side Detail Panel */}
+        <div className="chart-container" style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          <h3 style={{ fontSize: "0.85rem", fontWeight: 700, color: "#f8fafc", borderBottom: "1px solid #141a28", paddingBottom: "8px" }}>
+            {selected ? "Entity Details" : "Graph Summary"}
           </h3>
 
           {!selected ? (
-            <div className="space-y-4 text-xs">
-              <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-slate-300">
-                <p className="font-semibold text-blue-400 mb-1">💡 KSP Intelligence Net · DEMO DATA</p>
-                <p className="leading-relaxed">Click any node to query Neo4j and expand connections. Person & gang nodes fetch their full relationship network.</p>
-              </div>
-              <div className="space-y-2 text-slate-400 font-mono">
-                <p>Loaded Nodes: <span className="text-slate-200 font-bold">{nodes.length}</span></p>
-                <p>Linked Edges: <span className="text-slate-200 font-bold">{edges.length}</span></p>
-                <p>Tracked Suspects: <span className="text-blue-400 font-bold">{nodes.filter(n => n.type === "person").length}</span></p>
-                <p>FIR Files: <span className="text-red-400 font-bold">{nodes.filter(n => n.type === "fir").length}</span></p>
-                <p>Active Syndicates: <span className="text-purple-400 font-bold">{nodes.filter(n => n.type === "gang").length}</span></p>
-              </div>
-              {loadingNodeId && (
-                <div className="flex items-center gap-2 text-blue-400 text-[11px] font-mono">
-                  <div className="w-3 h-3 border border-blue-400 border-t-transparent rounded-full animate-spin" />
-                  Expanding from Neo4j…
-                </div>
-              )}
+            <div style={{ fontSize: "0.75rem", color: "#64748b", display: "flex", flexDirection: "column", gap: "8px" }}>
+              <p style={{ color: "#94a3b8" }}>Click any entity node to inspect its relationship topology.</p>
+              <p>Total Nodes: <span style={{ color: "#f8fafc", fontWeight: 700 }}>{nodes.length}</span></p>
+              <p>Total Connections: <span style={{ color: "#f8fafc", fontWeight: 700 }}>{edges.length}</span></p>
+              <p>Persons Tracked: <span style={{ color: "#60a5fa", fontWeight: 700 }}>{nodes.filter(n => n.type === "person").length}</span></p>
             </div>
           ) : (
-            <div className="space-y-4 text-xs">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
-                  style={{ background: `${NODE_COLORS[selected.type]}20`, border: `1px solid ${NODE_COLORS[selected.type]}` }}>
-                  {selected.type === "person" ? "👤" : selected.type === "vehicle" ? "🚗" : selected.type === "phone" ? "📱" : selected.type === "fir" ? "📋" : selected.type === "location" ? "📍" : "⚡"}
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", fontSize: "0.75rem" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div style={{ width: "36px", height: "36px", borderRadius: "8px", background: `${NODE_COLORS[selected.type]}20`, border: `1px solid ${NODE_COLORS[selected.type]}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {selected.type === "person" ? "👤" : selected.type === "vehicle" ? "🚗" : selected.type === "phone" ? "📱" : selected.type === "fir" ? "📋" : "⚡"}
                 </div>
                 <div>
-                  <p className="font-bold text-slate-100 text-sm">{selected.label}</p>
-                  <p className="text-[11px] capitalize font-semibold" style={{ color: NODE_COLORS[selected.type] }}>{selected.type} Entity</p>
+                  <p style={{ fontWeight: 700, color: "#f8fafc" }}>{selected.label}</p>
+                  <p style={{ fontSize: "0.68rem", color: NODE_COLORS[selected.type], textTransform: "capitalize" }}>{selected.type} Entity</p>
                 </div>
               </div>
 
               {selected.risk && (
-                <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold risk-${selected.risk}`}>
-                  RISK LEVEL: {selected.risk.toUpperCase()}
+                <span className={`risk-${selected.risk}`} style={{ fontSize: "0.65rem", padding: "3px 8px", borderRadius: "4px", fontWeight: 700 }}>
+                  RISK: {selected.risk.toUpperCase()}
                 </span>
               )}
 
-              {(selected.firs ?? 0) > 0 && (
-                <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 font-medium">
-                  ⚠️ Direct linkage to {selected.firs} FIR files
-                </div>
-              )}
-
-              {loadingNodeId === selected.id && (
-                <div className="flex items-center gap-2 text-blue-400 font-mono p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20">
-                  <div className="w-3 h-3 border border-blue-400 border-t-transparent rounded-full animate-spin" />
-                  Querying Neo4j for connections…
-                </div>
-              )}
-
-              <div className="space-y-2 border-t border-slate-800/80 pt-3">
-                <p className="text-[11px] font-semibold text-slate-400">Direct Connections:</p>
-                <div className="space-y-1.5 max-h-48 overflow-y-auto">
+              <div style={{ borderTop: "1px solid #141a28", paddingTop: "8px" }}>
+                <p style={{ fontSize: "0.7rem", color: "#64748b", marginBottom: "6px" }}>Direct Connections:</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                   {edges.filter(e => e.s === selected.id || e.t === selected.id).map((e, i) => {
                     const other = e.s === selected.id ? getNode(e.t) : getNode(e.s);
-                    if (!other) return null;
                     return (
-                      <div
-                        key={i}
-                        className="flex items-center gap-2 p-1.5 rounded-lg bg-slate-900/60 border border-slate-800 cursor-pointer hover:border-blue-500/30 transition-colors"
-                        onClick={() => handleNodeClick(other)}
-                      >
-                        <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: NODE_COLORS[other.type] || "#60a5fa" }} />
-                        <span className="font-medium text-slate-200 truncate">{other.label}</span>
-                        <span className="text-slate-500 ml-auto font-mono text-[10px]">{e.label}</span>
+                      <div key={i} style={{ fontSize: "0.72rem", color: "#cbd5e1", display: "flex", justifyContent: "space-between" }}>
+                        <span>{other?.label}</span>
+                        <span style={{ color: "#64748b", fontFamily: "var(--font-mono)", fontSize: "0.65rem", marginLeft: "auto" }}>{e.label}</span>
                       </div>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Properties panel */}
-              {selected.properties && Object.keys(selected.properties).length > 0 && (
-                <div className="space-y-1.5 border-t border-slate-800/80 pt-3">
-                  <p className="text-[11px] font-semibold text-slate-400">Properties:</p>
-                  {Object.entries(selected.properties).slice(0, 5).map(([k, v]) => (
-                    <div key={k} className="flex justify-between text-[10px]">
-                      <span className="text-slate-500 font-mono capitalize">{k}</span>
-                      <span className="text-slate-300 font-mono">{String(v)}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              <div className="flex gap-2 pt-2">
-                <Link href="/dashboard/chat" className="btn-primary text-xs py-2 px-3 no-underline flex-1 justify-center font-semibold">
-                  Query AI →
+              <div style={{ display: "flex", gap: "8px", paddingTop: "6px" }}>
+                <Link href="/dashboard/chat" className="btn-primary" style={{ fontSize: "0.75rem", padding: "6px 12px", textDecoration: "none", flex: 1, textAlign: "center", justifyContent: "center" }}>
+                  Query AI
                 </Link>
-                {(selected.type === "person" || selected.type === "gang") && (
-                  <button
-                    onClick={() => loadSuspectNetwork(selected.id, false)}
-                    className="btn-ghost text-xs py-2 px-3 flex-1 font-semibold"
-                  >
-                    Reload Graph
-                  </button>
-                )}
               </div>
             </div>
           )}

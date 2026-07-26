@@ -37,54 +37,50 @@ export default function SuspectsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-wide" style={{ fontFamily: "'Outfit', sans-serif" }}>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#f8fafc", letterSpacing: "-0.02em" }}>
             Criminal Intelligence & Suspect Profiles
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p style={{ fontSize: "0.78rem", color: "#64748b", marginTop: "2px" }}>
             Criminal registry, repeat offender risk scoring, and intelligence linkage
           </p>
         </div>
-        <Link href="/dashboard/graph" className="btn-primary text-xs px-4 py-2.5 flex items-center gap-2 no-underline shadow-md">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/>
-            <line x1="8.5" y1="7.5" x2="15.5" y2="7.5"/><line x1="7.5" y1="8.5" x2="10.5" y2="15.5"/><line x1="16.5" y1="8.5" x2="13.5" y2="15.5"/>
-          </svg>
-          Open Network Graph →
+        <Link href="/dashboard/graph" className="btn-primary" style={{ fontSize: "0.75rem", padding: "8px 14px", textDecoration: "none" }}>
+          🕸️ Open Network Graph →
         </Link>
       </div>
 
       {/* Filter Toolbar */}
-      <div className="flex gap-3 flex-wrap items-center bg-slate-900/50 p-3 rounded-2xl border border-slate-800">
-        <div className="relative flex-1 min-w-[240px]">
+      <div className="glass-card" style={{ padding: "12px 16px", display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+        <div style={{ flex: 1, minWidth: "240px" }}>
           <input
             type="text"
-            className="pg-input text-xs pl-9 py-2"
+            className="pg-input"
+            style={{ fontSize: "0.78rem", padding: "8px 12px" }}
             placeholder="Search by Suspect Name, Alias, or Criminal ID..."
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
         </div>
 
-        <div className="flex gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
+        <div style={{ display: "flex", gap: "6px", background: "#060810", padding: "4px", borderRadius: "8px", border: "1px solid #141a28" }}>
           {[
             { id: "all", label: "All Profiles" },
             { id: "absconding", label: "⚠️ Absconding" },
             { id: "arrested", label: "🔒 In Custody" },
-            { id: "repeat", label: "Repeat Offenders (5+ FIRs)" },
+            { id: "repeat", label: "Repeat (5+ FIRs)" },
           ].map(f => (
             <button
               key={f.id}
               onClick={() => setFilter(f.id)}
-              className={`text-xs px-3 py-1.5 rounded-lg transition-all font-medium ${
-                filter === f.id ? "bg-blue-600 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
-              }`}>
+              style={{
+                fontSize: "0.72rem", padding: "6px 12px", borderRadius: "6px", border: "none", cursor: "pointer", fontWeight: 600,
+                background: filter === f.id ? "#3b82f6" : "transparent",
+                color: filter === f.id ? "#ffffff" : "#64748b"
+              }}>
               {f.label}
             </button>
           ))}
@@ -92,122 +88,113 @@ export default function SuspectsPage() {
       </div>
 
       {/* Main Grid */}
-      <div className={`grid gap-6 ${selected ? "grid-cols-1 lg:grid-cols-3" : "grid-cols-1"}`}>
+      <div style={{ display: "grid", gridTemplateColumns: selected ? "1fr 340px" : "1fr", gap: "20px" }}>
         {/* Suspect Cards Grid */}
-        <div className={`${selected ? "lg:col-span-2" : ""} grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 content-start`}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "16px", alignContent: "start" }}>
           {filtered.length === 0 ? (
-            <div className="col-span-full py-12 text-center text-slate-300 font-mono text-sm terminal-panel">
-              No cases match these filters — try widening the date range
+            <div className="chart-container" style={{ padding: "40px", textAlign: "center", color: "#64748b", gridColumn: "1 / -1" }}>
+              No suspect profiles match these parameters
             </div>
           ) : (
             filtered.map(s => {
-            const rb = riskBadge(s.risk);
-            return (
-              <div key={s.id}
-                onClick={() => setSelected(s === selected ? null : s)}
-                className={`glass-card p-5 cursor-pointer relative overflow-hidden transition-all duration-300 ${
-                  selected?.id === s.id ? "border-blue-500/60 shadow-[0_0_25px_rgba(59,130,246,0.25)] bg-slate-900/80" : "hover:border-slate-700"
-                }`}>
-                
-                {/* Card Top */}
-                <div className="flex items-start justify-between mb-3">
-                  <div className="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-sm shadow-inner"
-                    style={{
-                      background: s.risk === "extreme" ? "rgba(220,38,38,0.15)" : s.risk === "high" ? "rgba(37,99,235,0.2)" : "rgba(2,132,199,0.15)",
-                      border: `1px solid ${s.risk === "extreme" ? "rgba(220,38,38,0.4)" : s.risk === "high" ? "rgba(37,99,235,0.4)" : "rgba(2,132,199,0.4)"}`,
-                      color: s.risk === "extreme" ? "#f87171" : s.risk === "high" ? "#60a5fa" : "#38bdf8",
+              const rb = riskBadge(s.risk);
+              return (
+                <div key={s.id}
+                  onClick={() => setSelected(s === selected ? null : s)}
+                  className="glass-card glass-card-hover"
+                  style={{
+                    padding: "16px", cursor: "pointer",
+                    borderColor: selected?.id === s.id ? "rgba(59,130,246,0.6)" : undefined,
+                    boxShadow: selected?.id === s.id ? "0 0 20px rgba(59,130,246,0.2)" : undefined
+                  }}>
+                  
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: "10px" }}>
+                    <div style={{
+                      width: "40px", height: "40px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center",
+                      fontWeight: 800, fontSize: "0.85rem",
+                      background: s.risk === "extreme" ? "rgba(239,68,68,0.15)" : "rgba(59,130,246,0.15)",
+                      border: `1px solid ${s.risk === "extreme" ? "rgba(239,68,68,0.3)" : "rgba(59,130,246,0.3)"}`,
+                      color: s.risk === "extreme" ? "#f87171" : "#60a5fa"
                     }}>
-                    {s.name.charAt(0)}
+                      {s.name.charAt(0)}
+                    </div>
+                    <span className={rb.class} style={{ fontSize: "0.62rem", padding: "2px 8px", borderRadius: "4px", fontWeight: 700, marginLeft: "auto" }}>
+                      {rb.label}
+                    </span>
                   </div>
-                  <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full tracking-wider ${rb.class}`}>
-                    {rb.label}
-                  </span>
-                </div>
 
-                <h3 className="font-bold text-sm text-slate-100 mb-0.5">{s.name}</h3>
-                <p className="text-[11px] font-mono text-blue-400 mb-1.5">{s.criminal_id}</p>
+                  <h3 style={{ fontWeight: 700, fontSize: "0.9rem", color: "#f8fafc", marginBottom: "2px" }}>{s.name}</h3>
+                  <p style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono)", color: "#3b82f6", marginBottom: "6px" }}>{s.criminal_id}</p>
 
-                {s.aliases.length > 0 && (
-                  <p className="text-xs text-slate-400 italic mb-3">
-                    aka &quot;{s.aliases.join(', ')}&quot;
-                  </p>
-                )}
-
-                <div className="flex items-center gap-2 mb-3">
-                  {s.absconding && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full risk-extreme animate-pulse">
-                      🚨 ABSCONDING
-                    </span>
+                  {s.aliases.length > 0 && (
+                    <p style={{ fontSize: "0.72rem", color: "#64748b", fontStyle: "italic", marginBottom: "8px" }}>
+                      aka &quot;{s.aliases.join(', ')}&quot;
+                    </p>
                   )}
-                  {s.arrested && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full risk-low">
-                      🔒 IN CUSTODY
-                    </span>
-                  )}
-                </div>
 
-                <div className="grid grid-cols-2 gap-2 text-xs text-slate-400 border-t border-slate-800/80 pt-3">
-                  <div><span>FIR Count: </span><span className="font-bold font-mono text-slate-200">{s.firs}</span></div>
-                  <div>Age / Sex: <span className="text-slate-200 font-medium">{s.age} / {s.gender}</span></div>
-                  {s.gang && <div className="col-span-2 text-slate-400 truncate">Gang: <span className="text-blue-300 font-medium">{s.gang}</span></div>}
-                </div>
+                  <div style={{ display: "flex", gap: "6px", marginBottom: "10px" }}>
+                    {s.absconding && (
+                      <span className="risk-extreme" style={{ fontSize: "0.62rem", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>
+                        🚨 ABSCONDING
+                      </span>
+                    )}
+                    {s.arrested && (
+                      <span className="risk-low" style={{ fontSize: "0.62rem", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>
+                        🔒 IN CUSTODY
+                      </span>
+                    )}
+                  </div>
 
-                <div className="flex gap-1.5 mt-3 flex-wrap">
-                  {s.categories.map(c => (
-                    <span key={c} className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-slate-300">
-                      {c}
-                    </span>
-                  ))}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px", fontSize: "0.72rem", color: "#64748b", borderTop: "1px solid #141a28", paddingTop: "8px" }}>
+                    <div>FIRs: <span style={{ color: "#f1f5f9", fontWeight: 700, fontFamily: "var(--font-mono)" }}>{s.firs}</span></div>
+                    <div>Age: <span style={{ color: "#f1f5f9", fontWeight: 600 }}>{s.age} yrs</span></div>
+                  </div>
                 </div>
-              </div>
-            );
-          }))}
+              );
+            })
+          )}
         </div>
 
         {/* Selected Suspect Profile Drawer */}
         {selected && (
-          <div className="chart-container space-y-4 border border-blue-500/30 bg-slate-950/90 shadow-2xl sticky top-0 max-h-[700px] overflow-y-auto">
-            <div className="flex justify-between items-start border-b border-slate-800 pb-3">
+          <div className="chart-container" style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #141a28", paddingBottom: "10px" }}>
               <div>
-                <h3 className="font-extrabold text-lg text-slate-100">{selected.name}</h3>
-                <p className="text-xs font-mono text-blue-400 mt-0.5">{selected.criminal_id}</p>
+                <h3 style={{ fontWeight: 800, fontSize: "1.1rem", color: "#f8fafc" }}>{selected.name}</h3>
+                <p style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono)", color: "#3b82f6", marginTop: "2px" }}>{selected.criminal_id}</p>
               </div>
-              <button onClick={() => setSelected(null)} className="p-1 text-slate-500 hover:text-slate-200">✕</button>
+              <button onClick={() => setSelected(null)} style={{ color: "#64748b", border: "none", background: "none", cursor: "pointer", marginLeft: "auto" }}>✕</button>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className={`text-xs px-3 py-1 rounded-full font-bold ${riskBadge(selected.risk).class}`}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span className={riskBadge(selected.risk).class} style={{ fontSize: "0.68rem", padding: "4px 8px", borderRadius: "4px", fontWeight: 700 }}>
                 {riskBadge(selected.risk).label}
               </span>
-              {selected.absconding && <span className="text-xs text-red-400 font-semibold animate-pulse">⚠️ BOLO ALERT</span>}
             </div>
 
-            <div className="space-y-2 text-xs">
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "0.75rem" }}>
               {[
                 { l: "Full Name", v: selected.name },
                 { l: "Known Aliases", v: selected.aliases.join(", ") || "None" },
                 { l: "Age / Gender", v: `${selected.age} yrs / ${selected.gender}` },
-                { l: "Linked FIR Count", v: `${selected.firs} Records Registered` },
-                { l: "Legal Status", v: selected.absconding ? "🚨 Absconding (Active Warrant)" : selected.arrested ? "🔒 In Judicial Custody" : "At Large" },
+                { l: "Linked FIR Count", v: `${selected.firs} Records` },
+                { l: "Legal Status", v: selected.absconding ? "🚨 Absconding" : selected.arrested ? "🔒 In Custody" : "At Large" },
                 { l: "Last Known Location", v: selected.location },
-                { l: "Syndicate Affiliation", v: selected.gang || "No Known Affiliation" },
+                { l: "Gang Affiliation", v: selected.gang || "None" },
               ].map(item => (
-                <div key={item.l} className="flex justify-between py-2 border-b border-slate-800/60">
-                  <span className="text-slate-500">{item.l}</span>
-                  <span className="text-slate-200 font-medium text-right">{item.v}</span>
+                <div key={item.l} style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #0d1018", paddingBottom: "6px" }}>
+                  <span style={{ color: "#475569" }}>{item.l}</span>
+                  <span style={{ color: "#e2e8f0", fontWeight: 600, textAlign: "right", marginLeft: "auto" }}>{item.v}</span>
                 </div>
               ))}
             </div>
 
-            <div className="flex gap-2 flex-wrap pt-2">
-              <Link href="/dashboard/graph" className="btn-primary text-xs py-2 px-3 no-underline flex-1 justify-center font-semibold">
+            <div style={{ display: "flex", gap: "8px", paddingTop: "6px" }}>
+              <Link href="/dashboard/graph" className="btn-primary" style={{ fontSize: "0.75rem", padding: "8px", flex: 1, textAlign: "center", justifyContent: "center", textDecoration: "none" }}>
                 🕸️ Graph Network
               </Link>
-              <Link href="/dashboard/chat" className="btn-ghost text-xs py-2 px-3 no-underline">
-                🤖 AI Query
-              </Link>
-              <Link href="/dashboard/reports" className="btn-ghost text-xs py-2 px-3 no-underline">
-                📄 Print Dossier
+              <Link href="/dashboard/chat" className="btn-ghost" style={{ fontSize: "0.75rem", padding: "8px", textDecoration: "none" }}>
+                AI Query
               </Link>
             </div>
           </div>

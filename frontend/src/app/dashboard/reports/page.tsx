@@ -8,7 +8,7 @@ export default function ReportsPage() {
 
   const handleGenerate = async () => {
     setGenerating(true);
-    await new Promise(r => setTimeout(r, 1800));
+    await new Promise(r => setTimeout(r, 1200));
     setReport({
       title: `Official Intelligence Dossier — FIR ${firNumber}`,
       summary: "Grounded AI synthesis generated for Karnataka State Police CID Division • Confidence Score: 94.2%",
@@ -25,37 +25,35 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-wide" style={{ fontFamily: "'Outfit', sans-serif" }}>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#f8fafc", letterSpacing: "-0.02em" }}>
             AI Investigation Dossiers & Case Reports
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p style={{ fontSize: "0.78rem", color: "#64748b", marginTop: "2px" }}>
             Automated intelligence report synthesis grounded in CCTNS case files and forensic records
           </p>
         </div>
       </div>
 
       {/* Generator Tool */}
-      <div className="chart-container border border-slate-800 bg-slate-950 p-6 space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-blue-400">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-          </svg>
-          <h3 className="text-sm font-bold text-slate-200" style={{ fontFamily: "'Outfit', sans-serif" }}>
+      <div className="chart-container" style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", borderBottom: "1px solid #141a28", paddingBottom: "10px" }}>
+          <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#f8fafc" }}>
             POLICEGPT Intelligence Dossier Generator
           </h3>
         </div>
 
-        <div className="flex gap-4 flex-wrap items-end">
-          <div className="space-y-1.5 flex-1 min-w-[220px] max-w-sm">
-            <label className="text-xs text-slate-400 font-medium">Target Case / FIR Number</label>
+        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", alignItems: "flex-end" }}>
+          <div style={{ flex: 1, minWidth: "220px", maxWidth: "360px", display: "flex", flexDirection: "column", gap: "6px" }}>
+            <label style={{ fontSize: "0.75rem", color: "#64748b", fontWeight: 500 }}>Target Case / FIR Number</label>
             <input
               value={firNumber}
               onChange={e => setFirNumber(e.target.value)}
-              className="pg-input text-xs font-mono font-bold text-blue-400"
+              className="pg-input"
+              style={{ fontSize: "0.85rem", fontFamily: "var(--font-mono)", fontWeight: 700, color: "#60a5fa" }}
               placeholder="e.g. CR-045/2024"
             />
           </div>
@@ -63,53 +61,39 @@ export default function ReportsPage() {
           <button
             onClick={handleGenerate}
             disabled={generating}
-            className="btn-primary text-xs px-6 py-2.5 flex items-center gap-2 font-semibold shadow-md">
-            {generating ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Synthesizing Dossier...
-              </>
-            ) : (
-              <>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-                Generate Official Report
-              </>
-            )}
+            className="btn-primary"
+            style={{ fontSize: "0.75rem", padding: "10px 20px" }}>
+            {generating ? "Synthesizing Dossier..." : "Generate Official Report"}
           </button>
         </div>
       </div>
 
       {/* Generated Report View */}
       {report && (
-        <div className="chart-container space-y-6 border border-blue-500/30 bg-slate-950/90 shadow-2xl p-6">
-          <div className="flex items-start justify-between border-b border-slate-800 pb-4">
+        <div className="chart-container" style={{ display: "flex", flexDirection: "column", gap: "20px", border: "1px solid rgba(59,130,246,0.3)" }}>
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", borderBottom: "1px solid #141a28", paddingBottom: "12px" }}>
             <div>
-              <h2 className="text-lg font-bold text-blue-400 font-mono tracking-wide">{report.title}</h2>
-              <p className="text-xs text-slate-400 mt-1">
+              <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#60a5fa", fontFamily: "var(--font-mono)" }}>{report.title}</h2>
+              <p style={{ fontSize: "0.72rem", color: "#64748b", marginTop: "4px" }}>
                 {report.summary}
               </p>
             </div>
-            <div className="flex gap-2">
-              <button onClick={() => window.print()} className="btn-ghost text-xs px-3 py-1.5 flex items-center gap-1.5">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-                Print / Export PDF
-              </button>
-            </div>
+            <button onClick={() => window.print()} className="btn-ghost" style={{ fontSize: "0.75rem", padding: "6px 12px", marginLeft: "auto" }}>
+              Print / Export PDF
+            </button>
           </div>
 
-          <div className="space-y-4">
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
             {report.sections.map((s, i) => (
-              <div key={i} className="p-4 rounded-xl bg-slate-900/40 border border-slate-800/80 space-y-2">
-                <h3 className="text-xs font-bold text-blue-300 font-mono uppercase tracking-wider">{s.title}</h3>
-                <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-line">{s.content}</p>
+              <div key={i} style={{ padding: "14px", borderRadius: "8px", background: "#05070a", border: "1px solid #141a28", display: "flex", flexDirection: "column", gap: "6px" }}>
+                <h3 style={{ fontSize: "0.75rem", fontWeight: 700, color: "#93c5fd", fontFamily: "var(--font-mono)", textTransform: "uppercase" }}>{s.title}</h3>
+                <p style={{ fontSize: "0.78rem", color: "#cbd5e1", lineHeight: 1.6, whiteSpace: "pre-line" }}>{s.content}</p>
               </div>
             ))}
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
-            ⚠️ <strong className="text-slate-200">Legal Audit Notice:</strong> This dossier is compiled automatically by POLICEGPT for internal investigative briefing. Official evidentiary submissions require officer signature & verification against CCTNS database records.
+          <div style={{ padding: "12px", borderRadius: "8px", background: "#05070a", border: "1px solid #141a28", fontSize: "0.72rem", color: "#64748b", lineHeight: 1.5 }}>
+            ⚠️ <strong style={{ color: "#cbd5e1" }}>Legal Audit Notice:</strong> This dossier is compiled automatically by POLICEGPT for internal investigative briefing.
           </div>
         </div>
       )}

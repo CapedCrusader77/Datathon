@@ -43,15 +43,14 @@ const EXAMPLE_QUERIES = [
 /* ── Sub-components ─────────────────────────────────────────── */
 function TypingIndicator() {
   return (
-    <div className="flex items-center gap-1.5 py-1 px-2">
+    <div style={{ display: "flex", alignItems: "center", gap: "6px", padding: "4px 8px" }}>
       {[0, 1, 2].map(i => (
-        <div key={i} className="typing-dot w-2 h-2 rounded-full bg-blue-400" />
+        <div key={i} className="typing-dot" style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#60a5fa" }} />
       ))}
     </div>
   );
 }
 
-/* Feature 5: Collapsible signature evidence panel */
 function getSourceBadge(c: Citation): string {
   const t = (c.title || "").toLowerCase();
   if (t.includes("witness") || t.includes("statement") || t.includes("testimony")) return "WITNESS";
@@ -64,12 +63,16 @@ function CitationPanel({ citations }: { citations: Citation[] }) {
   if (!citations || citations.length === 0) return null;
 
   return (
-    <div className="mt-3">
+    <div style={{ marginTop: "12px" }}>
       <button
         onClick={() => setOpen(v => !v)}
-        className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-200 transition-colors font-mono font-medium"
+        style={{
+          display: "flex", alignItems: "center", gap: "6px",
+          fontSize: "0.72rem", color: "#94a3b8", background: "none", border: "none", cursor: "pointer",
+          fontFamily: "var(--font-mono)", fontWeight: 600, padding: 0
+        }}
       >
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
         </svg>
@@ -83,44 +86,36 @@ function CitationPanel({ citations }: { citations: Citation[] }) {
       </button>
 
       {open && (
-        <div className="mt-2.5 space-y-2.5">
+        <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "10px" }}>
           {citations.map((c, i) => {
             const badge = getSourceBadge(c);
             const chainRef = `#EVID-${(c.fir_number || "").replace(/[^0-9]/g, "").slice(-4) || "8842"}`;
             const logTime = c.date ? `LOGGED: ${c.date} 14:22 IST` : "LOGGED: 2024-03-10 14:22 IST";
 
             return (
-              <Link
-                key={i}
-                href={`/dashboard/cases?fir=${encodeURIComponent(c.fir_number)}`}
-                className="block no-underline"
-              >
-                <div className="evidence-card p-3.5 cursor-pointer">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                        <span className="text-xs font-bold font-mono text-slate-100">{c.fir_number}</span>
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-500/10 border border-blue-500/30 text-blue-400 font-bold">
+              <Link key={i} href={`/dashboard/cases?fir=${encodeURIComponent(c.fir_number)}`} style={{ textDecoration: "none" }}>
+                <div className="glass-card glass-card-hover" style={{ padding: "12px 14px", borderLeft: "3px solid #3b82f6" }}>
+                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px", flexWrap: "wrap" }}>
+                        <span style={{ fontSize: "0.75rem", fontWeight: 700, fontFamily: "var(--font-mono)", color: "#f1f5f9" }}>{c.fir_number}</span>
+                        <span style={{ fontSize: "0.65rem", fontFamily: "var(--font-mono)", padding: "2px 6px", borderRadius: "4px", background: "rgba(59,130,246,0.12)", border: "1px solid rgba(59,130,246,0.3)", color: "#60a5fa", fontWeight: 700 }}>
                           [{badge}]
                         </span>
-                        <span className="text-xs text-slate-300 font-medium truncate">{c.title}</span>
+                        <span style={{ fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 500 }}>{c.title}</span>
                       </div>
                       {c.snippet && (
-                        <p className="text-xs text-slate-400 leading-relaxed line-clamp-2 mb-2 font-normal">
+                        <p style={{ fontSize: "0.75rem", color: "#94a3b8", lineHeight: 1.5, marginBottom: "6px" }}>
                           "{c.snippet}"
                         </p>
                       )}
-                      <div className="text-[10px] text-slate-500 font-mono tracking-wide">
+                      <div style={{ fontSize: "0.65rem", color: "#475569", fontFamily: "var(--font-mono)" }}>
                         {logTime} · CHAIN REF: {chainRef}
                       </div>
                     </div>
-                    {/* Thin horizontal bar confidence indicator, no percentage text */}
-                    <div className="w-16 flex-shrink-0 pt-1">
-                      <div className="w-full h-1 rounded-full bg-slate-800 overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-[#2563eb]"
-                          style={{ width: `${Math.min(100, Math.max(15, c.relevance))}%` }}
-                        />
+                    <div style={{ width: "60px", flexShrink: 0, paddingTop: "4px" }}>
+                      <div style={{ width: "100%", height: "4px", borderRadius: "99px", background: "#1e293b", overflow: "hidden" }}>
+                        <div style={{ height: "100%", borderRadius: "99px", background: "#3b82f6", width: `${Math.min(100, Math.max(15, c.relevance))}%` }} />
                       </div>
                     </div>
                   </div>
@@ -140,14 +135,14 @@ function MessageBubble({ msg }: { msg: Message }) {
 
   if (isThinking) {
     return (
-      <div className="flex gap-3 mb-4">
-        <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0 bg-[#141720] border border-[#2a2f3e] text-[#2563eb]">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="animate-spin">
+      <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
+        <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "#0a0d14", border: "1px solid #141a28", color: "#3b82f6", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="10" /><path d="M12 2a10 10 0 0 1 10 10" />
           </svg>
         </div>
-        <div className="terminal-panel px-4 py-2.5 text-xs text-slate-300 flex items-center gap-2 max-w-lg">
-          <span className="text-[#2563eb] font-semibold uppercase tracking-wider font-mono">REASONING STEP:</span>
+        <div style={{ background: "#080a12", border: "1px solid #141a28", borderRadius: "8px", padding: "10px 14px", fontSize: "0.75rem", color: "#94a3b8", display: "flex", alignItems: "center", gap: "8px", maxWidth: "500px" }}>
+          <span style={{ color: "#3b82f6", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: "var(--font-mono)" }}>REASONING:</span>
           <span>{msg.content}</span>
         </div>
       </div>
@@ -155,30 +150,30 @@ function MessageBubble({ msg }: { msg: Message }) {
   }
 
   return (
-    <div className={`flex gap-3 mb-5 ${isUser ? "flex-row-reverse" : "flex-row"}`}>
-      {/* Tactical Officer/System Avatar */}
-      <div className={`w-8 h-8 rounded flex items-center justify-center flex-shrink-0 text-xs font-mono font-bold ${
-        isUser
-          ? "bg-[#2563eb] text-white border border-blue-400/30"
-          : "bg-[#141720] border border-[#2a2f3e] text-slate-200"
-      }`}>
+    <div style={{ display: "flex", gap: "12px", marginBottom: "20px", flexDirection: isUser ? "row-reverse" : "row" }}>
+      <div style={{
+        width: "32px", height: "32px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        fontSize: "0.68rem", fontFamily: "var(--font-mono)", fontWeight: 700,
+        background: isUser ? "#3b82f6" : "#080a12",
+        color: isUser ? "#ffffff" : "#94a3b8",
+        border: isUser ? "1px solid rgba(255,255,255,0.15)" : "1px solid #141a28"
+      }}>
         {isUser ? "OFF" : "SYS"}
       </div>
 
-      {/* Message Content */}
       <div style={{ maxWidth: "80%" }}>
-        <div className={isUser ? "chat-bubble-user px-5 py-3.5 rounded-sm" : "chat-bubble-ai px-5 py-3.5 rounded-sm bg-zinc-900/90 border border-zinc-800"}>
+        <div className={isUser ? "chat-bubble-user" : "chat-bubble-ai"} style={{ padding: "14px 18px" }}>
           {isUser ? (
-            <p className="text-sm text-zinc-200 font-normal leading-relaxed">{msg.content}</p>
+            <p style={{ fontSize: "0.875rem", color: "#f1f5f9", lineHeight: 1.6 }}>{msg.content}</p>
           ) : (
-            <div className="prose-police text-sm font-normal text-zinc-200 leading-relaxed"
+            <div className="prose-police"
               dangerouslySetInnerHTML={{
                 __html: msg.content
                   .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                  .replace(/^## (.*?)$/gm, '<h2 class="text-base font-bold text-zinc-100 mt-2 mb-1">$1</h2>')
-                  .replace(/^### (.*?)$/gm, '<h3 class="text-sm font-bold text-zinc-200 mt-2 mb-1">$1</h3>')
-                  .replace(/^- (.*?)$/gm, "<li class='text-zinc-300'>$1</li>")
-                  .replace(/(<li>[\s\S]*?<\/li>)+/g, m => `<ul class='list-disc pl-4 space-y-1 my-2'>${m}</ul>`)
+                  .replace(/^## (.*?)$/gm, '<h2 style="font-size:0.95rem;font-weight:700;color:#f8fafc;margin-top:8px;margin-bottom:4px;">$1</h2>')
+                  .replace(/^### (.*?)$/gm, '<h3 style="font-size:0.875rem;font-weight:700;color:#e2e8f0;margin-top:6px;margin-bottom:4px;">$1</h3>')
+                  .replace(/^- (.*?)$/gm, "<li style='color:#cbd5e1;margin-bottom:3px;'>$1</li>")
+                  .replace(/(<li>[\s\S]*?<\/li>)+/g, m => `<ul style='padding-left:18px;margin:8px 0;'>${m}</ul>`)
                   .replace(/\n\n/g, "<br/><br/>")
                   .replace(/\n/g, "<br/>")
               }}
@@ -186,34 +181,31 @@ function MessageBubble({ msg }: { msg: Message }) {
           )}
         </div>
 
-        {/* Feature 3: Retrieval debug pill */}
         {msg.retrieval_meta && (
-          <div className="flex items-center gap-1.5 mt-1.5 px-1">
-            <span className="text-[10px] font-light font-mono px-2 py-0.5 rounded-sm bg-zinc-900 border border-zinc-800 text-zinc-400">
+          <div style={{ marginTop: "6px", paddingLeft: "4px" }}>
+            <span style={{ fontSize: "0.62rem", fontFamily: "var(--font-mono)", padding: "2px 6px", borderRadius: "4px", background: "#080a12", border: "1px solid #141a28", color: "#64748b" }}>
               PATH: {msg.retrieval_meta.path.toUpperCase()} · {msg.retrieval_meta.results_count} RECORD{msg.retrieval_meta.results_count !== 1 ? "S" : ""}
             </span>
           </div>
         )}
 
-        {/* Feature 5: Signature Case File Evidence Citations */}
         {!isUser && <CitationPanel citations={msg.citations || []} />}
 
-        {/* Visualization Action Banner */}
         {msg.visualization && (
-          <div className="mt-3 p-3 rounded flex items-center justify-between gap-3 text-xs bg-[#141720] border border-[#2a2f3e] text-slate-300">
-            <div className="flex items-center gap-2">
-              <span className="text-base">
+          <div style={{ marginTop: "12px", padding: "12px 14px", borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", background: "#080a12", border: "1px solid #141a28" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.75rem", color: "#cbd5e1" }}>
+              <span style={{ fontSize: "1rem" }}>
                 {msg.visualization.type === "map" ? "🗺️" : msg.visualization.type === "graph" ? "🕸️" : "📊"}
               </span>
-              <span className="font-semibold uppercase tracking-wide font-mono">INTERACTIVE VISUAL MODULE READY</span>
+              <span style={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", fontFamily: "var(--font-mono)" }}>INTERACTIVE MODULE READY</span>
             </div>
-            <button className="px-3 py-1 rounded bg-[#2563eb] hover:bg-blue-700 text-white transition-colors font-medium text-xs">
-              OPEN {msg.visualization.type.toUpperCase()} VIEW →
+            <button className="btn-primary" style={{ padding: "4px 10px", fontSize: "0.7rem" }}>
+              OPEN {msg.visualization.type.toUpperCase()} →
             </button>
           </div>
         )}
 
-        <p className="text-[10px] text-slate-500 font-mono mt-1.5 px-1">
+        <p style={{ fontSize: "0.62rem", color: "#475569", fontFamily: "var(--font-mono)", marginTop: "6px", paddingLeft: "4px" }}>
           {msg.timestamp.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
         </p>
       </div>
@@ -235,7 +227,6 @@ export default function ChatPage() {
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string>("");
 
-  /* Feature 1: Voice state */
   const [isRecording, setIsRecording] = useState(false);
   const [voiceLang, setVoiceLang] = useState<VoiceLang>("en-IN");
   const [showLangPicker, setShowLangPicker] = useState(false);
@@ -248,7 +239,6 @@ export default function ChatPage() {
 
   useEffect(() => {
     setSessionId(`sess_${Date.now()}`);
-    // Check browser support
     if (!("SpeechRecognition" in window || "webkitSpeechRecognition" in window)) {
       setVoiceSupported(false);
     }
@@ -258,7 +248,6 @@ export default function ChatPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  /* Feature 1: Voice recording logic */
   const startRecording = useCallback(() => {
     const SR: typeof SpeechRecognition | undefined =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -313,7 +302,6 @@ export default function ChatPage() {
     else startRecording();
   }, [isRecording, startRecording, stopRecording]);
 
-  /* Feature 2: PDF Export */
   const exportToPDF = useCallback(async () => {
     const { jsPDF } = await import("jspdf");
     const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
@@ -322,20 +310,19 @@ export default function ChatPage() {
     const margin = 15;
     let y = margin;
 
-    // Header
-    doc.setFillColor(6, 8, 21);
+    doc.setFillColor(6, 8, 16);
     doc.rect(0, 0, W, 30, "F");
-    doc.setTextColor(59, 91, 255);
+    doc.setTextColor(59, 130, 246);
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");
     doc.text("POLICEGPT — Investigation Session Transcript", margin, 12);
     doc.setFontSize(8);
-    doc.setTextColor(120, 140, 180);
+    doc.setTextColor(148, 163, 184);
     doc.text(`Session: ${sessionId}`, margin, 19);
     doc.text(`Exported: ${new Date().toLocaleString("en-IN")}`, margin, 24);
     y = 38;
 
-    doc.setDrawColor(30, 42, 80);
+    doc.setDrawColor(20, 26, 40);
     doc.setLineWidth(0.4);
     doc.line(margin, y - 2, W - margin, y - 2);
 
@@ -361,36 +348,34 @@ export default function ChatPage() {
     for (const msg of talkMessages) {
       if (msg.role === "user") {
         y += 3;
-        addText("▶ OFFICER QUERY", 7.5, true, [80, 120, 210]);
-        addText(msg.content, 9, false, [200, 215, 240], 3);
+        addText("▶ OFFICER QUERY", 7.5, true, [59, 130, 246]);
+        addText(msg.content, 9, false, [226, 232, 240], 3);
       } else {
         y += 2;
-        addText("◈ POLICEGPT RESPONSE", 7.5, true, [40, 180, 100]);
-        // Strip markdown
+        addText("◈ POLICEGPT RESPONSE", 7.5, true, [16, 185, 129]);
         const clean = msg.content
           .replace(/\*\*(.*?)\*\*/g, "$1")
           .replace(/^#+\s*/gm, "")
           .replace(/^-\s+/gm, "• ")
           .replace(/\n{3,}/g, "\n\n");
-        addText(clean, 9, false, [180, 200, 230], 3);
+        addText(clean, 9, false, [203, 213, 225], 3);
 
         if (msg.citations && msg.citations.length > 0) {
           y += 1;
-          addText("Sources:", 7.5, true, [80, 160, 200], 3);
+          addText("Sources:", 7.5, true, [96, 165, 250], 3);
           for (const c of msg.citations) {
-            addText(`  • ${c.fir_number} (${c.relevance}% match)${c.snippet ? " — " + c.snippet.slice(0, 80) + "…" : ""}`, 7.5, false, [100, 140, 180], 6);
+            addText(`  • ${c.fir_number} (${c.relevance}% match)${c.snippet ? " — " + c.snippet.slice(0, 80) + "…" : ""}`, 7.5, false, [148, 163, 184], 6);
           }
         }
       }
       y += 4;
-      doc.setDrawColor(20, 30, 50);
+      doc.setDrawColor(20, 26, 40);
       doc.line(margin, y - 2, W - margin, y - 2);
     }
 
     doc.save(`policegpt-session-${sessionId}.pdf`);
   }, [messages, sessionId]);
 
-  /* Send message */
   const sendMessage = useCallback(async (queryText?: string) => {
     const text = queryText || input.trim();
     if (!text || loading) return;
@@ -477,7 +462,6 @@ export default function ChatPage() {
       }
 
     } catch {
-      // Demo mode fallback
       setMessages(prev => prev.filter(m => m.id !== "t1"));
       const demoResponse = generateDemoResponse(text);
       setMessages(prev => [...prev, {
@@ -505,59 +489,40 @@ export default function ChatPage() {
   const activeLang = VOICE_LANGS.find(l => l.code === voiceLang)!;
 
   return (
-    <div className="flex flex-col h-full space-y-4 bg-zinc-950 p-4 rounded-sm border border-zinc-800" style={{ height: "calc(100vh - 120px)" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 120px)", background: "#000000", gap: "12px" }}>
 
       {/* ── Header ── */}
-      <div className="flex items-center justify-between flex-shrink-0 border-b border-zinc-800 pb-3">
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0, borderBottom: "1px solid #141a28", paddingBottom: "12px" }}>
         <div>
-          <h1 className="text-xl font-bold text-zinc-100 tracking-wide flex items-center gap-2" style={{ fontFamily: "'Outfit', sans-serif" }}>
+          <h1 style={{ fontSize: "1.2rem", fontWeight: 800, color: "#f8fafc", letterSpacing: "-0.02em", display: "flex", alignItems: "center", gap: "10px" }}>
             <span>POLICEGPT AI Investigation Assistant</span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-sm bg-blue-500/10 border border-blue-500/30 text-blue-400">RAG v2.4</span>
+            <span style={{ fontSize: "0.65rem", fontFamily: "var(--font-mono)", padding: "2px 8px", borderRadius: "4px", background: "rgba(59,130,246,0.1)", border: "1px solid rgba(59,130,246,0.3)", color: "#60a5fa" }}>RAG v2.4</span>
           </h1>
-          <p className="text-xs text-zinc-400 mt-0.5 font-light">
+          <p style={{ fontSize: "0.75rem", color: "#64748b", marginTop: "2px" }}>
             Grounded intelligence engine linked to Karnataka State Police Crime Database
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          {/* Feature 2: Export PDF button */}
-          <button
-            id="export-pdf-btn"
-            onClick={exportToPDF}
-            className="border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 rounded-sm text-xs px-3 py-1.5 flex items-center gap-1.5 text-zinc-300 transition-colors"
-            title="Export conversation as PDF"
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-              <polyline points="14 2 14 8 20 8" />
-              <line x1="12" y1="18" x2="12" y2="12" /><polyline points="9 15 12 18 15 15" />
-            </svg>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <button id="export-pdf-btn" onClick={exportToPDF} className="btn-ghost" style={{ fontSize: "0.75rem", padding: "6px 12px" }}>
             Export PDF
           </button>
-          <button
-            className="border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 rounded-sm text-xs px-3 py-1.5 flex items-center gap-1.5 text-zinc-300 transition-colors"
-            onClick={() => setMessages(msg => [msg[0]])}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M3 6h18" /><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" /><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-            </svg>
+          <button className="btn-ghost" style={{ fontSize: "0.75rem", padding: "6px 12px" }} onClick={() => setMessages(msg => [msg[0]])}>
             Clear History
           </button>
         </div>
       </div>
 
       {/* ── Chat Messages Log ── */}
-      <div className="flex-1 overflow-y-auto rounded-sm p-6 bg-zinc-900 border border-zinc-800 shadow-inner">
-        <div className="max-w-3xl mx-auto space-y-4">
+      <div className="chart-container" style={{ flex: 1, overflowY: "auto", padding: "20px", background: "#05070a", border: "1px solid #141a28" }}>
+        <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           {messages.map(msg => <MessageBubble key={msg.id} msg={msg} />)}
 
           {loading && (
-            <div className="flex gap-3 mb-4">
-              <div className="w-8 h-8 rounded-sm flex items-center justify-center bg-zinc-950 border border-zinc-800 text-[#2563eb]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
+            <div style={{ display: "flex", gap: "12px", marginBottom: "16px" }}>
+              <div style={{ width: "32px", height: "32px", borderRadius: "8px", background: "#080a12", border: "1px solid #141a28", color: "#3b82f6", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                🛡️
               </div>
-              <div className="chat-bubble-ai px-5 py-3.5 rounded-sm bg-zinc-900/90 border border-zinc-800">
+              <div className="chat-bubble-ai" style={{ padding: "14px 18px" }}>
                 <TypingIndicator />
               </div>
             </div>
@@ -568,12 +533,13 @@ export default function ChatPage() {
 
       {/* ── Suggested Queries ── */}
       {messages.length < 3 && (
-        <div className="flex gap-2 flex-wrap flex-shrink-0 max-w-3xl mx-auto w-full">
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", flexShrink: 0, maxWidth: "800px", margin: "0 auto", width: "100%" }}>
           {EXAMPLE_QUERIES.slice(0, 4).map((q, i) => (
             <button
               key={i}
               onClick={() => sendMessage(q)}
-              className="border border-zinc-700 bg-zinc-900/80 hover:bg-zinc-800 rounded-sm text-zinc-300 font-mono text-xs px-3 py-1.5 transition-colors cursor-pointer"
+              className="btn-ghost"
+              style={{ fontSize: "0.72rem", padding: "6px 12px", fontFamily: "var(--font-mono)", cursor: "pointer" }}
             >
               {q}
             </button>
@@ -582,8 +548,8 @@ export default function ChatPage() {
       )}
 
       {/* ── Input Area ── */}
-      <div className="flex-shrink-0 flex gap-3 items-end max-w-3xl mx-auto w-full bg-zinc-800 border border-zinc-700 rounded-sm p-1.5">
-        <div className="flex-1 relative">
+      <div style={{ flexShrink: 0, display: "flex", gap: "10px", alignItems: "flex-end", maxWidth: "800px", margin: "0 auto", width: "100%", background: "#080a12", border: "1px solid #141a28", borderRadius: "10px", padding: "6px" }}>
+        <div style={{ flex: 1, position: "relative" }}>
           <textarea
             ref={inputRef}
             id="chat-input"
@@ -597,42 +563,38 @@ export default function ChatPage() {
             }
             rows={1}
             disabled={loading}
-            className="pg-input resize-none rounded-sm bg-transparent border-0 focus:outline-none focus:ring-0 text-zinc-200"
+            className="pg-input"
             style={{
-              minHeight: "52px", maxHeight: "120px",
-              paddingRight: voiceSupported ? "6rem" : "1rem",
+              minHeight: "48px", maxHeight: "120px",
+              paddingRight: voiceSupported ? "90px" : "12px",
+              border: "none", background: "transparent"
             }}
           />
 
-          {/* Live transcript overlay (shown while recording) */}
           {isRecording && liveTranscript && (
-            <div className="absolute left-3 bottom-full mb-1 max-w-xs bg-slate-900 border border-red-500/30 text-red-300 text-xs px-3 py-1.5 rounded-xl pointer-events-none">
-              <span className="italic opacity-70">{liveTranscript}</span>
+            <div style={{ position: "absolute", left: "12px", bottom: "100%", marginBottom: "4px", background: "#0f172a", border: "1px solid rgba(239,68,68,0.3)", color: "#fca5a5", fontSize: "0.72rem", padding: "4px 10px", borderRadius: "8px" }}>
+              <span style={{ fontStyle: "italic", opacity: 0.8 }}>{liveTranscript}</span>
             </div>
           )}
 
-          {/* Feature 1: Voice controls */}
           {voiceSupported && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-              {/* Language picker */}
-              <div className="relative">
+            <div style={{ position: "absolute", right: "8px", top: "50%", transform: "translateY(-50%)", display: "flex", alignItems: "center", gap: "4px" }}>
+              <div style={{ position: "relative" }}>
                 <button
                   id="voice-lang-btn"
                   onClick={() => setShowLangPicker(v => !v)}
-                  className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all text-[11px] font-mono"
+                  style={{ padding: "4px 6px", fontSize: "0.7rem", color: "#64748b", background: "none", border: "none", cursor: "pointer" }}
                   title="Voice input language"
                 >
                   {activeLang.flag}
                 </button>
                 {showLangPicker && (
-                  <div className="absolute bottom-full right-0 mb-2 bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-xl z-20">
+                  <div style={{ position: "absolute", bottom: "100%", right: 0, marginBottom: "8px", background: "#080a12", border: "1px solid #141a28", borderRadius: "8px", overflow: "hidden", zIndex: 20, width: "110px" }}>
                     {VOICE_LANGS.map(lang => (
                       <button
                         key={lang.code}
                         onClick={() => { setVoiceLang(lang.code); setShowLangPicker(false); }}
-                        className={`flex items-center gap-2 w-full px-3 py-2 text-xs text-left hover:bg-slate-800 transition-colors ${
-                          voiceLang === lang.code ? "text-blue-300 bg-blue-500/10" : "text-slate-300"
-                        }`}
+                        style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%", padding: "8px 10px", fontSize: "0.72rem", textAlign: "left", background: voiceLang === lang.code ? "rgba(59,130,246,0.1)" : "transparent", color: voiceLang === lang.code ? "#93c5fd" : "#cbd5e1", border: "none", cursor: "pointer" }}
                       >
                         <span>{lang.flag}</span>
                         <span>{lang.label}</span>
@@ -642,31 +604,13 @@ export default function ChatPage() {
                 )}
               </div>
 
-              {/* Mic button */}
               <button
                 id="voice-btn"
                 onClick={toggleRecording}
-                className={`p-2 rounded-xl transition-all ${
-                  isRecording
-                    ? "text-red-400 bg-red-500/15 border border-red-500/40 animate-pulse"
-                    : "text-slate-400 hover:text-white hover:bg-slate-800"
-                }`}
+                style={{ padding: "6px", borderRadius: "8px", border: "none", cursor: "pointer", color: isRecording ? "#ef4444" : "#64748b", background: isRecording ? "rgba(239,68,68,0.1)" : "transparent" }}
                 title={isRecording ? "Stop recording" : `Voice input (${activeLang.label})`}
               >
-                {isRecording ? (
-                  /* Stop icon */
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
-                    <rect x="6" y="6" width="12" height="12" rx="2" />
-                  </svg>
-                ) : (
-                  /* Mic icon */
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                    <line x1="12" y1="19" x2="12" y2="23" />
-                    <line x1="8" y1="23" x2="16" y2="23" />
-                  </svg>
-                )}
+                🎤
               </button>
             </div>
           )}
@@ -676,23 +620,19 @@ export default function ChatPage() {
           id="send-btn"
           onClick={() => sendMessage()}
           disabled={loading || !input.trim()}
-          className="btn-primary px-5 py-3.5 rounded-2xl flex-shrink-0 font-semibold tracking-wide shadow-lg"
+          className="btn-primary"
+          style={{ padding: "10px 18px", borderRadius: "8px", flexShrink: 0 }}
         >
           {loading ? (
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <div style={{ width: "16px", height: "16px", border: "2px solid #fff", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.6s linear infinite" }} />
           ) : (
-            <div className="flex items-center gap-2">
-              <span>Send</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
-              </svg>
-            </div>
+            <span>Send →</span>
           )}
         </button>
       </div>
 
-      <p className="text-center text-[11px] text-slate-500 tracking-wider">
-        POLICEGPT Grounded AI Engine • All output generated strictly from official CCTNS & police database records.
+      <p style={{ textAlign: "center", fontSize: "0.68rem", color: "#475569", letterSpacing: "0.04em" }}>
+        POLICEGPT Grounded AI Engine • Output generated strictly from official CCTNS & police database records.
       </p>
     </div>
   );

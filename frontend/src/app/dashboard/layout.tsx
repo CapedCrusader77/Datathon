@@ -115,14 +115,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <>
       <style>{`
         :root {
-          --bg-primary: #0d0f14;
-          --bg-panel: #141720;
-          --bg-elevated: #1c2030;
-          --border: #2a2f3e;
-          --text-primary: #f1f5f9;
-          --text-muted: #94a3b8;
-          --accent: #2563eb;
-          --accent-alert: #dc2626;
+          --bg-primary: #05070a;
+          --bg-panel: rgba(11, 15, 26, 0.85);
+          --bg-elevated: rgba(22, 29, 49, 0.6);
+          --border: rgba(59, 91, 255, 0.12);
+          --border-hover: rgba(59, 91, 255, 0.3);
+          --text-primary: #f8fafc;
+          --text-muted: #64748b;
+          --accent: #3b5bff;
+          --accent-alert: #ef4444;
           --font-sans: 'Inter', -apple-system, sans-serif;
           --font-mono: 'JetBrains Mono', monospace;
         }
@@ -142,123 +143,156 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         /* ── SIDEBAR ── */
         .sidebar {
-          width: 230px;
+          width: 250px;
           flex-shrink: 0;
-          background: var(--bg-panel);
+          background: rgba(11, 15, 26, 0.95);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
           border-right: 1px solid var(--border);
           display: flex;
           flex-direction: column;
           overflow: hidden;
+          box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
         }
 
         .sidebar-brand {
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 1.25rem 1rem;
+          gap: 12px;
+          padding: 1.75rem 1.25rem;
           border-bottom: 1px solid var(--border);
         }
         .sidebar-brand-icon {
-          width: 28px; height: 28px;
+          width: 32px; height: 32px;
           background: var(--bg-elevated);
-          border: 1px solid var(--border);
-          border-radius: 6px;
+          border: 1px solid rgba(59, 91, 255, 0.25);
+          border-radius: 8px;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
+          box-shadow: 0 0 15px rgba(59, 91, 255, 0.15);
         }
         .sidebar-brand-name {
-          font-size: 0.825rem;
-          font-weight: 700;
-          letter-spacing: 0.08em;
+          font-size: 0.9rem;
+          font-weight: 800;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
-          color: var(--text-primary);
+          background: linear-gradient(135deg, #ffffff 30%, #a5b4fc 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
 
         .sidebar-nav {
           flex: 1;
           overflow-y: auto;
-          padding: 0.75rem 0.625rem;
+          padding: 1.25rem 0.85rem;
           display: flex;
           flex-direction: column;
-          gap: 4px;
+          gap: 6px;
         }
         .sidebar-nav::-webkit-scrollbar { width: 0; }
 
         .nav-link {
           display: flex;
           align-items: center;
-          gap: 0.6rem;
-          padding: 0.55rem 0.75rem;
-          border-radius: 6px;
-          font-size: 0.825rem;
-          font-weight: 500;
-          color: var(--text-muted);
+          gap: 0.75rem;
+          padding: 0.7rem 0.95rem;
+          border-radius: 8px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: #94a3b8;
           text-decoration: none;
-          transition: background 0.15s ease, color 0.15s ease;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
           border: 1px solid transparent;
+          position: relative;
+        }
+        .nav-link svg {
+          color: #64748b;
+          transition: color 0.2s ease;
         }
         .nav-link:hover {
-          background: var(--bg-elevated);
+          background: rgba(59, 91, 255, 0.05);
           color: var(--text-primary);
+          border-color: rgba(59, 91, 255, 0.08);
+        }
+        .nav-link:hover svg {
+          color: #93c5fd;
         }
         .nav-link.active {
-          background: var(--accent);
+          background: linear-gradient(135deg, rgba(59, 91, 255, 0.15) 0%, rgba(59, 91, 255, 0.05) 100%);
           color: #ffffff;
-          border-color: rgba(255, 255, 255, 0.15);
-          font-weight: 600;
+          border-color: rgba(59, 91, 255, 0.25);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.05);
         }
-        .nav-link.active svg { color: #ffffff; }
+        .nav-link.active svg {
+          color: #818cf8;
+        }
+        .nav-link.active::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 20%;
+          height: 60%;
+          width: 3px;
+          background: var(--accent);
+          border-radius: 0 4px 4px 0;
+          box-shadow: 0 0 10px var(--accent);
+        }
 
         .sidebar-footer {
           border-top: 1px solid var(--border);
-          padding: 0.875rem 0.75rem;
-          background: var(--bg-panel);
+          padding: 1.25rem 1rem;
+          background: rgba(11, 15, 26, 0.98);
         }
         .officer-row {
           display: flex;
           align-items: center;
-          gap: 0.625rem;
-          margin-bottom: 0.625rem;
+          gap: 0.75rem;
+          margin-bottom: 0.85rem;
         }
         .officer-avatar {
-          width: 28px; height: 28px;
-          border-radius: 6px;
-          background: var(--bg-elevated);
-          border: 1px solid var(--border);
+          width: 32px; height: 32px;
+          border-radius: 8px;
+          background: rgba(59, 91, 255, 0.1);
+          border: 1px solid rgba(59, 91, 255, 0.2);
           display: flex; align-items: center; justify-content: center;
-          font-size: 0.7rem; font-weight: 700; color: var(--text-primary);
+          font-size: 0.75rem; font-weight: 700; color: #a5b4fc;
           font-family: var(--font-mono);
           flex-shrink: 0;
         }
         .officer-info { flex: 1; min-width: 0; }
         .officer-name {
-          font-size: 0.75rem; font-weight: 600; color: var(--text-primary);
+          font-size: 0.78rem; font-weight: 700; color: var(--text-primary);
           display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .officer-meta {
-          font-size: 0.65rem; color: var(--text-muted);
-          display: block; margin-top: 1px;
+          font-size: 0.65rem; color: #64748b;
+          display: block; margin-top: 2px;
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
           font-family: var(--font-mono);
+          font-weight: 500;
         }
         .logout-btn {
           width: 100%;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.4rem;
-          padding: 0.5rem;
+          gap: 0.5rem;
+          padding: 0.6rem;
           border: 1px solid var(--border);
-          border-radius: 6px;
-          background: var(--bg-primary);
+          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.01);
           font-size: 0.75rem;
-          font-weight: 500;
-          color: var(--text-muted);
+          font-weight: 600;
+          color: #94a3b8;
           cursor: pointer;
           font-family: inherit;
-          transition: all 0.15s ease;
+          transition: all 0.2s ease;
         }
-        .logout-btn:hover { color: var(--accent-alert); border-color: rgba(220, 38, 38, 0.4); }
+        .logout-btn:hover {
+          color: var(--accent-alert);
+          border-color: rgba(239, 68, 68, 0.35);
+          background: rgba(239, 68, 68, 0.05);
+        }
 
         /* ── MAIN ── */
         .main-wrap {
@@ -273,42 +307,58 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 0 1.5rem;
-          height: 52px;
+          padding: 0 2rem;
+          height: 64px;
           border-bottom: 1px solid var(--border);
           flex-shrink: 0;
-          background: var(--bg-panel);
+          background: rgba(11, 15, 26, 0.8);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
         }
 
         .topbar-left {
           display: flex;
           align-items: center;
-          gap: 0.625rem;
+          gap: 0.75rem;
         }
         .topbar-dot {
-          width: 6px; height: 6px;
-          border-radius: 2px;
-          background: var(--accent);
+          width: 8px; height: 8px;
+          border-radius: 50%;
+          background: #22c55e;
+          box-shadow: 0 0 10px #22c55e;
+          animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+          0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+          70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
         }
         .topbar-status {
-          font-size: 0.7rem;
+          font-size: 0.72rem;
           font-weight: 700;
-          color: var(--text-muted);
+          color: #22c55e;
           text-transform: uppercase;
           letter-spacing: 0.08em;
           font-family: var(--font-mono);
         }
 
-        .topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+        .topbar-right { display: flex; align-items: center; gap: 1rem; }
 
         .topbar-search {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          background: var(--bg-elevated);
+          gap: 0.6rem;
+          background: rgba(13, 17, 28, 0.5);
           border: 1px solid var(--border);
-          border-radius: 6px;
-          padding: 0.4rem 0.75rem;
+          border-radius: 8px;
+          padding: 0.5rem 0.85rem;
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+          transition: all 0.2s ease;
+        }
+        .topbar-search:focus-within {
+          border-color: rgba(59, 91, 255, 0.4);
+          background: rgba(13, 17, 28, 0.85);
+          box-shadow: 0 0 10px rgba(59, 91, 255, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .topbar-search input {
           background: transparent;
@@ -317,26 +367,26 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           font-size: 0.78rem;
           color: var(--text-primary);
           font-family: var(--font-sans);
-          width: 200px;
+          width: 220px;
         }
-        .topbar-search input::placeholder { color: var(--text-muted); }
+        .topbar-search input::placeholder { color: #475569; }
 
         .topbar-officer {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          padding: 0.35rem 0.75rem;
+          gap: 0.6rem;
+          padding: 0.4rem 0.85rem;
           border: 1px solid var(--border);
-          border-radius: 6px;
+          border-radius: 8px;
           background: var(--bg-elevated);
         }
-        .topbar-officer-name { font-size: 0.75rem; font-weight: 600; color: var(--text-primary); }
+        .topbar-officer-name { font-size: 0.75rem; font-weight: 700; color: var(--text-primary); }
 
         /* ── PAGE CONTENT ── */
         .page-content {
           flex: 1;
           overflow-y: auto;
-          padding: 1.75rem;
+          padding: 2rem;
         }
       `}</style>
 
