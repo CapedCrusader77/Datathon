@@ -425,8 +425,3 @@ function generateDemoResponse(query: string) {
     visualization: undefined,
   };
 }
-      { fir_number: "CR-089/2024", title: "Case", relevance: 87 },
-    ],
-    visualization: undefined,
-  };
-}
