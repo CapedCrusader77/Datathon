@@ -2,31 +2,26 @@
 Database models (SQLAlchemy) for POLICEGPT
 Complete schema for all crime investigation entities
 """
-import enum
-import uuid
-from datetime import datetime
-
 from sqlalchemy import (
-    ARRAY,
-    JSON,
-    Boolean,
-    Column,
-    DateTime,
-    Float,
-    ForeignKey,
-    Integer,
-    String,
-    Text,
+    Column, String, Integer, Float, Boolean, DateTime,
+    Text, ForeignKey, JSON, Enum as SAEnum, ARRAY, LargeBinary
 )
-from sqlalchemy import Enum as SAEnum
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+from datetime import datetime, timezone
+import uuid
+import enum
 
 Base = declarative_base()
 
 
 def gen_uuid():
     return str(uuid.uuid4())
+
+
+def utc_now():
+    return datetime.now(timezone.utc)
 
 
 # ── Enums ──────────────────────────────────────────────────────────────────
@@ -86,7 +81,7 @@ class District(Base):
     id = Column(String, primary_key=True, default=gen_uuid)
     name = Column(String(100), nullable=False, unique=True)
     code = Column(String(20), unique=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
     police_stations = relationship("PoliceStation", back_populates="district")
 
 
@@ -118,7 +113,7 @@ class Officer(Base):
     hashed_password = Column(String(255))
     is_active = Column(Boolean, default=True)
     last_login = Column(DateTime)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
     assigned_cases = relationship("FIR", back_populates="investigating_officer")
 
 
@@ -160,8 +155,8 @@ class FIR(Base):
     fake_complaint_score = Column(Float, default=0.0)
 
     # Metadata
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 
     # Relationships
     police_station = relationship("PoliceStation", back_populates="firs")
@@ -193,7 +188,7 @@ class Person(Base):
     photo_url = Column(String(500))
     face_embedding = Column(JSON)  # For face similarity search
     fingerprint_data = Column(JSON)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
 
 
 class Suspect(Base):
@@ -210,7 +205,7 @@ class Suspect(Base):
     is_absconding = Column(Boolean, default=False)
     is_arrested = Column(Boolean, default=False)
     arrest_date = Column(DateTime)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
     person = relationship("Person")
     fir_links = relationship("FIRSuspect", back_populates="suspect")
 
@@ -252,7 +247,7 @@ class Vehicle(Base):
     chassis_number = Column(String(100))
     engine_number = Column(String(100))
     fir_links = Column(ARRAY(String))  # FIR IDs this vehicle appears in
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
     owner = relationship("Person")
 
 
@@ -265,7 +260,7 @@ class Weapon(Base):
     registered_owner_id = Column(String, ForeignKey("persons.id"))
     is_licensed = Column(Boolean)
     recovered_in_fir = Column(String, ForeignKey("firs.id"))
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
 
 
 class Evidence(Base):
@@ -282,7 +277,7 @@ class Evidence(Base):
     chain_of_custody = Column(JSON)  # List of handlers with timestamps
     collected_by = Column(String, ForeignKey("officers.id"))
     collected_at = Column(DateTime)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
     fir = relationship("FIR", back_populates="evidence")
 
 
@@ -298,7 +293,7 @@ class Gang(Base):
     leader_person_id = Column(String, ForeignKey("persons.id"))
     strength = Column(Integer)
     status = Column(String(50))  # active / dormant / disbanded
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
     members = relationship("Suspect", foreign_keys=[Suspect.gang_id])
 
 
@@ -311,7 +306,7 @@ class PhoneRecord(Base):
     operator = Column(String(100))
     imei = Column(String(20))
     fir_links = Column(ARRAY(String))
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
 
 
 class CrimeScene(Base):
@@ -326,7 +321,7 @@ class CrimeScene(Base):
     cctv_available = Column(Boolean, default=False)
     cctv_coverage_hours = Column(Integer)
     forensic_report = Column(Text)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
 
 
 class Chargesheet(Base):
@@ -339,7 +334,7 @@ class Chargesheet(Base):
     summary = Column(Text)
     ai_summary = Column(Text)
     file_url = Column(String(500))
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
     fir = relationship("FIR", back_populates="chargesheet")
 
 
@@ -353,7 +348,7 @@ class MissingPerson(Base):
     last_seen_longitude = Column(Float)
     case_status = Column(String(50))  # missing / found / deceased
     linked_fir_id = Column(String, ForeignKey("firs.id"))
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
     person = relationship("Person")
 
 
@@ -367,7 +362,7 @@ class AuditLog(Base):
     ip_address = Column(String(50))
     query_text = Column(Text)
     response_summary = Column(Text)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime, default=utc_now)
 
 
 class ConversationHistory(Base):
@@ -379,4 +374,4 @@ class ConversationHistory(Base):
     content = Column(Text)
     citations = Column(JSON)
     tool_calls = Column(JSON)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime, default=utc_now)

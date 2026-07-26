@@ -2,17 +2,17 @@
 Authentication Router — JWT + RBAC for POLICEGPT
 Zero Trust: every request is authenticated and authorized
 """
-from datetime import datetime, timedelta
-
-import jwt
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from passlib.context import CryptContext
 from pydantic import BaseModel
-from sqlalchemy.ext.asyncio import AsyncSession
+from datetime import datetime, timedelta, timezone
+from typing import Optional
+import jwt
+from passlib.context import CryptContext
 
 from app.core.config import settings
 from app.db.database import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -34,18 +34,20 @@ class LoginRequest(BaseModel):
     password: str
 
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
-    expire = datetime.utcnow() + (
+    now = datetime.now(timezone.utc)
+    expire = now + (
         expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     )
-    to_encode.update({"exp": expire, "iat": datetime.utcnow(), "type": "access"})
+    to_encode.update({"exp": expire, "iat": now, "type": "access"})
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
 def create_refresh_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
+    now = datetime.now(timezone.utc)
+    expire = now + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS)
     to_encode.update({"exp": expire, "type": "refresh"})
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
@@ -110,7 +112,12 @@ async def refresh_token(refresh_token: str):
             raise HTTPException(status_code=401, detail="Invalid token type")
 
         new_access_token = create_access_token(
-            {"sub": payload["sub"], "name": payload["name"], "role": payload["role"]}
+            {
+                "sub": payload["sub"],
+                "name": payload.get("name", ""),
+                "role": payload.get("role", "officer"),
+                "badge": payload.get("badge", payload["sub"]),
+            }
         )
         return {"access_token": new_access_token, "token_type": "bearer"}
     except jwt.ExpiredSignatureError:

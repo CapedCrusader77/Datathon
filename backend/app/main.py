@@ -3,24 +3,24 @@ POLICEGPT - National-Grade AI Investigation Assistant
 Karnataka State Police | Intelligent Crime & Investigation Database
 """
 
-import logging
-import time
-
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager
+import time
+import logging
 
 from app.api.routers import (
-    admin,
-    analytics,
     auth,
-    cases,
     chat,
+    cases,
+    suspects,
+    analytics,
     knowledge_graph,
     reports,
+    admin,
     search,
-    suspects,
 )
 from app.core.config import settings
 from app.db.database import init_db
@@ -28,19 +28,27 @@ from app.db.database import init_db
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("policegpt")
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info("[POLICEGPT] Starting Up...")
+    await init_db()
+    logger.info("[POLICEGPT] Database initialized")
+    yield
+    logger.info("[POLICEGPT] Shutting Down...")
+
+
 app = FastAPI(
     title="POLICEGPT API",
-    description="National-Grade AI Investigation Assistant for Karnataka State Police",
+    description="Karnataka State Police — Intelligent AI Investigation Assistant",
     version="1.0.0",
-    docs_url="/api/docs",
-    redoc_url="/api/redoc",
+    lifespan=lifespan,
 )
 
 # ── Middleware ──────────────────────────────────────────────────────────────
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -51,9 +59,10 @@ async def audit_log_middleware(request: Request, call_next):
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time
+    client_ip = request.client.host if request.client else "unknown"
     logger.info(
         f"[AUDIT] {request.method} {request.url.path} "
-        f"IP={request.client.host} "
+        f"IP={client_ip} "
         f"Status={response.status_code} "
         f"Time={process_time:.3f}s"
     )
@@ -70,12 +79,6 @@ app.include_router(knowledge_graph.router, prefix="/api/v1/graph",        tags=[
 app.include_router(reports.router,       prefix="/api/v1/reports",        tags=["Reports"])
 app.include_router(admin.router,         prefix="/api/v1/admin",          tags=["Admin"])
 app.include_router(search.router,        prefix="/api/v1/search",         tags=["Search"])
-
-@app.on_event("startup")
-async def startup_event():
-    logger.info("🚔 POLICEGPT Starting Up...")
-    await init_db()
-    logger.info("✅ Database initialized")
 
 @app.get("/api/health")
 async def health_check():

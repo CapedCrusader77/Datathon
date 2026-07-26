@@ -95,7 +95,12 @@ export default function SuspectsPage() {
       <div className={`grid gap-6 ${selected ? "grid-cols-1 lg:grid-cols-3" : "grid-cols-1"}`}>
         {/* Suspect Cards Grid */}
         <div className={`${selected ? "lg:col-span-2" : ""} grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 content-start`}>
-          {filtered.map(s => {
+          {filtered.length === 0 ? (
+            <div className="col-span-full py-12 text-center text-slate-300 font-mono text-sm terminal-panel">
+              No cases match these filters — try widening the date range
+            </div>
+          ) : (
+            filtered.map(s => {
             const rb = riskBadge(s.risk);
             return (
               <div key={s.id}
@@ -108,9 +113,9 @@ export default function SuspectsPage() {
                 <div className="flex items-start justify-between mb-3">
                   <div className="w-11 h-11 rounded-xl flex items-center justify-center font-bold text-sm shadow-inner"
                     style={{
-                      background: s.risk === "extreme" ? "rgba(239,68,68,0.15)" : s.risk === "high" ? "rgba(245,158,11,0.15)" : "rgba(59,130,246,0.15)",
-                      border: `1px solid ${s.risk === "extreme" ? "rgba(239,68,68,0.4)" : s.risk === "high" ? "rgba(245,158,11,0.4)" : "rgba(59,130,246,0.4)"}`,
-                      color: s.risk === "extreme" ? "#f87171" : s.risk === "high" ? "#fbbf24" : "#60a5fa",
+                      background: s.risk === "extreme" ? "rgba(220,38,38,0.15)" : s.risk === "high" ? "rgba(37,99,235,0.2)" : "rgba(2,132,199,0.15)",
+                      border: `1px solid ${s.risk === "extreme" ? "rgba(220,38,38,0.4)" : s.risk === "high" ? "rgba(37,99,235,0.4)" : "rgba(2,132,199,0.4)"}`,
+                      color: s.risk === "extreme" ? "#f87171" : s.risk === "high" ? "#60a5fa" : "#38bdf8",
                     }}>
                     {s.name.charAt(0)}
                   </div>
@@ -156,7 +161,7 @@ export default function SuspectsPage() {
                 </div>
               </div>
             );
-          })}
+          }))}
         </div>
 
         {/* Selected Suspect Profile Drawer */}

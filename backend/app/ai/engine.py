@@ -83,6 +83,17 @@ class PoliceGPTEngine:
             top_k=20,
         )
 
+        # Feature 3: Emit retrieval path metadata for debugging
+        retrieval_path = search_results[0].get("retrieval_path", "hybrid") if search_results else "hybrid"
+        yield {
+            "type": "retrieval_meta",
+            "content": {
+                "path": retrieval_path,
+                "results_count": len(search_results),
+                "query_count": len(expanded_queries),
+            }
+        }
+
         # ── 8. Knowledge Graph Lookup ────────────────────────────────────────
         kg_results = {}
         if entities.get("persons") or entities.get("vehicles") or entities.get("phones"):
@@ -124,7 +135,7 @@ class PoliceGPTEngine:
             yield {"type": "visualization", "content": viz_hints}
 
         # ── 14. Save to Conversation History ────────────────────────────────
-        await self.redis.save_message(session_id, "user", query)
+        await self.redis.save_message(session_id, "user", query, officer_id=officer_id)
         # Full response saved by the router after streaming completes
 
     def _build_metadata_filters(
@@ -171,8 +182,11 @@ class PoliceGPTEngine:
                 "title": doc.get("category", "Case"),
                 "date": doc.get("date_filed"),
                 "relevance": round(doc.get("score", 0) * 100, 1),
+                # Feature 5: include a narrative snippet for explainability UI
+                "snippet": (doc.get("summary") or "")[:120] or None,
             }
             for doc in reranked[:5]
+            if doc.get("fir_number") and doc.get("fir_number") != "AGGREGATE"
         ]
 
     def _get_visualization_hints(
