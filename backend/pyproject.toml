@@ -10,3 +10,8 @@ ignore = [
     "DTZ003",  # datetime.datetime.utcnow()
     "BLE001",  # Blind exception: Exception
 ]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
