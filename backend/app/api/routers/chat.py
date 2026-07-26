@@ -2,18 +2,18 @@
 Chat API Router — POLICEGPT Conversational Interface
 Streaming SSE endpoint for real-time AI responses
 """
-from fastapi import APIRouter, Depends, HTTPException, status
+import json
+import uuid
+from collections.abc import AsyncGenerator
+
+from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
-from typing import Optional, AsyncGenerator
-import json
-import asyncio
-import uuid
 
-from app.auth.dependencies import get_current_officer
 from app.ai.engine import PoliceGPTEngine
-from app.models.schemas import OfficerOut
+from app.auth.dependencies import get_current_officer
 from app.db.redis_client import RedisClient
+from app.models.schemas import OfficerOut
 
 router = APIRouter()
 engine = PoliceGPTEngine()
@@ -22,7 +22,7 @@ redis = RedisClient()
 
 class ChatRequest(BaseModel):
     query: str = Field(..., min_length=2, max_length=2000)
-    session_id: Optional[str] = None
+    session_id: str | None = None
     language: str = Field(default="en", pattern="^(en|kn|hi)$")
 
 
@@ -30,9 +30,9 @@ class ChatResponse(BaseModel):
     session_id: str
     response: str
     citations: list
-    visualization: Optional[dict] = None
-    intent: Optional[str] = None
-    tokens_used: Optional[int] = None
+    visualization: dict | None = None
+    intent: str | None = None
+    tokens_used: int | None = None
 
 
 @router.post("/stream")

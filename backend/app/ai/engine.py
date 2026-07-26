@@ -3,23 +3,20 @@ POLICEGPT AI Engine — Core RAG + LLM Pipeline
 Implements: Intent Detection → NER → Query Expansion → Hybrid Search
 → Knowledge Graph → Reranking → LLM Reasoning → Response Generation
 """
-from typing import Any, Dict, List, Optional, AsyncGenerator
-import asyncio
 import json
 import logging
-import re
+from collections.abc import AsyncGenerator
 
-from app.core.config import settings
 from app.ai.intent_classifier import IntentClassifier
-from app.ai.ner_extractor import NERExtractor
-from app.ai.query_expander import QueryExpander
-from app.search.hybrid_search import HybridSearchEngine
-from app.knowledge_graph.graph_client import KnowledgeGraphClient
-from app.ai.reranker import CrossEncoderReranker
 from app.ai.llm_client import LLMClient
+from app.ai.ner_extractor import NERExtractor
 from app.ai.prompt_templates import PromptTemplates
-from app.security.prompt_guard import PromptGuard
+from app.ai.query_expander import QueryExpander
+from app.ai.reranker import CrossEncoderReranker
 from app.db.redis_client import RedisClient
+from app.knowledge_graph.graph_client import KnowledgeGraphClient
+from app.search.hybrid_search import HybridSearchEngine
+from app.security.prompt_guard import PromptGuard
 
 logger = logging.getLogger("policegpt.ai_engine")
 
@@ -49,7 +46,7 @@ class PoliceGPTEngine:
         officer_id: str,
         officer_role: str,
         stream: bool = True,
-    ) -> AsyncGenerator[Dict, None]:
+    ) -> AsyncGenerator[dict, None]:
         """
         Main query pipeline — Chain of Thought (internal) → Grounded Response
         """
@@ -142,8 +139,8 @@ class PoliceGPTEngine:
         # Full response saved by the router after streaming completes
 
     def _build_metadata_filters(
-        self, intent: Dict, entities: Dict, officer_role: str
-    ) -> Dict:
+        self, intent: dict, entities: dict, officer_role: str
+    ) -> dict:
         """Construct structured filters from NER + intent for vector DB query"""
         filters = {}
         if entities.get("date_range"):
@@ -160,7 +157,7 @@ class PoliceGPTEngine:
         return filters
 
     def _build_context(
-        self, reranked: List, kg_results: Dict, intent: Dict
+        self, reranked: list, kg_results: dict, intent: dict
     ) -> str:
         """Assemble retrieved documents into LLM context"""
         sections = []
@@ -178,7 +175,7 @@ class PoliceGPTEngine:
             sections.append(f"\n[KNOWLEDGE GRAPH]\n{json.dumps(kg_results, indent=2)}")
         return "\n\n---\n\n".join(sections)
 
-    def _extract_citations(self, reranked: List) -> List[Dict]:
+    def _extract_citations(self, reranked: list) -> list[dict]:
         return [
             {
                 "fir_number": doc.get("fir_number"),
@@ -193,8 +190,8 @@ class PoliceGPTEngine:
         ]
 
     def _get_visualization_hints(
-        self, intent: Dict, entities: Dict, results: List
-    ) -> Optional[Dict]:
+        self, intent: dict, entities: dict, results: list
+    ) -> dict | None:
         primary = intent.get("primary", "")
         if primary in ["crime_heatmap", "hotspot_analysis"]:
             return {"type": "map", "action": "show_heatmap"}

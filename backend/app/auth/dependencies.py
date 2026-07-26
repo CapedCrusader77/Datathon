@@ -1,8 +1,9 @@
 """Stub modules for app.auth, app.models.schemas, app.db"""
 # app/auth/dependencies.py
+import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-import jwt
+
 from app.core.config import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")

@@ -1,9 +1,9 @@
 """
 Core configuration for POLICEGPT
 """
-from pydantic_settings import BaseSettings
-from typing import List
 import secrets
+
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     # CORS
-    ALLOWED_ORIGINS: List[str] = [
+    ALLOWED_ORIGINS: list[str] = [
         "http://localhost:3000",
         "https://policegpt.karnataka.gov.in",
     ]

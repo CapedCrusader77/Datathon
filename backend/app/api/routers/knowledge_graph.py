@@ -2,8 +2,8 @@
 Knowledge Graph Router — Neo4j relationship queries for POLICEGPT
 Supports: person-to-person, person-vehicle, gang-network, crime-location graphs
 """
+
 from fastapi import APIRouter, Depends, Query
-from typing import Optional, List
 from pydantic import BaseModel
 
 from app.auth.dependencies import get_current_officer
@@ -27,8 +27,8 @@ class GraphEdge(BaseModel):
 
 
 class GraphResponse(BaseModel):
-    nodes: List[GraphNode]
-    edges: List[GraphEdge]
+    nodes: list[GraphNode]
+    edges: list[GraphEdge]
     total_nodes: int
     total_edges: int
 
@@ -118,7 +118,7 @@ async def get_fir_connections(
     officer: OfficerOut = Depends(get_current_officer),
 ):
     """All entities connected to a specific FIR"""
-    pass  # Implementation similar to above
+    # Implementation similar to above
 
 
 @router.post("/find-path")

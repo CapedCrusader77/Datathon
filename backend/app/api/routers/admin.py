@@ -1,5 +1,6 @@
 """Admin router stub"""
 from fastapi import APIRouter, Depends
+
 from app.auth.dependencies import get_current_officer
 from app.models.schemas import OfficerOut
 

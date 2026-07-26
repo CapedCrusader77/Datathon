@@ -1,9 +1,9 @@
 """
 Analytics API Router — Crime heatmaps, trends, hotspots, statistics
 """
+from datetime import date
+
 from fastapi import APIRouter, Depends, Query
-from typing import Optional, List
-from datetime import datetime, date
 from pydantic import BaseModel
 
 from app.auth.dependencies import get_current_officer
@@ -30,10 +30,10 @@ class TrendData(BaseModel):
 
 @router.get("/heatmap")
 async def get_crime_heatmap(
-    district: Optional[str] = None,
-    category: Optional[str] = None,
-    start_date: Optional[date] = None,
-    end_date: Optional[date] = None,
+    district: str | None = None,
+    category: str | None = None,
+    start_date: date | None = None,
+    end_date: date | None = None,
     officer: OfficerOut = Depends(get_current_officer),
 ):
     """
@@ -61,7 +61,7 @@ async def get_crime_heatmap(
 @router.get("/trends")
 async def get_crime_trends(
     period: str = Query(default="monthly", pattern="^(daily|weekly|monthly|yearly)$"),
-    district: Optional[str] = None,
+    district: str | None = None,
     year: int = Query(default=2024),
     officer: OfficerOut = Depends(get_current_officer),
 ):
@@ -133,7 +133,7 @@ async def get_category_breakdown(
 
 @router.get("/predictions")
 async def get_crime_predictions(
-    district: Optional[str] = None,
+    district: str | None = None,
     days_ahead: int = Query(default=30, ge=7, le=90),
     officer: OfficerOut = Depends(get_current_officer),
 ):

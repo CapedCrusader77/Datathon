@@ -1,10 +1,9 @@
 """
 Suspects Router — Criminal profiling, history, repeat offender detection
 """
-from fastapi import APIRouter, Depends, Query, HTTPException
-from typing import Optional, List
+
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
-from datetime import datetime
 
 from app.auth.dependencies import get_current_officer
 from app.models.schemas import OfficerOut
@@ -16,28 +15,28 @@ class SuspectProfile(BaseModel):
     id: str
     criminal_id: str
     name: str
-    aliases: List[str]
+    aliases: list[str]
     age: int
     gender: str
-    photo_url: Optional[str]
+    photo_url: str | None
     risk_level: str
     fir_count: int
     is_repeat_offender: bool
-    gang_affiliation: Optional[str]
+    gang_affiliation: str | None
     is_arrested: bool
     is_absconding: bool
-    last_known_location: Optional[str]
-    crime_categories: List[str]
+    last_known_location: str | None
+    crime_categories: list[str]
     created_at: str
 
 
-@router.get("/", response_model=List[SuspectProfile])
+@router.get("/", response_model=list[SuspectProfile])
 async def list_suspects(
-    search: Optional[str] = None,
-    risk_level: Optional[str] = None,
-    is_absconding: Optional[bool] = None,
-    repeat_offender: Optional[bool] = None,
-    district: Optional[str] = None,
+    search: str | None = None,
+    risk_level: str | None = None,
+    is_absconding: bool | None = None,
+    repeat_offender: bool | None = None,
+    district: str | None = None,
     page: int = Query(default=1, ge=1),
     limit: int = Query(default=20, ge=1, le=100),
     officer: OfficerOut = Depends(get_current_officer),

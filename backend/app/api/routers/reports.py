@@ -1,10 +1,9 @@
 """
 Reports Router — AI-generated investigation reports
 """
-from fastapi import APIRouter, Depends, BackgroundTasks
-from pydantic import BaseModel
-from typing import Optional
 from datetime import datetime
+
+from fastapi import APIRouter, BackgroundTasks, Depends
 
 from app.auth.dependencies import get_current_officer
 from app.models.schemas import OfficerOut
