@@ -3,23 +3,23 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 const kpis = [
-  { label: "Total FIRs",       value: "48,234", change: "+5.2%",  up: true,  color: "#3b5bff" },
-  { label: "Open Cases",       value: "12,891", change: "−3.1%",  up: false, color: "#f59e0b" },
-  { label: "Solved",           value: "35,343", change: "+12.4%", up: true,  color: "#22c55e" },
-  { label: "Clearance Rate",   value: "73.3%",  change: "+2.1%",  up: true,  color: "#8b5cf6" },
-  { label: "Cybercrime YTD",   value: "8,921",  change: "+34.1%", up: false, color: "#ef4444" },
-  { label: "Arrests YTD",      value: "19,876", change: "+8.7%",  up: true,  color: "#0ea5e9" },
-  { label: "Missing Persons",  value: "234",    change: "−12.0%", up: true,  color: "#22c55e" },
-  { label: "AI Queries Today", value: "1,204",  change: "+45.0%", up: true,  color: "#6366f1" },
+  { label: "Total FIRs",       value: "48,234", change: "+5.2%",  up: true,  color: "#2563eb" },
+  { label: "Open Cases",       value: "12,891", change: "−3.1%",  up: false, color: "#2563eb" },
+  { label: "Solved",           value: "35,343", change: "+12.4%", up: true,  color: "#0284c7" },
+  { label: "Clearance Rate",   value: "73.3%",  change: "+2.1%",  up: true,  color: "#6366f1" },
+  { label: "Cybercrime YTD",   value: "8,921",  change: "+34.1%", up: false, color: "#dc2626" },
+  { label: "Arrests YTD",      value: "19,876", change: "+8.7%",  up: true,  color: "#0284c7" },
+  { label: "Missing Persons",  value: "234",    change: "−12.0%", up: true,  color: "#475569" },
+  { label: "AI Queries Today", value: "1,204",  change: "+45.0%", up: true,  color: "#2563eb" },
 ];
 
 const categories = [
-  { label: "Cybercrime",    count: 8921, color: "#6366f1" },
-  { label: "Assault",       count: 7234, color: "#ef4444" },
-  { label: "Vehicle Theft", count: 6789, color: "#3b5bff" },
-  { label: "Robbery",       count: 5432, color: "#f59e0b" },
-  { label: "Burglary",      count: 4123, color: "#8b5cf6" },
-  { label: "Narcotics",     count: 3456, color: "#22c55e" },
+  { label: "Cybercrime",    count: 8921, color: "#2563eb" },
+  { label: "Assault",       count: 7234, color: "#dc2626" },
+  { label: "Vehicle Theft", count: 6789, color: "#0284c7" },
+  { label: "Robbery",       count: 5432, color: "#475569" },
+  { label: "Burglary",      count: 4123, color: "#6366f1" },
+  { label: "Narcotics",     count: 3456, color: "#0891b2" },
 ];
 
 const cases = [
@@ -37,18 +37,18 @@ const alerts = [
 ];
 
 const modules = [
-  { label: "PoliceGPT Chat",       desc: "Natural language crime queries",   href: "/dashboard/chat",      color: "#3b5bff" },
-  { label: "FIR Database",         desc: "Search and filter case files",      href: "/dashboard/cases",     color: "#22c55e" },
-  { label: "Crime Analytics",      desc: "Heatmaps and trend predictions",    href: "/dashboard/analytics", color: "#f59e0b" },
-  { label: "Knowledge Graph",      desc: "Suspect network relationships",     href: "/dashboard/graph",     color: "#8b5cf6" },
-  { label: "Investigation Reports",desc: "Auto-generate case dossiers",       href: "/dashboard/reports",   color: "#0ea5e9" },
+  { label: "PoliceGPT Chat",       desc: "Natural language crime queries",   href: "/dashboard/chat",      color: "#2563eb" },
+  { label: "FIR Database",         desc: "Search and filter case files",      href: "/dashboard/cases",     color: "#0284c7" },
+  { label: "Crime Analytics",      desc: "Heatmaps and trend predictions",    href: "/dashboard/analytics", color: "#6366f1" },
+  { label: "Knowledge Graph",      desc: "Suspect network relationships",     href: "/dashboard/graph",     color: "#475569" },
+  { label: "Investigation Reports",desc: "Auto-generate case dossiers",       href: "/dashboard/reports",   color: "#0891b2" },
 ];
 
 const statusColor: Record<string, string> = {
-  open: "#ef4444",
-  investigation: "#f59e0b",
-  chargesheeted: "#3b5bff",
-  closed: "#22c55e",
+  open: "#dc2626",
+  investigation: "#2563eb",
+  chargesheeted: "#0284c7",
+  closed: "#475569",
 };
 
 const maxCount = Math.max(...categories.map((c) => c.count));
@@ -77,7 +77,7 @@ export default function DashboardPage() {
           gap: 1.5rem;
           font-family: 'Inter', -apple-system, sans-serif;
           -webkit-font-smoothing: antialiased;
-          color: #c8cdd8;
+          color: #f1f5f9;
         }
 
         /* Page header */
@@ -90,19 +90,19 @@ export default function DashboardPage() {
         .page-hdr h1 {
           font-size: 1.25rem;
           font-weight: 700;
-          letter-spacing: -0.03em;
-          color: #dde2ee;
+          letter-spacing: -0.02em;
+          color: #f1f5f9;
         }
         .page-hdr p {
           font-size: 0.75rem;
-          color: #2e3550;
+          color: #94a3b8;
           margin-top: 0.2rem;
         }
         .page-time {
           font-size: 0.72rem;
           font-weight: 600;
-          font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
-          color: #2a3048;
+          font-family: 'JetBrains Mono', monospace;
+          color: #94a3b8;
           letter-spacing: 0.04em;
           white-space: nowrap;
         }
@@ -114,19 +114,19 @@ export default function DashboardPage() {
           align-items: center;
           gap: 0.75rem;
           padding: 0.6rem 0.875rem;
-          border-radius: 8px;
+          border-radius: 6px;
           border: 1px solid;
           font-size: 0.78rem;
           line-height: 1.5;
         }
-        .alert-row.high   { background: #110b0b; border-color: #2e1515; color: #f87171; }
-        .alert-row.medium { background: #0f0d08; border-color: #2a220e; color: #fbbf24; }
-        .alert-row.low    { background: #08100e; border-color: #0e2218; color: #6b7588; }
+        .alert-row.high   { background: rgba(220,38,38,0.1); border-color: rgba(220,38,38,0.35); color: #fca5a5; }
+        .alert-row.medium { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.35); color: #93c5fd; }
+        .alert-row.low    { background: #141720; border-color: #2a2f3e; color: #94a3b8; }
         .alert-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-        .alert-dot.high   { background: #ef4444; }
-        .alert-dot.medium { background: #f59e0b; }
-        .alert-dot.low    { background: #3a4256; }
-        .alert-time { font-size: 0.65rem; font-family: monospace; color: #2a3048; flex-shrink: 0; margin-left: auto; padding-left: 0.5rem; }
+        .alert-dot.high   { background: #dc2626; }
+        .alert-dot.medium { background: #2563eb; }
+        .alert-dot.low    { background: #475569; }
+        .alert-time { font-size: 0.65rem; font-family: 'JetBrains Mono', monospace; color: #64748b; flex-shrink: 0; margin-left: auto; padding-left: 0.5rem; }
 
         /* KPI grid */
         .kpi-grid {
@@ -137,9 +137,9 @@ export default function DashboardPage() {
         @media (max-width: 1100px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
 
         .kpi-card {
-          background: #080a10;
-          border: 1px solid #111420;
-          border-radius: 10px;
+          background: #141720;
+          border: 1px solid #2a2f3e;
+          border-radius: 8px;
           padding: 1rem;
           display: flex;
           flex-direction: column;
@@ -148,25 +148,27 @@ export default function DashboardPage() {
         .kpi-top { display: flex; align-items: center; justify-content: space-between; }
         .kpi-icon {
           width: 30px; height: 30px;
-          border-radius: 7px;
+          border-radius: 6px;
           display: flex; align-items: center; justify-content: center;
         }
         .kpi-badge {
           font-size: 0.65rem;
           font-weight: 600;
+          font-family: 'JetBrains Mono', monospace;
           padding: 0.15rem 0.4rem;
           border-radius: 4px;
           border: 1px solid;
         }
-        .kpi-badge.up   { background: rgba(34,197,94,0.08);  border-color: rgba(34,197,94,0.15);  color: #4ade80; }
-        .kpi-badge.down { background: rgba(239,68,68,0.08);   border-color: rgba(239,68,68,0.15);   color: #f87171; }
+        .kpi-badge.up   { background: rgba(34,197,94,0.12); border-color: rgba(34,197,94,0.25); color: #4ade80; }
+        .kpi-badge.down { background: rgba(220,38,38,0.12); border-color: rgba(220,38,38,0.25); color: #f87171; }
         .kpi-value {
-          font-size: 1.4rem;
+          font-size: 1.5rem;
           font-weight: 700;
           letter-spacing: -0.04em;
-          color: #dde2ee;
+          color: #f1f5f9;
+          font-family: 'Inter', sans-serif;
         }
-        .kpi-label { font-size: 0.72rem; color: #2e3550; }
+        .kpi-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
 
         /* Two col section */
         .two-col {
@@ -178,32 +180,33 @@ export default function DashboardPage() {
 
         /* Panel */
         .panel {
-          background: #080a10;
-          border: 1px solid #111420;
-          border-radius: 10px;
+          background: #141720;
+          border: 1px solid #2a2f3e;
+          border-radius: 8px;
           padding: 1.25rem;
         }
         .panel-title {
-          font-size: 0.82rem;
-          font-weight: 600;
-          color: #8b97b8;
-          margin-bottom: 0.25rem;
-          letter-spacing: -0.01em;
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: #f1f5f9;
+          margin-bottom: 0.2rem;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
         }
-        .panel-sub { font-size: 0.7rem; color: #2a3048; margin-bottom: 1.25rem; }
+        .panel-sub { font-size: 0.7rem; color: #94a3b8; margin-bottom: 1.25rem; }
 
         /* Bar chart */
         .bar-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
         .bar-row:last-child { margin-bottom: 0; }
-        .bar-label { font-size: 0.75rem; color: #4a5470; width: 100px; flex-shrink: 0; }
+        .bar-label { font-size: 0.75rem; color: #cbd5e1; width: 110px; flex-shrink: 0; }
         .bar-track {
           flex: 1; height: 5px;
-          background: #0c0f18;
+          background: #1c2030;
           border-radius: 99px;
           overflow: hidden;
         }
         .bar-fill { height: 100%; border-radius: 99px; }
-        .bar-count { font-size: 0.7rem; font-family: monospace; color: #3a4256; width: 46px; text-align: right; flex-shrink: 0; }
+        .bar-count { font-size: 0.7rem; font-family: 'JetBrains Mono', monospace; color: #94a3b8; width: 50px; text-align: right; flex-shrink: 0; }
 
         /* Modules */
         .module-list { display: flex; flex-direction: column; gap: 0.35rem; }
@@ -212,63 +215,67 @@ export default function DashboardPage() {
           align-items: center;
           justify-content: space-between;
           padding: 0.625rem 0.75rem;
-          border: 1px solid #0d1018;
-          border-radius: 8px;
+          border: 1px solid #2a2f3e;
+          border-radius: 6px;
           text-decoration: none;
           background: transparent;
           transition: background 0.12s, border-color 0.12s;
           cursor: pointer;
         }
-        .module-link:hover { background: #0c0f18; border-color: #171b26; }
+        .module-link:hover { background: #1c2030; border-color: #3b445c; }
         .module-link-left {}
-        .module-link-name { font-size: 0.78rem; font-weight: 600; color: #8b97b8; display: block; }
-        .module-link-desc { font-size: 0.67rem; color: #252c40; display: block; margin-top: 1px; }
+        .module-link-name { font-size: 0.8rem; font-weight: 600; color: #e2e8f0; display: block; }
+        .module-link-desc { font-size: 0.68rem; color: #94a3b8; display: block; margin-top: 2px; }
         .module-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 
         /* Cases table */
         .cases-table { width: 100%; border-collapse: collapse; }
         .cases-table thead th {
-          font-size: 0.65rem;
-          font-weight: 600;
+          font-size: 0.68rem;
+          font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 0.08em;
-          color: #1e2438;
+          color: #94a3b8;
           padding: 0 0.75rem 0.75rem;
           text-align: left;
-          border-bottom: 1px solid #0d1018;
+          border-bottom: 1px solid #2a2f3e;
         }
         .cases-table tbody td {
-          font-size: 0.78rem;
+          font-size: 0.8rem;
           padding: 0.65rem 0.75rem;
-          border-bottom: 1px solid #0a0d14;
+          border-bottom: 1px solid #1c2030;
           vertical-align: middle;
+          color: #e2e8f0;
         }
         .cases-table tbody tr:last-child td { border-bottom: none; }
-        .cases-table tbody tr:hover td { background: #0c0f18; }
+        .cases-table tbody tr:hover td { background: rgba(37,99,235,0.05); }
 
-        .fir-link { font-family: monospace; font-weight: 700; color: #3b5bff; font-size: 0.75rem; text-decoration: none; }
-        .fir-link:hover { color: #5b7bff; }
+        .fir-link { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #60a5fa; font-size: 0.78rem; text-decoration: none; }
+        .fir-link:hover { color: #93c5fd; }
         .status-pill {
           font-size: 0.65rem;
-          font-weight: 600;
+          font-weight: 700;
+          font-family: 'JetBrains Mono', monospace;
           padding: 0.2rem 0.5rem;
           border-radius: 4px;
           border: 1px solid;
           white-space: nowrap;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
         }
 
         .urgency-bar { display: flex; align-items: center; gap: 0.5rem; }
-        .urg-track { width: 60px; height: 4px; background: #0c0f18; border-radius: 99px; overflow: hidden; flex-shrink: 0; }
+        .urg-track { width: 60px; height: 4px; background: #1c2030; border-radius: 99px; overflow: hidden; flex-shrink: 0; }
         .urg-fill { height: 100%; border-radius: 99px; }
-        .urg-val { font-size: 0.68rem; font-family: monospace; color: #3a4256; }
+        .urg-val { font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; color: #94a3b8; }
 
-        .loc-text { color: #3a4256; }
-        .cat-text { color: #8b97b8; font-weight: 500; }
-        .off-text { color: #4a5470; }
+        .loc-text { color: #94a3b8; font-size: 0.78rem; }
+        .cat-text { color: #cbd5e1; font-weight: 500; }
+        .off-text { color: #cbd5e1; font-size: 0.78rem; }
 
         .cases-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
-        .view-all { font-size: 0.72rem; color: #2a3560; text-decoration: none; font-weight: 600; }
-        .view-all:hover { color: #3b5bff; }
+        .view-all { font-size: 0.72rem; color: #2563eb; text-decoration: none; font-weight: 600; }
+        .view-all:hover { color: #60a5fa; }
       `}</style>
 
       <div className="db-page">
@@ -381,7 +388,7 @@ export default function DashboardPage() {
                       <div className="urg-track">
                         <div className="urg-fill" style={{
                           width: `${c.urgency * 100}%`,
-                          background: c.urgency > 0.8 ? "#ef4444" : c.urgency > 0.6 ? "#f59e0b" : "#22c55e",
+                          background: c.urgency > 0.8 ? "#dc2626" : c.urgency > 0.6 ? "#2563eb" : "#0284c7",
                         }} />
                       </div>
                       <span className="urg-val">{Math.round(c.urgency * 100)}%</span>

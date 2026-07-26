@@ -1,76 +1,90 @@
-# ============================================================
-# POLICEGPT — .gitignore
-# ============================================================
-
-# ─── Secrets & Environment ───────────────────────────────────
+# ── Security & Secrets ──
 .env
-.env.local
-.env.*.local
-*.env
+.env.*
 !.env.example
+credentials.json
+token.json
 
-# ─── Python ──────────────────────────────────────────────────
+# ── Temporary & Agent Files ──
+.tmp/
+scratch/
+*.log
+logs/
+
+# ── Python / Backend ──
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
 build/
+develop-eggs/
 dist/
-*.egg-info/
+downloads/
+eggs/
 .eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
 *.egg
-.venv/
+
+# Virtual Environments
 venv/
+.venv/
 env/
 ENV/
-pip-log.txt
-pip-delete-this-directory.txt
+env.bak/
+venv.bak/
+
+# Testing & Coverage
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-htmlcov/
 .coverage
-.coverage.*
+htmlcov/
 coverage.xml
 *.cover
+*.py,cover
+.hypothesis/
 
-# ─── Node / Next.js ──────────────────────────────────────────
+# ── Node.js / Frontend (Next.js) ──
 node_modules/
 .next/
 out/
-.nuxt/
+build/
 dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
-.DS_Store
-*.pem
+pnpm-debug.log*
 
-# ─── IDEs ────────────────────────────────────────────────────
+# ── OS & IDE ──
+.DS_Store
+Thumbs.db
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+*.sublime-workspace
+*.sublime-project
 
-# ─── Docker / Data ───────────────────────────────────────────
-data/
-*.db
-*.sqlite3
+# Local AI Agent Workspaces & Scratchpads
+Agents.md
+CLAUDE.md
+GEMINI.md
+SKILL.md
+.agents
+.agents/
+.tmp/
 
-# ─── Logs ────────────────────────────────────────────────────
-*.log
-logs/
+# Junk / Temporary Files
+.gitignore copy
+README.mdgit
+*benchmark_report.json
 
-# ─── OS ──────────────────────────────────────────────────────
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# ─── Uploads / Generated ─────────────────────────────────────
-uploads/
-*.pkl
-*.pt
-*.bin

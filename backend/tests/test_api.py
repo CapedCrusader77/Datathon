@@ -2,11 +2,12 @@
 POLICEGPT Backend — Comprehensive Test Suite
 """
 import pytest
+import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def client():
     async with AsyncClient(
         transport=ASGITransport(app=app),
@@ -15,7 +16,7 @@ async def client():
         yield c
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def auth_token(client):
     """Get a valid JWT token for testing"""
     resp = await client.post("/api/v1/auth/login",

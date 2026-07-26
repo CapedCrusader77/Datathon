@@ -48,6 +48,7 @@ async def chat_stream(
 
     async def event_generator() -> AsyncGenerator[str, None]:
         try:
+            full_response_parts = []
             async for event in engine.process_query(
                 query=request.query,
                 session_id=session_id,
@@ -55,7 +56,14 @@ async def chat_stream(
                 officer_role=officer.role,
                 stream=True,
             ):
+                if event.get("type") == "token" and event.get("content"):
+                    full_response_parts.append(event["content"])
                 yield f"data: {json.dumps(event)}\n\n"
+            full_assistant_message = "".join(full_response_parts)
+            if full_assistant_message:
+                await engine.redis.save_message(
+                    session_id, "assistant", full_assistant_message, officer_id=str(officer.id)
+                )
             # Send completion event
             yield f"data: {json.dumps({'type': 'done', 'session_id': session_id})}\n\n"
         except Exception as e:

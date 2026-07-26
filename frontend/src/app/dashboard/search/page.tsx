@@ -109,7 +109,7 @@ export default function SearchPage() {
                 {group.items.map((item, i) => (
                   <div key={i} className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 hover:border-blue-500/40 cursor-pointer transition-all">
                     <p className="text-xs font-bold text-slate-100">
-                      {(item as Record<string, string>)[group.key]}
+                      {(item as unknown as Record<string, string>)[group.key]}
                     </p>
                     <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-800/60">
                       <p className="text-[11px] text-slate-400 truncate max-w-[130px]">

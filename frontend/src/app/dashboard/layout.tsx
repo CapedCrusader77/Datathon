@@ -114,27 +114,38 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap');
+        :root {
+          --bg-primary: #0d0f14;
+          --bg-panel: #141720;
+          --bg-elevated: #1c2030;
+          --border: #2a2f3e;
+          --text-primary: #f1f5f9;
+          --text-muted: #94a3b8;
+          --accent: #2563eb;
+          --accent-alert: #dc2626;
+          --font-sans: 'Inter', -apple-system, sans-serif;
+          --font-mono: 'JetBrains Mono', monospace;
+        }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { height: 100%; background: #06080d; }
+        html, body { height: 100%; background: var(--bg-primary); }
 
         .shell {
           display: flex;
           height: 100vh;
-          font-family: 'Inter', -apple-system, sans-serif;
+          font-family: var(--font-sans);
           -webkit-font-smoothing: antialiased;
-          background: #06080d;
-          color: #c8cdd8;
+          background: var(--bg-primary);
+          color: var(--text-primary);
           overflow: hidden;
         }
 
         /* ── SIDEBAR ── */
         .sidebar {
-          width: 220px;
+          width: 230px;
           flex-shrink: 0;
-          background: #06080d;
-          border-right: 1px solid #12151e;
+          background: var(--bg-panel);
+          border-right: 1px solid var(--border);
           display: flex;
           flex-direction: column;
           overflow: hidden;
@@ -143,24 +154,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         .sidebar-brand {
           display: flex;
           align-items: center;
-          gap: 9px;
+          gap: 10px;
           padding: 1.25rem 1rem;
-          border-bottom: 1px solid #12151e;
+          border-bottom: 1px solid var(--border);
         }
         .sidebar-brand-icon {
           width: 28px; height: 28px;
-          background: #0d1120;
-          border: 1px solid #1e2438;
-          border-radius: 7px;
+          background: var(--bg-elevated);
+          border: 1px solid var(--border);
+          border-radius: 6px;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
         }
         .sidebar-brand-name {
-          font-size: 0.8rem;
+          font-size: 0.825rem;
           font-weight: 700;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          color: #3d4560;
+          color: var(--text-primary);
         }
 
         .sidebar-nav {
@@ -169,48 +180,39 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           padding: 0.75rem 0.625rem;
           display: flex;
           flex-direction: column;
-          gap: 2px;
+          gap: 4px;
         }
         .sidebar-nav::-webkit-scrollbar { width: 0; }
-
-        .nav-section-label {
-          font-size: 0.62rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          color: #1e2438;
-          padding: 0.5rem 0.5rem 0.25rem;
-          margin-top: 0.5rem;
-        }
-        .nav-section-label:first-child { margin-top: 0; }
 
         .nav-link {
           display: flex;
           align-items: center;
           gap: 0.6rem;
-          padding: 0.5rem 0.625rem;
-          border-radius: 7px;
-          font-size: 0.8rem;
+          padding: 0.55rem 0.75rem;
+          border-radius: 6px;
+          font-size: 0.825rem;
           font-weight: 500;
-          color: #3a4256;
+          color: var(--text-muted);
           text-decoration: none;
-          transition: background 0.12s, color 0.12s;
+          transition: background 0.15s ease, color 0.15s ease;
           border: 1px solid transparent;
         }
         .nav-link:hover {
-          background: #0c0f18;
-          color: #8b97b8;
+          background: var(--bg-elevated);
+          color: var(--text-primary);
         }
         .nav-link.active {
-          background: #0d1120;
-          border-color: #1c2438;
-          color: #c8cdd8;
+          background: var(--accent);
+          color: #ffffff;
+          border-color: rgba(255, 255, 255, 0.15);
+          font-weight: 600;
         }
-        .nav-link.active svg { color: #3b5bff; }
+        .nav-link.active svg { color: #ffffff; }
 
         .sidebar-footer {
-          border-top: 1px solid #12151e;
+          border-top: 1px solid var(--border);
           padding: 0.875rem 0.75rem;
+          background: var(--bg-panel);
         }
         .officer-row {
           display: flex;
@@ -220,22 +222,24 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }
         .officer-avatar {
           width: 28px; height: 28px;
-          border-radius: 7px;
-          background: linear-gradient(135deg, #1e2a50, #2b1e50);
-          border: 1px solid #252c40;
+          border-radius: 6px;
+          background: var(--bg-elevated);
+          border: 1px solid var(--border);
           display: flex; align-items: center; justify-content: center;
-          font-size: 0.65rem; font-weight: 700; color: #7b8ab8;
+          font-size: 0.7rem; font-weight: 700; color: var(--text-primary);
+          font-family: var(--font-mono);
           flex-shrink: 0;
         }
         .officer-info { flex: 1; min-width: 0; }
         .officer-name {
-          font-size: 0.75rem; font-weight: 600; color: #8b97b8;
+          font-size: 0.75rem; font-weight: 600; color: var(--text-primary);
           display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .officer-meta {
-          font-size: 0.65rem; color: #2a3048;
+          font-size: 0.65rem; color: var(--text-muted);
           display: block; margin-top: 1px;
           white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+          font-family: var(--font-mono);
         }
         .logout-btn {
           width: 100%;
@@ -243,18 +247,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           align-items: center;
           justify-content: center;
           gap: 0.4rem;
-          padding: 0.45rem;
-          border: 1px solid #12151e;
+          padding: 0.5rem;
+          border: 1px solid var(--border);
           border-radius: 6px;
-          background: transparent;
-          font-size: 0.72rem;
+          background: var(--bg-primary);
+          font-size: 0.75rem;
           font-weight: 500;
-          color: #2a3048;
+          color: var(--text-muted);
           cursor: pointer;
           font-family: inherit;
-          transition: color 0.12s, border-color 0.12s;
+          transition: all 0.15s ease;
         }
-        .logout-btn:hover { color: #e05f5f; border-color: #2e1515; }
+        .logout-btn:hover { color: var(--accent-alert); border-color: rgba(220, 38, 38, 0.4); }
 
         /* ── MAIN ── */
         .main-wrap {
@@ -262,7 +266,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           display: flex;
           flex-direction: column;
           overflow: hidden;
-          background: #070910;
+          background: var(--bg-primary);
         }
 
         .topbar {
@@ -271,9 +275,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           justify-content: space-between;
           padding: 0 1.5rem;
           height: 52px;
-          border-bottom: 1px solid #12151e;
+          border-bottom: 1px solid var(--border);
           flex-shrink: 0;
-          background: #06080d;
+          background: var(--bg-panel);
         }
 
         .topbar-left {
@@ -283,18 +287,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         }
         .topbar-dot {
           width: 6px; height: 6px;
-          border-radius: 50%;
-          background: #22c55e;
-          box-shadow: 0 0 6px #22c55e88;
-          animation: blink 2.5s ease-in-out infinite;
+          border-radius: 2px;
+          background: var(--accent);
         }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
         .topbar-status {
           font-size: 0.7rem;
-          font-weight: 600;
-          color: #2a3048;
+          font-weight: 700;
+          color: var(--text-muted);
           text-transform: uppercase;
           letter-spacing: 0.08em;
+          font-family: var(--font-mono);
         }
 
         .topbar-right { display: flex; align-items: center; gap: 0.75rem; }
@@ -303,32 +305,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          background: #080a10;
-          border: 1px solid #12151e;
-          border-radius: 7px;
-          padding: 0.35rem 0.75rem;
+          background: var(--bg-elevated);
+          border: 1px solid var(--border);
+          border-radius: 6px;
+          padding: 0.4rem 0.75rem;
         }
         .topbar-search input {
           background: transparent;
           border: none;
           outline: none;
           font-size: 0.78rem;
-          color: #6b7588;
-          font-family: inherit;
+          color: var(--text-primary);
+          font-family: var(--font-sans);
           width: 200px;
         }
-        .topbar-search input::placeholder { color: #1e2438; }
+        .topbar-search input::placeholder { color: var(--text-muted); }
 
         .topbar-officer {
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          padding: 0.3rem 0.625rem;
-          border: 1px solid #12151e;
-          border-radius: 7px;
-          background: #080a10;
+          padding: 0.35rem 0.75rem;
+          border: 1px solid var(--border);
+          border-radius: 6px;
+          background: var(--bg-elevated);
         }
-        .topbar-officer-name { font-size: 0.75rem; font-weight: 600; color: #6b7588; }
+        .topbar-officer-name { font-size: 0.75rem; font-weight: 600; color: var(--text-primary); }
 
         /* ── PAGE CONTENT ── */
         .page-content {
@@ -336,9 +338,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           overflow-y: auto;
           padding: 1.75rem;
         }
-        .page-content::-webkit-scrollbar { width: 4px; }
-        .page-content::-webkit-scrollbar-track { background: transparent; }
-        .page-content::-webkit-scrollbar-thumb { background: #12151e; border-radius: 4px; }
       `}</style>
 
       <div className="shell">
@@ -392,7 +391,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <header className="topbar">
             <div className="topbar-left">
               <div className="topbar-dot" />
-              <span className="topbar-status">KSP Intelligence Net · Live</span>
+              <span className="topbar-status">KSP INTELLIGENCE NET · DEMO DATA</span>
             </div>
             <div className="topbar-right">
               <div className="topbar-search">

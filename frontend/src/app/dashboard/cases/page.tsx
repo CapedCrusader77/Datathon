@@ -112,32 +112,39 @@ export default function CasesPage() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map(f => (
-                  <tr key={f.id} className="cursor-pointer group"
-                    onClick={() => setSelectedFIR(f === selectedFIR ? null : f)}
-                    style={{ background: selectedFIR?.id === f.id ? "rgba(59,130,246,0.12)" : undefined }}>
-                    <td>
-                      <span className="font-mono text-xs font-bold text-blue-400 group-hover:text-blue-300 transition-colors">{f.fir}</span>
+                {filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-12 text-center text-slate-300 font-mono text-sm">
+                      No cases match these filters — try widening the date range
                     </td>
-                    <td className="text-xs text-slate-400 font-mono">{f.date}</td>
-                    <td>
-                      <span className="text-[11px] px-2.5 py-0.5 rounded-full font-medium bg-blue-500/10 border border-blue-500/20 text-slate-300">{f.cat}</span>
-                    </td>
-                    <td className="text-xs text-slate-300 max-w-xs truncate">{f.location}</td>
-                    <td>
-                      <span className={`text-[11px] px-2.5 py-0.5 rounded-full font-semibold ${STATUS_COLORS[f.status]}`}>
-                        {f.status === "under_investigation" ? "Investigating" : f.status.charAt(0).toUpperCase() + f.status.slice(1)}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-1.5 rounded-full bg-slate-900 overflow-hidden">
-                          <div className="h-full rounded-full transition-all"
-                            style={{ width: `${f.urgency * 100}%`, background: f.urgency > 0.8 ? "#ef4444" : f.urgency > 0.6 ? "#f59e0b" : "#10b981" }} />
-                        </div>
-                        <span className="text-xs font-mono font-bold text-slate-400">
-                          {Math.round(f.urgency * 100)}%
+                  </tr>
+                ) : (
+                  filtered.map(f => (
+                    <tr key={f.id} className="cursor-pointer group"
+                      onClick={() => setSelectedFIR(f === selectedFIR ? null : f)}
+                      style={{ background: selectedFIR?.id === f.id ? "rgba(37,99,235,0.15)" : undefined }}>
+                      <td>
+                        <span className="font-mono text-xs font-bold text-[#2563eb] group-hover:text-blue-400 transition-colors">{f.fir}</span>
+                      </td>
+                      <td className="text-xs text-slate-400 font-mono">{f.date}</td>
+                      <td>
+                        <span className="text-[11px] px-2.5 py-0.5 rounded-full font-medium bg-blue-500/10 border border-blue-500/20 text-slate-300">{f.cat}</span>
+                      </td>
+                      <td className="text-xs text-slate-300 max-w-xs truncate">{f.location}</td>
+                      <td>
+                        <span className={`text-[11px] px-2.5 py-0.5 rounded-full font-semibold ${STATUS_COLORS[f.status]}`}>
+                          {f.status === "under_investigation" ? "Investigating" : f.status.charAt(0).toUpperCase() + f.status.slice(1)}
                         </span>
+                      </td>
+                      <td>
+                        <div className="flex items-center gap-2">
+                          <div className="w-16 h-1.5 rounded-full bg-slate-900 overflow-hidden">
+                            <div className="h-full rounded-full transition-all"
+                              style={{ width: `${f.urgency * 100}%`, background: f.urgency > 0.8 ? "#dc2626" : f.urgency > 0.6 ? "#2563eb" : "#0284c7" }} />
+                          </div>
+                          <span className="text-xs font-mono font-bold text-slate-400">
+                            {Math.round(f.urgency * 100)}%
+                          </span>
                       </div>
                     </td>
                     <td>
@@ -147,7 +154,7 @@ export default function CasesPage() {
                       </button>
                     </td>
                   </tr>
-                ))}
+                )))}
               </tbody>
             </table>
           </div>

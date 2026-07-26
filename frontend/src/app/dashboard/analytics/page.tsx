@@ -36,14 +36,14 @@ const predictions = [
 ];
 
 const categories = [
-  { cat: "Cybercrime", count: 8921, color: "#6366f1", change: +34.1 },
-  { cat: "Vehicle Theft", count: 6789, color: "#3b82f6", change: +8.2 },
-  { cat: "Assault", count: 7234, color: "#ef4444", change: -2.1 },
-  { cat: "Robbery", count: 5432, color: "#f59e0b", change: +5.3 },
-  { cat: "Narcotics", count: 3456, color: "#10b981", change: -8.7 },
-  { cat: "Burglary", count: 4123, color: "#8b5cf6", change: +3.2 },
-  { cat: "Economic Offence", count: 2341, color: "#f97316", change: +15.4 },
-  { cat: "Missing Persons", count: 1234, color: "#06b6d4", change: -12.0 },
+  { cat: "Cybercrime", count: 8921, color: "#2563eb", change: +34.1 },
+  { cat: "Vehicle Theft", count: 6789, color: "#0284c7", change: +8.2 },
+  { cat: "Assault", count: 7234, color: "#dc2626", change: -2.1 },
+  { cat: "Robbery", count: 5432, color: "#475569", change: +5.3 },
+  { cat: "Narcotics", count: 3456, color: "#0891b2", change: -8.7 },
+  { cat: "Burglary", count: 4123, color: "#6366f1", change: +3.2 },
+  { cat: "Economic Offence", count: 2341, color: "#2563eb", change: +15.4 },
+  { cat: "Missing Persons", count: 1234, color: "#0284c7", change: -12.0 },
 ];
 
 const maxCount = Math.max(...categories.map(c => c.count));
@@ -51,9 +51,9 @@ const maxMonth = Math.max(...monthlyData.map(m => Math.max(m.robbery, m.cybercri
 
 function BarChart() {
   const series = [
-    { key: "cybercrime", color: "#6366f1", label: "Cybercrime" },
-    { key: "robbery", color: "#f59e0b", label: "Robbery" },
-    { key: "assault", color: "#ef4444", label: "Assault" },
+    { key: "cybercrime", color: "#2563eb", label: "Cybercrime" },
+    { key: "robbery", color: "#0284c7", label: "Robbery" },
+    { key: "assault", color: "#dc2626", label: "Assault" },
   ];
 
   return (
@@ -139,7 +139,7 @@ export default function AnalyticsPage() {
                   <p className="text-[11px] text-slate-500">Comparative multi-series monthly volume</p>
                 </div>
                 <div className="flex gap-3">
-                  {[{ c: "#6366f1", l: "Cyber" }, { c: "#f59e0b", l: "Robbery" }, { c: "#ef4444", l: "Assault" }].map(s => (
+                  {[{ c: "#2563eb", l: "Cyber" }, { c: "#0284c7", l: "Robbery" }, { c: "#dc2626", l: "Assault" }].map(s => (
                     <div key={s.l} className="flex items-center gap-1.5">
                       <div className="w-2.5 h-2.5 rounded-full" style={{ background: s.c }} />
                       <span className="text-[10px] text-slate-400 font-medium">{s.l}</span>
@@ -202,11 +202,10 @@ export default function AnalyticsPage() {
                 return (
                   <g key={i}>
                     <circle cx={svgX} cy={svgY} r={r}
-                      fill={h.count > 250 ? "rgba(239,68,68,0.25)" : h.count > 150 ? "rgba(245,158,11,0.2)" : "rgba(59,130,246,0.18)"}
-                      stroke={h.count > 250 ? "#ef4444" : h.count > 150 ? "#f59e0b" : "#3b82f6"}
-                      strokeWidth="1.5">
-                      <animate attributeName="r" values={`${r};${r * 1.15};${r}`} dur="3s" repeatCount="indefinite" />
-                    </circle>
+                      fill={h.count > 250 ? "rgba(220,38,38,0.25)" : h.count > 150 ? "rgba(37,99,235,0.25)" : "rgba(2,132,199,0.2)"}
+                      stroke={h.count > 250 ? "#dc2626" : h.count > 150 ? "#2563eb" : "#0284c7"}
+                      strokeWidth="1.5"
+                    />
                     <text x={svgX} y={svgY + 3} textAnchor="middle" fontSize="10" fontWeight="bold" fill="#f8fafc">
                       {h.area.split(" ")[0]}
                     </text>
