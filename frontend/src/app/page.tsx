@@ -8,11 +8,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [scanLine, setScanLine] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setScanLine(true), 500);
-    return () => clearTimeout(t);
+    setMounted(true);
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -35,7 +34,7 @@ export default function LoginPage() {
       }));
       router.push("/dashboard");
     } catch {
-      setError("Invalid badge number or password. Please try again.");
+      setError("Invalid badge number or password. Please verify credentials.");
       setLoading(false);
     }
   };
@@ -46,118 +45,132 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-grid flex items-center justify-center relative overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #050a14 0%, #070d1a 50%, #0a1628 100%)" }}>
+    <div className="min-h-screen bg-grid flex items-center justify-center relative overflow-hidden selection:bg-blue-500 selection:text-white"
+      style={{ background: "radial-gradient(ellipse at 50% 0%, #0c1a32 0%, #040812 70%)" }}>
 
-      {/* Background decorative elements */}
+      {/* Atmospheric Glowing Background Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full opacity-5"
-          style={{ background: "radial-gradient(circle, #3b82f6, transparent)", filter: "blur(60px)" }} />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full opacity-5"
-          style={{ background: "radial-gradient(circle, #06b6d4, transparent)", filter: "blur(60px)" }} />
-        {/* Animated grid lines */}
-        <div className="absolute inset-0 bg-grid opacity-30" />
-        {/* Scan line */}
-        {scanLine && (
-          <div className="absolute left-0 right-0 h-px opacity-30"
-            style={{
-              background: "linear-gradient(90deg, transparent, #3b82f6, transparent)",
-              animation: "scan-line 4s linear infinite",
-              top: "0"
-            }} />
-        )}
+        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full opacity-25"
+          style={{ background: "radial-gradient(circle, #3b82f6 0%, rgba(6, 182, 212, 0.4) 40%, transparent 80%)", filter: "blur(80px)" }} />
+        <div className="absolute bottom-0 right-10 w-[500px] h-[350px] rounded-full opacity-15"
+          style={{ background: "radial-gradient(circle, #8b5cf6 0%, transparent 70%)", filter: "blur(90px)" }} />
+        <div className="absolute inset-0 bg-grid opacity-20" />
       </div>
 
-      <div className="relative z-10 w-full max-w-md px-6">
-        {/* Logo & Branding */}
-        <div className="text-center mb-10">
-          {/* Karnataka Police Emblem placeholder */}
-          <div className="mx-auto mb-6 w-20 h-20 rounded-full flex items-center justify-center animate-float"
-            style={{
-              background: "linear-gradient(135deg, #1e3a5f, #1e40af)",
-              border: "2px solid rgba(59,130,246,0.5)",
-              boxShadow: "0 0 30px rgba(59,130,246,0.3)"
-            }}>
-            <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-              <path d="M22 4L38 12V24C38 33 30 40 22 42C14 40 6 33 6 24V12L22 4Z"
-                stroke="#60a5fa" strokeWidth="2" fill="none" />
-              <circle cx="22" cy="22" r="7" fill="#3b82f6" opacity="0.8" />
-              <path d="M22 15V22L26 26" stroke="white" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+      <div className={`relative z-10 w-full max-w-md px-6 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        
+        {/* Header Emblem & Branding */}
+        <div className="text-center mb-8">
+          <div className="relative inline-block mb-4">
+            {/* Outer radar glow ring */}
+            <div className="absolute -inset-3 rounded-full opacity-30 animate-pulse-glow"
+              style={{ background: "radial-gradient(circle, #3b82f6, transparent)" }} />
+            
+            {/* Shield Container */}
+            <div className="relative w-20 h-20 mx-auto rounded-2xl flex items-center justify-center shadow-2xl transition-transform hover:scale-105"
+              style={{
+                background: "linear-gradient(135deg, #1e3a5f 0%, #0f2342 100%)",
+                border: "1px solid rgba(96, 165, 250, 0.4)",
+                boxShadow: "0 0 35px rgba(59, 130, 246, 0.35)"
+              }}>
+              <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="text-blue-400">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="m9 12 2 2 4-4" stroke="#38bdf8" strokeWidth="2"/>
+              </svg>
+            </div>
           </div>
-          <h1 className="text-4xl font-bold mb-1" style={{ fontFamily: "'Rajdhani', sans-serif", letterSpacing: "0.1em" }}>
+
+          <h1 className="text-3xl font-extrabold tracking-wider mb-1" style={{ fontFamily: "'Outfit', sans-serif" }}>
             <span className="gradient-text-blue">POLICE</span>
-            <span style={{ color: "#f59e0b" }}>GPT</span>
+            <span className="text-amber-400 ml-1">GPT</span>
           </h1>
-          <p className="text-sm font-medium mb-1" style={{ color: "#94a3b8", letterSpacing: "0.2em" }}>
-            KARNATAKA STATE POLICE
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
+            Karnataka State Police
           </p>
-          <p style={{ color: "#475569", fontSize: "0.75rem", letterSpacing: "0.1em" }}>
-            INTELLIGENT CRIME INVESTIGATION SYSTEM
+          <p className="text-[11px] text-slate-500 tracking-wider mt-0.5">
+            NATIONAL CRIME & INVESTIGATION INTELLIGENCE PLATFORM
           </p>
-          <div className="flex items-center justify-center gap-2 mt-3">
+
+          <div className="inline-flex items-center gap-2 mt-3 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-800">
             <div className="live-dot" />
-            <span style={{ color: "#10b981", fontSize: "0.7rem", letterSpacing: "0.15em" }}>
-              SYSTEM OPERATIONAL
+            <span className="text-[11px] font-medium tracking-widest text-emerald-400 uppercase">
+              CCTNS SECURE GATEWAY
             </span>
           </div>
         </div>
 
         {/* Login Card */}
-        <div className="glass-card p-8 relative overflow-hidden">
-          {/* Top accent line */}
-          <div className="absolute top-0 left-0 right-0 h-0.5"
+        <div className="glass-card p-8 relative overflow-hidden border border-blue-500/20 shadow-2xl">
+          {/* Top accent beam */}
+          <div className="absolute top-0 left-0 right-0 h-[2px]"
             style={{ background: "linear-gradient(90deg, transparent, #3b82f6, #06b6d4, transparent)" }} />
 
-          <h2 className="text-lg font-semibold mb-6 text-center" style={{ color: "#e2e8f0" }}>
-            🔐 Officer Authentication
+          <h2 className="text-base font-semibold mb-6 text-center text-slate-200 flex items-center justify-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-blue-400">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            Officer Authentication
           </h2>
 
           {error && (
-            <div className="mb-4 p-3 rounded-lg text-sm text-red-400"
-              style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)" }}>
-              ⚠️ {error}
+            <div className="mb-5 p-3.5 rounded-xl text-xs text-red-300 flex items-start gap-2.5"
+              style={{ background: "rgba(239,68,68,0.12)", border: "1px solid rgba(239,68,68,0.3)" }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-red-400 flex-shrink-0 mt-0.5">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>{error}</span>
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium mb-2" style={{ color: "#94a3b8", letterSpacing: "0.05em" }}>
-                BADGE NUMBER / OFFICER ID
+              <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                Badge Number / Officer ID
               </label>
-              <input
-                id="badge-input"
-                type="text"
-                className="pg-input"
-                placeholder="e.g., KSP001"
-                value={badge}
-                onChange={e => setBadge(e.target.value)}
-                required
-                autoComplete="username"
-              />
+              <div className="relative">
+                <input
+                  id="badge-input"
+                  type="text"
+                  className="pg-input pl-10"
+                  placeholder="e.g. KSP001"
+                  value={badge}
+                  onChange={e => setBadge(e.target.value)}
+                  required
+                  autoComplete="username"
+                />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+              </div>
             </div>
+
             <div>
-              <label className="block text-xs font-medium mb-2" style={{ color: "#94a3b8", letterSpacing: "0.05em" }}>
-                PASSWORD
+              <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">
+                Password
               </label>
-              <input
-                id="password-input"
-                type="password"
-                className="pg-input"
-                placeholder="••••••••"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                required
-                autoComplete="current-password"
-              />
+              <div className="relative">
+                <input
+                  id="password-input"
+                  type="password"
+                  className="pg-input pl-10"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                />
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </div>
             </div>
 
             <button
               id="login-btn"
               type="submit"
               disabled={loading}
-              className="btn-primary w-full justify-center py-3 mt-2"
-              style={{ fontSize: "0.875rem", letterSpacing: "0.05em" }}>
+              className="btn-primary w-full justify-center py-3 mt-2 font-semibold tracking-wide">
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -165,42 +178,37 @@ export default function LoginPage() {
                 </>
               ) : (
                 <>
-                  <span>🚔</span> SECURE LOGIN
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
+                  </svg>
+                  ACCESS SYSTEM
                 </>
               )}
             </button>
           </form>
 
-          {/* Demo credentials */}
-          <div className="mt-6 pt-5" style={{ borderTop: "1px solid rgba(30,64,120,0.4)" }}>
-            <p className="text-center text-xs mb-3" style={{ color: "#475569" }}>
-              DEMO CREDENTIALS (HACKATHON MODE)
+          {/* Quick Demo Access Chips */}
+          <div className="mt-6 pt-5 border-t border-slate-800/80">
+            <p className="text-center text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-3">
+              Quick Hackathon Credentials
             </p>
             <div className="grid grid-cols-1 gap-2">
               {[
-                { label: "👮 Inspector", badge: "KSP001", pass: "police123" },
-                { label: "💻 Cyber Expert", badge: "KSP004", pass: "police123" },
-                { label: "⭐ Commissioner", badge: "KSP999", pass: "admin123" },
+                { label: "Inspector Ramesh", role: "Inspector", badge: "KSP001", pass: "police123", icon: "👮" },
+                { label: "Cyber Expert Ananya", role: "Cybercrime", badge: "KSP004", pass: "police123", icon: "💻" },
+                { label: "Commissioner DGP", role: "Commissioner", badge: "KSP999", pass: "admin123", icon: "⭐" },
               ].map((d) => (
-                <button key={d.badge}
+                <button
+                  key={d.badge}
                   onClick={() => demoLogin(d.badge, d.pass)}
-                  className="text-xs py-2 px-3 rounded-lg text-left transition-all duration-200"
-                  style={{
-                    background: "rgba(59,130,246,0.05)",
-                    border: "1px solid rgba(59,130,246,0.2)",
-                    color: "#94a3b8"
-                  }}
-                  onMouseEnter={e => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(59,130,246,0.15)";
-                    (e.currentTarget as HTMLElement).style.color = "#60a5fa";
-                  }}
-                  onMouseLeave={e => {
-                    (e.currentTarget as HTMLElement).style.background = "rgba(59,130,246,0.05)";
-                    (e.currentTarget as HTMLElement).style.color = "#94a3b8";
-                  }}>
-                  <span className="font-mono">{d.badge}</span>
-                  <span className="mx-2 opacity-40">|</span>
-                  {d.label}
+                  className="group flex items-center justify-between text-xs py-2 px-3.5 rounded-xl border border-slate-800/80 bg-slate-900/40 text-slate-400 hover:text-blue-400 hover:border-blue-500/40 hover:bg-blue-500/10 transition-all duration-200">
+                  <div className="flex items-center gap-2">
+                    <span>{d.icon}</span>
+                    <span className="font-mono text-slate-300 font-medium group-hover:text-blue-300">{d.badge}</span>
+                    <span className="text-slate-600">•</span>
+                    <span className="text-slate-400">{d.label}</span>
+                  </div>
+                  <span className="text-[10px] uppercase tracking-wider text-slate-500 group-hover:text-blue-400">Autofill →</span>
                 </button>
               ))}
             </div>
@@ -208,9 +216,9 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-center mt-6" style={{ color: "#1e3a5f", fontSize: "0.7rem", letterSpacing: "0.1em" }}>
+        <p className="text-center mt-6 text-slate-600 text-[11px] tracking-wider leading-relaxed">
           GOVERNMENT OF KARNATAKA • DEPARTMENT OF HOME AFFAIRS<br />
-          CLASSIFIED SYSTEM — AUTHORIZED ACCESS ONLY
+          RESTRICTED ACCESS • ALL AUDIT LOGS MONITORED
         </p>
       </div>
     </div>
