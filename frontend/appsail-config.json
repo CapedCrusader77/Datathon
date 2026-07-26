@@ -1,0 +1,13 @@
+{
+  "name": "policegpt-frontend",
+  "stack": "node20",
+  "build": [
+    "npm install",
+    "npm run build"
+  ],
+  "run": "npm start",
+  "env_variables": {
+    "NODE_ENV": "production",
+    "PORT": "3000"
+  }
+}
