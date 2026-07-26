@@ -167,17 +167,17 @@ function MessageBubble({ msg }: { msg: Message }) {
 
       {/* Message Content */}
       <div style={{ maxWidth: "80%" }}>
-        <div className={isUser ? "chat-bubble-user px-5 py-3.5" : "chat-bubble-ai px-5 py-3.5"}>
+        <div className={isUser ? "chat-bubble-user px-5 py-3.5 rounded-sm" : "chat-bubble-ai px-5 py-3.5 rounded-sm bg-zinc-900/90 border border-zinc-800"}>
           {isUser ? (
-            <p className="text-sm text-slate-100 font-normal leading-relaxed">{msg.content}</p>
+            <p className="text-sm text-zinc-200 font-normal leading-relaxed">{msg.content}</p>
           ) : (
-            <div className="prose-police text-sm leading-relaxed"
+            <div className="prose-police text-sm font-normal text-zinc-200 leading-relaxed"
               dangerouslySetInnerHTML={{
                 __html: msg.content
                   .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-                  .replace(/^## (.*?)$/gm, '<h2 class="text-base font-bold text-slate-100 mt-2 mb-1">$1</h2>')
-                  .replace(/^### (.*?)$/gm, '<h3 class="text-sm font-semibold text-slate-200 mt-2 mb-1">$1</h3>')
-                  .replace(/^- (.*?)$/gm, "<li class='text-slate-300'>$1</li>")
+                  .replace(/^## (.*?)$/gm, '<h2 class="text-base font-bold text-zinc-100 mt-2 mb-1">$1</h2>')
+                  .replace(/^### (.*?)$/gm, '<h3 class="text-sm font-bold text-zinc-200 mt-2 mb-1">$1</h3>')
+                  .replace(/^- (.*?)$/gm, "<li class='text-zinc-300'>$1</li>")
                   .replace(/(<li>[\s\S]*?<\/li>)+/g, m => `<ul class='list-disc pl-4 space-y-1 my-2'>${m}</ul>`)
                   .replace(/\n\n/g, "<br/><br/>")
                   .replace(/\n/g, "<br/>")
@@ -189,7 +189,7 @@ function MessageBubble({ msg }: { msg: Message }) {
         {/* Feature 3: Retrieval debug pill */}
         {msg.retrieval_meta && (
           <div className="flex items-center gap-1.5 mt-1.5 px-1">
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#141720] border border-[#2a2f3e] text-slate-400">
+            <span className="text-[10px] font-light font-mono px-2 py-0.5 rounded-sm bg-zinc-900 border border-zinc-800 text-zinc-400">
               PATH: {msg.retrieval_meta.path.toUpperCase()} · {msg.retrieval_meta.results_count} RECORD{msg.retrieval_meta.results_count !== 1 ? "S" : ""}
             </span>
           </div>
@@ -505,16 +505,16 @@ export default function ChatPage() {
   const activeLang = VOICE_LANGS.find(l => l.code === voiceLang)!;
 
   return (
-    <div className="flex flex-col h-full space-y-4" style={{ height: "calc(100vh - 120px)" }}>
+    <div className="flex flex-col h-full space-y-4 bg-zinc-950 p-4 rounded-sm border border-zinc-800" style={{ height: "calc(100vh - 120px)" }}>
 
       {/* ── Header ── */}
-      <div className="flex items-center justify-between flex-shrink-0">
+      <div className="flex items-center justify-between flex-shrink-0 border-b border-zinc-800 pb-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 tracking-wide flex items-center gap-2" style={{ fontFamily: "'Outfit', sans-serif" }}>
+          <h1 className="text-xl font-bold text-zinc-100 tracking-wide flex items-center gap-2" style={{ fontFamily: "'Outfit', sans-serif" }}>
             <span>POLICEGPT AI Investigation Assistant</span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400">RAG v2.4</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-sm bg-blue-500/10 border border-blue-500/30 text-blue-400">RAG v2.4</span>
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-zinc-400 mt-0.5 font-light">
             Grounded intelligence engine linked to Karnataka State Police Crime Database
           </p>
         </div>
@@ -523,7 +523,7 @@ export default function ChatPage() {
           <button
             id="export-pdf-btn"
             onClick={exportToPDF}
-            className="btn-ghost text-xs px-3 py-1.5 flex items-center gap-1.5"
+            className="border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 rounded-sm text-xs px-3 py-1.5 flex items-center gap-1.5 text-zinc-300 transition-colors"
             title="Export conversation as PDF"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -534,7 +534,7 @@ export default function ChatPage() {
             Export PDF
           </button>
           <button
-            className="btn-ghost text-xs px-3 py-1.5 flex items-center gap-1.5"
+            className="border border-zinc-700 bg-zinc-900 hover:bg-zinc-800 rounded-sm text-xs px-3 py-1.5 flex items-center gap-1.5 text-zinc-300 transition-colors"
             onClick={() => setMessages(msg => [msg[0]])}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -546,32 +546,34 @@ export default function ChatPage() {
       </div>
 
       {/* ── Chat Messages Log ── */}
-      <div className="flex-1 overflow-y-auto rounded-lg p-5 terminal-panel">
-        {messages.map(msg => <MessageBubble key={msg.id} msg={msg} />)}
+      <div className="flex-1 overflow-y-auto rounded-sm p-6 bg-zinc-900 border border-zinc-800 shadow-inner">
+        <div className="max-w-3xl mx-auto space-y-4">
+          {messages.map(msg => <MessageBubble key={msg.id} msg={msg} />)}
 
-        {loading && (
-          <div className="flex gap-3 mb-4">
-            <div className="w-8 h-8 rounded flex items-center justify-center bg-[#141720] border border-[#2a2f3e] text-[#2563eb]">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
+          {loading && (
+            <div className="flex gap-3 mb-4">
+              <div className="w-8 h-8 rounded-sm flex items-center justify-center bg-zinc-950 border border-zinc-800 text-[#2563eb]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              </div>
+              <div className="chat-bubble-ai px-5 py-3.5 rounded-sm bg-zinc-900/90 border border-zinc-800">
+                <TypingIndicator />
+              </div>
             </div>
-            <div className="chat-bubble-ai px-5 py-3.5">
-              <TypingIndicator />
-            </div>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
+          )}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* ── Suggested Queries ── */}
       {messages.length < 3 && (
-        <div className="flex gap-2 flex-wrap flex-shrink-0">
+        <div className="flex gap-2 flex-wrap flex-shrink-0 max-w-3xl mx-auto w-full">
           {EXAMPLE_QUERIES.slice(0, 4).map((q, i) => (
             <button
               key={i}
               onClick={() => sendMessage(q)}
-              className="btn-ghost text-xs py-1.5 px-3"
+              className="border border-zinc-700 bg-zinc-900/80 hover:bg-zinc-800 rounded-sm text-zinc-300 font-mono text-xs px-3 py-1.5 transition-colors cursor-pointer"
             >
               {q}
             </button>
@@ -580,7 +582,7 @@ export default function ChatPage() {
       )}
 
       {/* ── Input Area ── */}
-      <div className="flex-shrink-0 flex gap-3 items-end">
+      <div className="flex-shrink-0 flex gap-3 items-end max-w-3xl mx-auto w-full bg-zinc-800 border border-zinc-700 rounded-sm p-1.5">
         <div className="flex-1 relative">
           <textarea
             ref={inputRef}
@@ -595,7 +597,7 @@ export default function ChatPage() {
             }
             rows={1}
             disabled={loading}
-            className="pg-input resize-none rounded-2xl"
+            className="pg-input resize-none rounded-sm bg-transparent border-0 focus:outline-none focus:ring-0 text-zinc-200"
             style={{
               minHeight: "52px", maxHeight: "120px",
               paddingRight: voiceSupported ? "6rem" : "1rem",

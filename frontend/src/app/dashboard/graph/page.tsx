@@ -201,53 +201,55 @@ export default function GraphPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-slate-100 tracking-wide">
-            Entity Knowledge Graph
-          </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            KSP INTELLIGENCE NET · DEMO DATA — click any node to explore connections
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          {/* Search */}
-          <form onSubmit={handleSearch} className="flex items-center gap-2 bg-[#1c2030] border border-[#2a2f3e] rounded-md px-3 py-1.5">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search suspect…"
-              className="bg-transparent border-none outline-none text-xs text-slate-200 w-36 font-mono"
-            />
-          </form>
-          <Link href="/dashboard/chat" className="btn-primary text-xs px-4 py-2 flex items-center gap-2 no-underline">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-            </svg>
-            QUERY GRAPH VIA AI
-          </Link>
+      {/* Header (Contained bar to prevent logo collision) */}
+      <div className="bg-zinc-900 border-b border-zinc-800 p-6 -mt-7 -mx-7 mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold text-zinc-100 tracking-wide">
+              Entity Knowledge Graph
+            </h1>
+            <p className="text-xs text-zinc-400 mt-1 font-mono">
+              KSP INTELLIGENCE NET · DEMO DATA — click any node to explore connections
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            {/* Search */}
+            <form onSubmit={handleSearch} className="flex items-center gap-2 bg-zinc-800 border border-zinc-700 rounded-sm px-3 py-1.5">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                placeholder="Search suspect…"
+                className="bg-transparent border-none outline-none text-xs text-zinc-200 w-36 font-mono focus:ring-0"
+              />
+            </form>
+            <Link href="/dashboard/chat" className="btn-primary text-xs px-4 py-2 flex items-center gap-2 no-underline rounded-sm">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2-2z" />
+              </svg>
+              QUERY GRAPH VIA AI
+            </Link>
+          </div>
         </div>
       </div>
 
       {/* Legend & Filter Bar */}
-      <div className="flex gap-4 flex-wrap items-center terminal-panel p-3">
-        <span className="text-xs font-semibold text-slate-400 font-mono uppercase">ENTITY LEGEND:</span>
+      <div className="flex gap-4 flex-wrap items-center bg-zinc-900 border border-zinc-800 rounded-sm p-3">
+        <span className="text-xs font-semibold text-zinc-400 font-mono uppercase">ENTITY LEGEND:</span>
         {Object.entries(NODE_COLORS).map(([type, color]) => (
-          <div key={type} className="flex items-center gap-1.5 bg-[#0d0f14] px-2.5 py-1 rounded border border-[#2a2f3e]">
+          <div key={type} className="flex items-center gap-1.5 bg-zinc-950 px-2.5 py-1 rounded-sm border border-zinc-800">
             <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
-            <span className="text-[11px] uppercase font-mono text-slate-300 font-medium">{type}</span>
+            <span className="text-[11px] uppercase font-mono text-zinc-300 font-medium">{type}</span>
           </div>
         ))}
-        <div className="h-4 w-px bg-[#2a2f3e] mx-1" />
-        <span className="text-xs font-semibold text-slate-400 font-mono uppercase">SEVERITY LEVEL:</span>
+        <div className="h-4 w-px bg-zinc-800 mx-1" />
+        <span className="text-xs font-semibold text-zinc-400 font-mono uppercase">SEVERITY LEVEL:</span>
         {Object.entries(RISK_COLORS).map(([r, c]) => (
           <div key={r} className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full" style={{ background: c }} />
-            <span className="text-[10px] uppercase font-mono text-slate-400 font-bold">{r}</span>
+            <span className="text-[10px] uppercase font-mono text-zinc-400 font-bold">{r}</span>
           </div>
         ))}
         {initialLoading && (
@@ -255,9 +257,9 @@ export default function GraphPage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-6 items-start">
         {/* SVG Interactive Canvas */}
-        <div className="xl:col-span-3 terminal-panel relative overflow-hidden h-[580px] p-0 bg-[#0d0f14]">
+        <div className="xl:col-span-3 terminal-panel relative overflow-hidden h-[580px] p-0 bg-zinc-950 border border-zinc-800 rounded-sm">
           {initialLoading && (
             <div className="absolute inset-0 flex items-center justify-center bg-[#0d0f14]/90 z-10">
               <div className="text-center space-y-3">
@@ -342,18 +344,18 @@ export default function GraphPage() {
                   {node.risk && (
                     <circle r={r + 3} fill="none" stroke={borderColor} strokeWidth="1.5" strokeDasharray="3 2" />
                   )}
-                  {/* Main Circle */}
-                  <circle r={r} fill={`${color}25`} stroke={color} strokeWidth={isSelected ? 2.5 : 1.5} />
+                  {/* Main Circle (match legend colors exactly) */}
+                  <circle r={r} fill={color} stroke="#ffffff" strokeWidth={isSelected ? 2.5 : 1} strokeOpacity="0.4" />
                   {/* Node Symbol */}
                   <text textAnchor="middle" dominantBaseline="central" fontSize={node.type === "gang" ? "16" : "13"}>
                     {node.type === "person" ? "👤" : node.type === "vehicle" ? "🚗" : node.type === "phone" ? "📱" : node.type === "fir" ? "📋" : node.type === "location" ? "📍" : "⚡"}
                   </text>
-                  {/* Node Title */}
-                  <text y={r + 14} textAnchor="middle" fontSize="9" fontWeight="bold" fill="#f1f5f9" style={{ pointerEvents: "none" }}>
-                    {node.label.length > 16 ? node.label.slice(0, 15) + "…" : node.label}
+                  {/* Node Title (visible white text below node) */}
+                  <text y={r + 16} textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ffffff" fontFamily="JetBrains Mono" style={{ pointerEvents: "none" }}>
+                    {node.label}
                   </text>
                   {(node.firs ?? 0) > 0 && (
-                    <text y={r + 24} textAnchor="middle" fontSize="8" fontWeight="bold" fill="#ef4444" fontFamily="JetBrains Mono">
+                    <text y={r + 28} textAnchor="middle" fontSize="9" fontWeight="bold" fill="#ef4444" fontFamily="JetBrains Mono">
                       {node.firs} FIRs
                     </text>
                   )}
@@ -363,12 +365,12 @@ export default function GraphPage() {
           </svg>
         </div>
 
-        {/* Side Panel Drawer */}
-        <div className="terminal-panel space-y-4 p-4 border border-[#2a2f3e] bg-[#141720]">
-          <h3 className="font-bold text-sm text-slate-100 border-b border-[#2a2f3e] pb-2.5 flex items-center justify-between">
+        {/* Side Panel Drawer (Tactical Command Drawer with Overflow Fix) */}
+        <div className="terminal-panel space-y-4 p-5 border border-zinc-800 bg-zinc-900 rounded-sm max-h-[580px] overflow-y-auto">
+          <h3 className="font-bold text-sm text-zinc-100 border-b border-zinc-800 pb-2.5 flex items-center justify-between">
             <span>{selected ? "Entity Intelligence" : "Graph Overview"}</span>
             {selected && (
-              <button onClick={() => setSelected(null)} className="text-slate-500 hover:text-slate-300">✕</button>
+              <button onClick={() => setSelected(null)} className="text-zinc-400 hover:text-zinc-200">✕</button>
             )}
           </h3>
 
